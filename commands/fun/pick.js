@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const { e } = require('../../vars.json');
+const answers = require('../../vars.js').pick_answers;
 
 module.exports = {
 	name: 'pick',
@@ -13,7 +14,9 @@ module.exports = {
 		if (!args.length) {
 			throw "plees, enter elements for me to choos frome !!";
 		}
-        const arr = args.join(' ').trim().split(',')
-        return message.reply(`${e.think.e} i picke **${Discord.Util.cleanContent(arr[Math.floor(Math.random() * arr.length)].trim(), message.channel)}**! ${e.happy.e}`);
+        const arr = args.join(' ').trim().split(',');
+		const item = Discord.Util.cleanContent(arr[Math.floor(Math.random() * arr.length)].trim(), message.channel);
+		const answer = answers[Math.floor(Math.random() * answers.length)].replace(/{i}/g, `**${item}**`)
+        return message.reply(answer);
 	}
 };

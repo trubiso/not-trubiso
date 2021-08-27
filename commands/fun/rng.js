@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const { e } = require('../../vars.json');
+const answers = require('../../vars.js').pick_answers;
 
 module.exports = {
 	name: 'rng',
@@ -16,6 +17,7 @@ module.exports = {
 		if (args.length > 2) {
 			throw "yu gaev me too meny arguments !!";
 		}
-        return message.reply(`${e.think.e} i picke **${num}**! ${e.happy.e}`);
+		const answer = answers[Math.floor(Math.random() * answers.length)].replace(/{i}/g, `**${num}**`)
+        return message.reply(answer);
 	}
 };
