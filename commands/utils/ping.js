@@ -1,14 +1,27 @@
+const Discord = require('discord.js');
 const { e } = require('../../vars.json');
+
 module.exports = {
 	name: 'ping',
 	help: {
         category: 'utils',
 		brief: 'Gets the ping',
-		usage: 'ping',
+		usage: 'ping {granbo}',
 	},
 	execute(message, args, client) {
-		// if (!args.length)
-        //     throw "You must input an equation.";
-		return message.channel.send(`im hungri !! ${e.sad.e}`);
+        const embed = {
+            title: `${e.happy.e} ponge !`,
+            fields: [
+                {
+                    name: "latencie",
+                    value: `${Date.now() - message.createdTimestamp} milisecondes!`
+                },
+                {
+                    name: "api latencie",
+                    value: `${Math.round(client.ws.ping)} milisecondes!`
+                }
+            ]
+        };
+        return message.channel.send({embeds: [embed]});
 	}
 };

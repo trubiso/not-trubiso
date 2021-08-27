@@ -35,7 +35,7 @@ client.once('ready', () => {
 // });
 
 client.on('messageCreate', msg => {
-    if (!msg.content.startsWith(client.prefix)) {
+    if (!msg.content.startsWith(client.prefix) && !msg.mentions.everyone) {
         if (msg.mentions.has(client.user)) {
             msg.react("👋");
             msg.react(e.happy.id);
@@ -52,7 +52,7 @@ client.on('messageCreate', msg => {
             try {
                 client.commands.get(command).execute(msg, args, client);
             } catch (error) {
-                msg.channel.send(`${e.shock_handless.e} There was an error executing your command: ${error.toString()}`);
+                msg.channel.send(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} ${error.toString()}`);
             }
         }
     }
