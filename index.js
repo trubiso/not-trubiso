@@ -54,6 +54,11 @@ client.on('messageCreate', msg => {
             } catch (error) {
                 msg.channel.send(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} ${error.toString()}`);
             }
+        } else {
+            var suitable = [...client.commands.filter(v => (v.aliases ?? []).includes(command))];
+            if (suitable) {
+                try { suitable[0][1].execute(msg, args, client) } catch(e) {};
+            }
         }
     }
 });

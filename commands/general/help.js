@@ -9,6 +9,7 @@ function compareLevenshteinDistance(compareTo, baseItem) {
 
 module.exports = {
 	name: 'help',
+    aliases: ['cmds'],
 	help: {
         category: 'general',
 		brief: 'shows help for eny comand, categori or just evri comande',
@@ -25,7 +26,7 @@ module.exports = {
         let prefix = client.prefix
         for (_command of client.commands){
             const command = client.commands.get(_command[0]);
-            if (command.name === cmd){
+            if (command.name === cmd || (command.aliases ?? []).includes(cmd)){
                 cmdExists = true;
                 const embed = {
                     title: `help abuot ${prefix}${command.name}`,
@@ -36,15 +37,23 @@ module.exports = {
                         },
                         {
                             name: "useg",
-                            value: `${prefix}${command.help.usage}`
+                            value: `${prefix}${command.help.usage}`,
+                            inline: true
                         }
                     ]
                 };
+                if (command.aliases) {
+                    embed.fields.push({
+                        name: "aliasese",
+                        value: command.aliases.join(', '),
+                        inline: true
+                    });
+                }
                 if (command.help.extra) {
                     embed.fields.push({
                         name: "moar informetion",
                         value: command.help.extra
-                    })
+                    });
                 }
                 return embed;
             }
