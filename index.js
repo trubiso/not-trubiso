@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 const { token } = require('./config.json');
 const { e } = require('./vars.json');
 
-const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS"] });
+const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS"], allowedMentions: {parse: ["users"], repliedUser: false}});
 client.commands = new Discord.Collection();
 client.categories = [];
 client.prefix = "<";
