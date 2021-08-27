@@ -11,7 +11,6 @@ module.exports = {
 	execute(message, args, client) {
 		min = parseInt(args[1] ? args[0] : 1);
 		max = parseInt(((args[1] ?? args[0]) ?? 10)) + 1;
-		console.log([min, max]);
 		num = Math.floor(Math.random() * (max - min)) + min;
 		if (args.length > 2) {
 			throw "yu gaev me too meny arguments !!";
