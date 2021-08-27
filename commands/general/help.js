@@ -79,8 +79,7 @@ module.exports = {
             const cmd = args[0].toString().toLowerCase();
             let ret = this.get_help(cmd, client);
             if (ret == false) {
-
-                out = `i culdn't find anythinge for **${cmd}**... ${e.think.e} did yu meane **${this.find_closest_cmd_to(cmd, client)}**?`;
+                out = `i culdn't find anythinge for **${cmd}**... ${e.think.e}` + `did yu meane **${this.find_closest_cmd_to(cmd, client)}**?`;
             }
             else if (typeof ret === "string") out = ret;
             else return message.channel.send({embeds: [ret]});
