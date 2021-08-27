@@ -16,6 +16,6 @@ module.exports = {
 		if (args.length > 2) {
 			throw "yu gaev me too meny arguments !!";
 		}
-        return message.channel.send(`${e.think.e} i picke **${num}**! ${e.happy.e}`);
+        return message.reply(`${e.think.e} i picke **${num}**! ${e.happy.e}`);
 	}
 };

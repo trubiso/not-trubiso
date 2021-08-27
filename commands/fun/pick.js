@@ -14,6 +14,6 @@ module.exports = {
 			throw "plees, enter elements for me to choos frome !!";
 		}
         const arr = args.join(' ').trim().split(',')
-        return message.channel.send(`${e.think.e} i picke **${Discord.Util.cleanContent(arr[Math.floor(Math.random() * arr.length)].trim(), message.channel)}**! ${e.happy.e}`);
+        return message.reply(`${e.think.e} i picke **${Discord.Util.cleanContent(arr[Math.floor(Math.random() * arr.length)].trim(), message.channel)}**! ${e.happy.e}`);
 	}
 };
