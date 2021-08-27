@@ -17,6 +17,7 @@ module.exports = {
 	},
     find_closest_cmd_to(cmd, client){
         let cmds = [...client.commands.map(v => v.name)]
+        client.commands.filter(v => v.aliases).forEach(v => cmds.push(...v.aliases))
         cmds.push(...client.categories.map(v => v.name))
         return cmds[getClosest.custom(cmd, cmds, compareLevenshteinDistance)];
     },
@@ -27,7 +28,6 @@ module.exports = {
         for (_command of client.commands){
             const command = client.commands.get(_command[0]);
             if (command.name === cmd || (command.aliases ?? []).includes(cmd)){
-                cmdExists = true;
                 const embed = {
                     title: `help abuot ${prefix}${command.name}`,
                     fields: [
@@ -59,13 +59,21 @@ module.exports = {
             }
         }
         for (category of client.categories){
-            if (category.name === cmd){
-                cmdExists = true;
-                out = `**${category.help.name}**\n${category.help.brief}\n\n**Commands: **`;
-                for (command of category.commands){
-                    out += `${command.name}, `;
-                }
-                out = out.slice(0, -2);
+            if (category.name === cmd || category.help.name === cmd){
+                const embed = {
+                    title: `help abuot de ${category.help.name} categori`,
+                    fields: [
+                        {
+                            name: "descreption",
+                            value: category.help.brief
+                        },
+                        {
+                            name: "comandse",
+                            value: category.commands.map(v => v.name).join(', ')
+                        }
+                    ]
+                };
+                return embed;
             }
         }
         if (cmdExists)

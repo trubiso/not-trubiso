@@ -3,9 +3,10 @@ const { e } = require('../../vars.json');
 
 module.exports = {
 	name: 'rng',
+	aliases: ['random-number'],
 	help: {
         category: 'fun',
-		brief: 'picks numbr !',
+		brief: 'picks numbr acording to de limits yu giv it !',
 		usage: 'rng <max|min, max>',
 	},
 	execute(message, args, client) {

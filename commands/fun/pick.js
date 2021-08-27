@@ -3,9 +3,10 @@ const { e } = require('../../vars.json');
 
 module.exports = {
 	name: 'pick',
+	aliases: ['choose'],
 	help: {
         category: 'fun',
-		brief: 'picks betweene elementse !',
+		brief: 'picks betweene elements dat can be choesn !',
 		usage: 'pick [element, element, <element>...]',
 	},
 	execute(message, args, client) {
