@@ -1,7 +1,7 @@
 module.exports = {
     name: 'utils',
 	help: {
-        name: 'Utilities',
-		brief: 'Utility commands, such as creating a poll or converting measuring units.'
+        name: 'utilse',
+		brief: 'utiliti comands, such as creatinge a polle or converting mesuringe unitse'
 	}
 };

@@ -5,8 +5,8 @@ module.exports = {
 	name: 'ping',
 	help: {
         category: 'utils',
-		brief: 'Gets the ping',
-		usage: 'ping {granbo}',
+		brief: 'mesurs ze latencie !!',
+		usage: 'ping',
 	},
 	execute(message, args, client) {
         const embed = {
