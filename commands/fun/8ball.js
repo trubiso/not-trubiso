@@ -1,4 +1,3 @@
-const { Message } = require('discord.js');
 const { e } = require('../../vars.json');
 
 module.exports = {
