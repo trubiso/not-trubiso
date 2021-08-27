@@ -99,8 +99,8 @@ module.exports = {
                 out = `i culdn't find anythinge for **${cmd}**... ${e.think.e}` + `did yu meane **${this.find_closest_cmd_to(cmd, client)}**?`;
             }
             else if (typeof ret === "string") out = ret;
-            else return message.channel.send({embeds: [ret]});
+            else return message.reply({embeds: [ret]});
         }
-        return message.channel.send(Discord.Util.cleanContent(out, message.channel));
+        return message.reply(Discord.Util.cleanContent(out, message.channel));
 	},
 };
