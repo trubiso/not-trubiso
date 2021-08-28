@@ -23,16 +23,15 @@ export = {
         if (!args.length) {
             throw "giv me text to smiliefie";
         }
-        let text = Util.cleanContent(args.join(' ').replace(/--times [0-9]+/g, ''), message.channel);
+        let text = Util.cleanContent(args.join(' ').replace(/--times [0-9]+/g, '').trim(), message.channel);
         const num_param = args.join(' ').match(/--times [0-9]+/g)?.toString() ?? "--times 1";
-        const num = parseInt(num_param.replace(/--times/g, '').trim());
+        const num = Math.max(Math.min(parseInt(num_param.replace(/--times/g, '').trim()), 5), 1);
 
         [...Array(num).keys()].forEach(()=>{
             text = addRandomEmotes(text, message);
         });
 
-        if (text.length > 4000) throw `yur text is too bigege !! ${e.sad.e}`;
-
-        return message.reply(text);
+        if (text.length > 2000) throw `yur text is too bigege !! ${e.sad.e}`;
+        else return message.reply(text);
 	}
 } as Command;
