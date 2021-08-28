@@ -1,6 +1,6 @@
 const { e } = require("./vars.json");
 
-module.exports = {
+export = {
     eightball_answers: [
         `absolutlie, of cuors!! ${e.happy.e}`, `noe.. not at alle.. ${e.sad.e}`,
         `honestlie... ${e.angel.e} i hav no ideae ${e.sad.e}`,

@@ -1,14 +1,15 @@
-const Discord = require('discord.js');
+import { Command } from "../../types/command";
+
 const { e } = require('../../vars.json');
 
-module.exports = {
+export = {
 	name: 'ping',
 	help: {
         category: 'utils',
 		brief: 'mesurs ze latencie !!',
 		usage: 'ping',
 	},
-	execute(message, args, client) {
+	execute(message, args, handler) {
         const embed = {
             title: `${e.happy.e} ponge !`,
             fields: [
@@ -18,10 +19,10 @@ module.exports = {
                 },
                 {
                     name: "api latencie",
-                    value: `${Math.round(client.ws.ping)} milisecondes!`
+                    value: `${Math.round(handler.client.ws.ping)} milisecondes!`
                 }
             ]
         };
         return message.reply({embeds: [embed]});
 	}
-};
+} as Command;

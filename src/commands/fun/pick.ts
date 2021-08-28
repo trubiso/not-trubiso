@@ -1,8 +1,9 @@
-const Discord = require('discord.js');
+import { Util } from "discord.js";
+import { Command } from "../../types/command";
 const { e } = require('../../vars.json');
-const answers = require('../../vars.js').pick_answers;
+const answers = require('../../vars').pick_answers;
 
-module.exports = {
+export = {
 	name: 'pick',
 	aliases: ['choose'],
 	help: {
@@ -10,7 +11,7 @@ module.exports = {
 		brief: 'picks betweene elements dat can be choesn !',
 		usage: 'pick [element, element, <element>...]',
 	},
-	execute(message, args, client) {
+	execute(message, args, handler) {
 		if (!args.length) {
 			throw "plees, enter elements for me to choos frome !!";
 		}
@@ -18,8 +19,8 @@ module.exports = {
 		if (!arr[1] || !arr[0]) {
 			throw `meybi enter at least 2 elements for me to choos from ?? ${e.sad.e}`
 		}
-		const item = Discord.Util.cleanContent(arr[Math.floor(Math.random() * arr.length)].trim(), message.channel);
+		const item = Util.cleanContent(arr[Math.floor(Math.random() * arr.length)].trim(), message.channel);
 		const answer = answers[Math.floor(Math.random() * answers.length)].replace(/{i}/g, `**${item}**`)
         return message.reply(answer);
 	}
-};
+} as Command;

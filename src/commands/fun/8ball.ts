@@ -1,14 +1,15 @@
+import { Command } from "../../types/command";
 const { e } = require('../../vars.json');
-const answers = require('../../vars.js').eightball_answers;
+const answers = require('../../vars').eightball_answers;
 
-module.exports = {
+export = {
 	name: '8ball',
 	help: {
         category: 'fun',
 		brief: 'da smili gods will decied if they can agree with somthing!',
 		usage: '8ball <question>'
 	},
-    execute(message, args, client) {
+    execute(message, args, handler) {
         if (!args.length) {
             message.channel.send(`yu hab to ask a questione! ${e.really.e}`);
         }
@@ -19,4 +20,4 @@ module.exports = {
             message.reply(answer);
         }
     },
-};
+} as Command;
