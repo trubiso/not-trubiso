@@ -1,6 +1,8 @@
 import { Message, Util } from "discord.js";
 import { Command } from "../../types/command";
 
+const { e } = require('../../vars.json');
+
 const randomEmote = (message : Message) : string => {
     const arr = message.guild?.emojis.cache.map(v => v.toString()) ?? [];
     return arr[Math.floor(Math.random()*arr.length)];
@@ -28,6 +30,8 @@ export = {
         [...Array(num).keys()].forEach(()=>{
             text = addRandomEmotes(text, message);
         });
+
+        if (text.length > 4000) throw `yur text is too bigege !! ${e.sad.e}`;
 
         return message.reply(text);
 	}

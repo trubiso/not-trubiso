@@ -21,6 +21,7 @@ export = {
 		}
 		const item = Util.cleanContent(arr[Math.floor(Math.random() * arr.length)].trim(), message.channel);
 		const answer = answers[Math.floor(Math.random() * answers.length)].replace(/{i}/g, `**${item}**`);
+		if (answer.length > 4000) throw `yur options ar too bigege !! ${e.sad.e}`;
         return message.reply(answer);
 	}
 } as Command;
