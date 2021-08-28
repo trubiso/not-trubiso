@@ -47,7 +47,7 @@ client.on('messageCreate', (msg: Message) => {
             try {
                 handler.commands.get(command)!.execute(msg, args, handler);
             } catch (error) {
-                msg.channel.send(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} ${error.toString()}`);
+                msg.channel.send(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} ${(error as any).toString()}`);
             }
         } else {
             var suitable = [...handler.commands.filter((v: Command) => (v.aliases ?? []).includes(command))];

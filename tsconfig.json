@@ -9,6 +9,7 @@
     "removeComments": true /* Do not emit comments to output. */,
     "skipLibCheck": true,
     "declaration": true,
+    "types": [],
 
     /* Strict Type-Checking Options */
     "strict": true /* Enable all strict type-checking options. */,
@@ -35,5 +36,5 @@
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */,
   },
   "include": ["./src"],
-  "exclude": ["**/out", "**/node_modules"],
+  "exclude": ["**/out", "node_modules/*"],
 }
