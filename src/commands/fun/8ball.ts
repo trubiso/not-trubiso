@@ -9,13 +9,13 @@ export = {
 		brief: 'da smili gods will decied if they can agree with somthing!',
 		usage: '8ball <question>'
 	},
-    execute(message, args, handler) {
+    execute(message, args) {
         if (!args.length) {
             message.channel.send(`yu hab to ask a questione! ${e.really.e}`);
         }
         else {
-            let answer_pos = Math.floor(Math.random()*answers.length);
-            let answer = answers[answer_pos];
+            const answer_pos = Math.floor(Math.random()*answers.length);
+            const answer = answers[answer_pos];
 
             message.reply(answer);
         }

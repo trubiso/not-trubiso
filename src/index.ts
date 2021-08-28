@@ -20,17 +20,14 @@ for (const file of categoryFiles) {
 }
 
 client.once('ready', () => {
-    console.log(`Logged in as ${client.user!.tag}!`);
+    console.log(`Logged in as ${client.user?.tag}!`);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     (client.channels.cache.get("717683408553377815")! as TextChannel).send(`i'm bakke!!! ${e.happy.e}`);
 });
 
-// client.on('guildMemberAdd', member => {
-//     if (member.guild.id == 717683408012181505)
-//         member.roles.add(member.guild.roles.get(choose("725843105445576796", "725843316662468641")));
-// });
-
 client.on('messageCreate', (msg: Message) => {
     if (!msg.content.startsWith(handler.prefix) && !msg.mentions.everyone) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         if (msg.mentions.has(client.user!)) {
             msg.react("👋");
             msg.react(e.happy.id);
@@ -41,18 +38,23 @@ client.on('messageCreate', (msg: Message) => {
         return;
     } else if (!msg.author.bot && msg.content.startsWith(handler.prefix)) {
         const args = msg.content.slice(handler.prefix.length).trim().split(/ +/);
-        const command = args.shift()!.toLowerCase();
+        const command = args.shift()?.toLowerCase() ?? "";
 
         if (handler.commands.get(command)) {
             try {
-                handler.commands.get(command)!.execute(msg, args, handler);
+                handler.commands.get(command)?.execute(msg, args, handler);
             } catch (error) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 msg.channel.send(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} ${(error as any).toString()}`);
             }
         } else {
-            var suitable = [...handler.commands.filter((v: Command) => (v.aliases ?? []).includes(command))];
+            const suitable = [...handler.commands.filter((v: Command) => (v.aliases ?? []).includes(command))];
             if (suitable) {
-                try { suitable[0][1].execute(msg, args, handler) } catch(e) {};
+                try {
+                    suitable[0][1].execute(msg, args, handler);
+                } catch(e) {
+                    console.log(e);
+                }
             }
         }
     }

@@ -3,9 +3,12 @@
     "discord.js": "^13.1.0",
     "get-closest": "^0.0.4",
     "levenshtein": "^1.0.5",
-    "typescript": "^4.4.2"
+    "typescript": "^4.4.2",
+    "typescript-eslint": "^0.0.1-alpha.0"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.29.3",
+    "@typescript-eslint/parser": "^4.29.3",
     "eslint": "^7.32.0"
   },
   "scripts": {

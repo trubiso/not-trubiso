@@ -3,25 +3,26 @@ import { Handler } from "../../types/handler";
 
 const Discord = require('discord.js');
 const { e } = require('../../vars.json');
-var getClosest = require("get-closest");
-var Levenshtein = require("levenshtein");
+const getClosest = require("get-closest");
+const Levenshtein = require("levenshtein");
 
 function compareLevenshteinDistance(compareTo: string, baseItem: string) {
     return new Levenshtein(compareTo, baseItem).distance;
 }
 
 function find_closest_cmd_to(cmd: string, handler: Handler){
-    let cmds = [...handler.commands.map(v => v.name)]
-    handler.commands.filter(v => typeof v.aliases !== "undefined").forEach(v => cmds.push(...v.aliases as string[]))
-    cmds.push(...handler.categories.map(v => v.name))
+    const cmds = [...handler.commands.map(v => v.name)];
+    handler.commands.filter(v => typeof v.aliases !== "undefined").forEach(v => cmds.push(...v.aliases as string[]));
+    cmds.push(...handler.categories.map(v => v.name));
     return cmds[getClosest.custom(cmd, cmds, compareLevenshteinDistance)];
 }
 
 function get_help(cmd: string, handler: Handler) {
-    let out = ""
-    let cmdExists = false;
-    let prefix = handler.prefix
+    const out = "";
+    const cmdExists = false;
+    const prefix = handler.prefix;
     for (const _command of handler.commands){
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const command = handler.commands.get(_command[0])!;
         if (command.name === cmd || (command.aliases ?? []).includes(cmd)){
             const embed = {
@@ -91,7 +92,7 @@ export = {
 		if (!args.length){
             out = "**Commands: **\n\n";
             for (const category of handler.categories.sort((a,b) => a.name > b.name ? 1 : (a.name < b.name ? -1 : 0))){
-                out += `**${category.help.name}: **`
+                out += `**${category.help.name}: **`;
                 for (const command of category.commands){
                     out += `${command.name}, `;
                 }
@@ -99,7 +100,7 @@ export = {
             }
         } else {
             const cmd = args[0].toString().toLowerCase();
-            let ret = get_help(cmd, handler);
+            const ret = get_help(cmd, handler);
             if (ret == false) {
                 out = `i culdn't find anythinge for **${cmd}**... ${e.think.e}` + `did yu meane **${find_closest_cmd_to(cmd, handler)}**?`;
             }

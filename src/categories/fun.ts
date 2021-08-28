@@ -1,4 +1,4 @@
-import { Module } from "../types/module"
+import { Module } from "../types/module";
 
 export = {
     name: 'fun',

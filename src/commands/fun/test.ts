@@ -1,5 +1,4 @@
 import { Command } from "../../types/command";
-const { e } = require('../../vars.json');
 const { permissionError } = require('../../utils/permissionError');
 
 export = {
@@ -9,7 +8,7 @@ export = {
 		brief: 'test comande',
 		usage: 'test'
 	},
-    execute(message, args, handler) {
+    execute(message) {
         permissionError(message);
     },
 } as Command;
