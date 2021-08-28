@@ -40,22 +40,18 @@ client.on('messageCreate', (msg: Message) => {
         const args = msg.content.slice(handler.prefix.length).trim().split(/ +/);
         const command = args.shift()?.toLowerCase() ?? "";
 
-        if (handler.commands.get(command)) {
-            try {
+        try {
+            if (handler.commands.get(command)) {
                 handler.commands.get(command)?.execute(msg, args, handler);
-            } catch (error) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                msg.channel.send(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} ${(error as any).toString()}`);
-            }
-        } else {
-            const suitable = [...handler.commands.filter((v: Command) => (v.aliases ?? []).includes(command))];
-            if (suitable) {
-                try {
-                    suitable[0][1].execute(msg, args, handler);
-                } catch(e) {
-                    console.log(e);
+            } else {
+                const suitable = [...handler.commands.filter((v: Command) => (v.aliases ?? []).includes(command))];
+                if (suitable) {
+                    suitable[0][1]?.execute(msg, args, handler);
                 }
             }
+        } catch (error) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            msg.channel.send(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} ${(error as any).toString()}`);
         }
     }
 });
