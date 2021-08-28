@@ -53,6 +53,9 @@ client.on('messageCreate', (msg: Message) => {
             if (!(error instanceof TypeError)) {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 msg.channel.send(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} ${(error as any).toString()}`);
+            } else {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                if (handler.commands.get(command)) console.log((error as any).toString());
             }
         }
     }
