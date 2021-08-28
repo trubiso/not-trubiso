@@ -4,7 +4,7 @@ module.exports = {
     loadModule(file, client) {
         try {
             const category = require(`../categories/${file}`);
-            const commandFiles = fs.readdirSync(`../commands/${category.name}`).filter(file => file.endsWith('.js'));
+            const commandFiles = fs.readdirSync(`./commands/${category.name}`).filter(file => file.endsWith('.js'));
             let catcomds = [];
             for (const cmdFile of commandFiles) {
                 const command = require(`../commands/${category.name}/${cmdFile}`);
