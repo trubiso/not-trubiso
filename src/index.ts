@@ -50,8 +50,10 @@ client.on('messageCreate', (msg: Message) => {
                 }
             }
         } catch (error) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            msg.channel.send(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} ${(error as any).toString()}`);
+            if (!(error instanceof TypeError)) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                msg.channel.send(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} ${(error as any).toString()}`);
+            }
         }
     }
 });
