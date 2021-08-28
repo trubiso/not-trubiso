@@ -1,6 +1,6 @@
 const { e } = require('../../vars.json');
 const answers = require('../../vars.js').permission_denied_answers;
-const { permisionError, permissionError } = require('../../utils/permissionError.js');
+const { permissionError } = require('../../utils/permissionError.js');
 
 module.exports = {
 	name: 'test',
