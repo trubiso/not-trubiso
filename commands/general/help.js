@@ -85,7 +85,7 @@ module.exports = {
         out = "";
 		if (!args.length){
             out = "**Commands: **\n\n";
-            for (category of client.categories){
+            for (category of client.categories.sort((a,b) => a.name > b.name ? 1 : (a.name < b.name ? -1 : 0))){
                 out += `**${category.help.name}: **`
                 for (command of category.commands){
                     out += `${command.name}, `;

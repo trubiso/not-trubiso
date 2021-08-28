@@ -2,6 +2,7 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const { token } = require('./config.json');
 const { e } = require('./vars.json');
+const { loadModule } = require('./utils/loadModule.js');
 
 const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS"], allowedMentions: {parse: ["users"], repliedUser: false}});
 client.commands = new Discord.Collection();
@@ -11,23 +12,12 @@ client.prefix = "<";
 const categoryFiles = fs.readdirSync('./categories').filter(file => file.endsWith('.js'));
 
 for (const file of categoryFiles) {
-    const category = require(`./categories/${file}`);
-    const commandFiles = fs.readdirSync(`./commands/${category.name}`).filter(file => file.endsWith('.js'));
-    for (const file of commandFiles) {
-        const command = require(`./commands/${category.name}/${file}`);
-        client.commands.set(command.name, command);
-    }
-    let catcomds = [];
-    client.commands.forEach(v=>{
-        if (v.help.category) if (v.help.category == file.slice(0, -3)) catcomds.push(v);
-    });
-    let o = {name: file.slice(0, -3), help: category.help, commands: catcomds};
-    client.categories.push(o);
+    loadModule(file, client);
 }
 
 client.once('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
-    client.channels.cache.get("717683408553377815").send(`i'm bakke!!! ${e.happy.e}`)
+    client.channels.cache.get("717683408553377815").send(`i'm bakke!!! ${e.happy.e}`);
 });
 
 // client.on('guildMemberAdd', member => {

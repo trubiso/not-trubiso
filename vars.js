@@ -40,7 +40,7 @@ module.exports = {
         `let me sleepe!! ${e.sleep.e}`,
         `i wil onli doe wat i want to. and dat is not on da list. ${e.angry_pink.e}`,
         `its very harde to execut dat comande ${e.clenched_teeth_angry.e}`,
-        `let me checke.. ${e.read.e} yu arn't permited to do dat!! ${e.clenched_teeth_angry.e}`,
+        `let me checke.. ${e.read.e} yu arn't alowd to do dat!! ${e.clenched_teeth_angry.e}`,
         `leev me aloen ${e.disgust.e}`,
         `i wana ski!! ${e.ski.e}`,
         `if yu trie to do dat againe i wil lik yur eyes!! ${e.mad.e}${e.tongue_down.e}`,
