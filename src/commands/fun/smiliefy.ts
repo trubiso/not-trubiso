@@ -17,7 +17,7 @@ export = {
 	help: {
         category: 'fun',
 		brief: 'smiliefies yuor texte',
-		usage: 'smiliefy <text> [--times [number]]',
+		usage: 'smiliefy <text> [--times [number (1-5)]]',
 	},
 	execute(message, args) {
         if (!args.length) {
