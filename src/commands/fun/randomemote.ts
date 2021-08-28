@@ -10,7 +10,7 @@ export = {
 		usage: 'randomemote [num (up to 5)]'
 	},
     execute(message, args, handler) {
-        let num = args[0] ? parseInt(args[0]) : 1;
+        let num = Math.min(Math.max(args[0] ? parseInt(args[0]) : 1, 5), 1);
         let arr = message.guild!.emojis.cache.map(v => v.toString());
         let emojis : string[] = [];
 
