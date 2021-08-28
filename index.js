@@ -27,6 +27,7 @@ for (const file of categoryFiles) {
 
 client.once('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
+    client.channels.cache.get("717683408553377815").send(`i'm bakke!!! ${e.happy.e}`)
 });
 
 // client.on('guildMemberAdd', member => {
