@@ -29,7 +29,13 @@ module.exports = {
         `my opinion might be biased but {i} is de best wan!! ${e.business.e}`,
         `ar yu dum?? ${e.silly.e} cant yu alredi see dat {i} is de onli gud wan?? ${e.sad.e}`,
         `${e.sad.e} i dont liek eny option but i gues {i} is de best wan`,
-        `${e.really.e} ar yu chalenging me?? whu wuldnte pick {i}???`
+        `${e.really.e} ar yu chalenging me?? whu wuldnte pick {i}???`,
+        `${e.funny.e} {i} is de funiest wan !!`,
+        `${e.whistling.e} i'v polld de entiriti of smililand and results point towardse {i} !!`,
+        `${e.party.e} {i} sounds great !!`,
+        `${e.mad.e} waht de frinq ar thos optionse ??? i gues i'l go wit {i} ${e.sad.e}`,
+        `${e.read.e} my bloodlien has alweys chosene {i}!`,
+        `${e.shock_handless.e} yu scareded me wit yur spooki opteions !! {i} lookse goode ${e.tongue_down.e}`
     ],
     permission_denied_answers: [
         `${e.sad2.e} i dont wana!!`,
@@ -52,10 +58,10 @@ module.exports = {
         `yu'r not mi owner! ${e.angry_pink.e}`,
         `yu dont get to decied wat i do ${e.disgust.e}`,
         `i'm at a partie! ${e.party.e} can't do yur comande! ${e.silly.e}${e.whistling.e}`,
-        `i'm gona hamer yur hed for being so anoyinge <:hammering:762814921616392192>${e.sad.e}`,
-        `helo !! yu waned to do dis comande riet ?? wel ${e.silly.e} too bad i dont wana doe it <:funny:717690391499112508>`,
+        `i'm gona hamer yur hed for being so anoyinge ${e.hammering.e}${e.sad.e}`,
+        `helo !! yu waned to do dis comande riet ?? wel ${e.silly.e} too bad i dont wana doe it ${e.funny.e}`,
         `${e.mad.e} i told yu not to !!`,
-        `<:oops:729386039474520159> i acidentali aet da comand, so i cant doe it ${e.sad.e}`,
+        `${e.oops.e} i acidentali aet da comand, so i cant doe it ${e.sad.e}`,
         `if i doo dis comand, yu'r gona die in a tragik car acident !! ${e.sad.e}`,
         `yese!! ${e.happy.e} i'm gona do dat comand... ${e.happy.e} wehnever yu get premisions yu garragabuga ${e.mad.e}`,
         `i acidentali died so i cant do da comand ${e.sad.e}${e.silly.e}`,
