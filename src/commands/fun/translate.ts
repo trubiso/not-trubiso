@@ -10,7 +10,7 @@ export = {
 		usage: 'translate <text>'
 	},
     execute(message, args) {
-        let text = args.join(' ');
+        let text = args.join(' ').toLowerCase();
         Object.keys(smilie_english).forEach((v: string) => text = text.replaceAll(v, smilie_english[v]));
         message.reply(Util.cleanContent(text, message.channel));
     },
