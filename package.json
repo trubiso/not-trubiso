@@ -12,6 +12,12 @@
     "eslint": "^7.32.0"
   },
   "scripts": {
-    "run": "tsc && cd out && node ."
+    "run": "tsc && cp src/config.json out/config.json && cp src/vars.json out/vars.json && cd out && node ."
+  },
+  "name": "not-trubiso",
+  "author": "trubiso",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trubiso/not-trubiso.git"
   }
 }
