@@ -14,7 +14,13 @@ export class Poll {
     public async updateMessage(reaction?: MessageReaction) : Promise<void> {
         const reactionCounts : number[] = await Promise.all(this.pollOptions.map(async v => await v.getReactionCount(reaction)));
         const totalReactions = reactionCounts.reduce((a, b) => a+b);
-        const percentageArray = await Promise.all(this.pollOptions.map(async v => `${this.message.guild?.emojis.cache.get(v.emojiId)?.toString()}: ${await v.getReactionCount(reaction)} (${(await v.getReactionCount(reaction) * 100 / totalReactions).toFixed(0)}%)`));
+        const percentageArray = await Promise.all(this.pollOptions.map(async v => {
+            const emoji = this.message.guild?.emojis.cache.get(v.emojiId)?.toString();
+            const reactionCount = await v.getReactionCount(reaction);
+            const percentage = Math.max(reactionCount * 100 / totalReactions, 0);
+            const percentageString = isNaN(percentage) ? "0" : percentage.toFixed(0);
+            return `${emoji}: ${reactionCount} (${percentageString}%)`;
+        }));
         let percentages = percentageArray.join(', ');
         if (!percentages) percentages = "no reactionese yet !";
         const embed = this.message.embeds[0];
