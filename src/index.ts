@@ -69,12 +69,10 @@ client.on('messageCreate', (msg: Message) => {
 
 client.on('messageReactionAdd', reaction => {
     handler.polls.forEach(v => v.updateMessage(reaction as MessageReaction));
-    // console.log(`Reaction ${reaction.emoji.toString()} (${reaction.count})`);
 });
 
 client.on('messageReactionRemove', reaction => {
     handler.polls.forEach(v => v.updateMessage(reaction as MessageReaction));
-    // console.log(`Reaction ${reaction.emoji.toString()} (${reaction.count})`);
 });
 
 process.on('unhandledRejection', error => {

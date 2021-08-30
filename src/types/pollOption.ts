@@ -12,8 +12,7 @@ export class PollOption {
     }
 
     public async getReactionCount(reaction?: MessageReaction) : Promise<number> {
-        if (reaction) if (reaction.emoji.id === this.emojiId.toString()) this.count = reaction.count;
-        console.log(`reaction: ${reaction?.emoji.toString().split(':')[2].slice(0, -1)}: ${reaction?.count}, this: ${this.emojiId}: ${this.count}`);
+        if (reaction) if (reaction.emoji.id === this.emojiId) this.count = reaction.count;
         return this.count;
     }
 
