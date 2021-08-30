@@ -1,0 +1,1 @@
+export const isEmoji = (text : string) : boolean => !!text.match(/\p{Extended_Pictographic}/gu);

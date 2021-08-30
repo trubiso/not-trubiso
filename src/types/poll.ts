@@ -15,7 +15,9 @@ export class Poll {
         const reactionCounts : number[] = await Promise.all(this.pollOptions.map(async v => await v.getReactionCount(reaction)));
         const totalReactions = reactionCounts.reduce((a, b) => a+b);
         const percentageArray = await Promise.all(this.pollOptions.map(async v => {
-            const emoji = this.message.guild?.emojis.cache.get(v.emojiId)?.toString();
+            let emoji;
+            if (v.isUnicodeEmoji) emoji = v.emojiId;
+            else emoji = this.message.guild?.emojis.cache.get(v.emojiId)?.toString();
             const reactionCount = await v.getReactionCount(reaction);
             const percentage = reactionCount * 100 / totalReactions;
             const percentageString = isNaN(percentage) ? "0" : percentage.toFixed(0);

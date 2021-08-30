@@ -1,6 +1,8 @@
 import { Command } from "../../types/command";
 import { Poll } from "../../types/poll";
 import { PollOptionResolvable } from "../../types/pollOptionResolvable";
+import { getEmojis } from "../../utils/getEmojis";
+import { isEmoji } from "../../utils/isEmoji";
 import { permissionError } from "../../utils/permissionError";
 
 const { e } = require('../../vars.json');
@@ -22,13 +24,36 @@ export = {
         const description = rawArgs[1];
         const rawOptions = rawArgs[2].split(',').map(v => v.trim()).map(v => {
             const optionParts = v.split('->').map(v => v.trim());
-            const emojiId = optionParts[0].split(':')[2].slice(0, -1);
+            let emojiId : string;
+            if (isEmoji(optionParts[0])) {
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                emojiId = getEmojis(optionParts[0])[0];
+            } else {
+                emojiId = optionParts[0].split(':')[2].slice(0, -1);
+            }
             const emojiDescription = optionParts[1];
             return {
                 emoji: emojiId,
                 description: emojiDescription
             };
         });
+
+        const rawOptionsEmojis = rawOptions.map(v => v.emoji);
+
+        if (new Set(rawOptionsEmojis).size !== rawOptionsEmojis.length) {
+            message.reply(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} yu cant hav moar dan wan optione asocieted to wan emoji ! ${e.sad.e}`);
+            return;
+        }
+
+        if (!title) {
+            message.reply(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} giv a titel to de poll !! ${e.sad.e}`);
+            return;
+        }
+
+        if (!description) {
+            message.reply(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} yu hav to giv a descriptionene for de polle ! ${e.sad.e}`);
+            return;
+        }
 
         const embed = {
             title: `polle !! ${e.shock_handless.e}`,
@@ -40,7 +65,7 @@ export = {
                 {
                     name: "optionse!",
                     value: rawOptions.map(v => {
-                        return `${handler.client.emojis.cache.get(v.emoji)} for ${v.description}`;
+                        return `${isEmoji(v.emoji) ? v.emoji : handler.client.emojis.cache.get(v.emoji)} for ${v.description}`;
                     }).join(', ')
                 },
                 {
