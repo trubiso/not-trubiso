@@ -10,14 +10,12 @@ export = {
 		usage: 'convert <number> <source unit> <destination unit>',
 		extra: (()=>{
 			let out = `${e.nerd.e} **posibol unitse**`;
-			for(const measure of converter().measures()){
-				out += `\n\t**${measure}**: `;
-				for(const possibility of converter().possibilities(measure)){
-					out += `${possibility}, `;
-				}
-				out = out.slice(0, -2);
+			for(const measure of converter().measures().filter((v: string) => [
+				"length", "area", "mass", "volume", "temperature", "time", "digital", "speed", "pressure"
+			].includes(v))){
+				out += `\n\t**${measure}**: ${converter().possibilities(measure).join(', ')}`;
 			}
-			return out;
+			return `${out}\n**and meny moar !**`;
 		})()
 	},
 	execute(message, args) {
