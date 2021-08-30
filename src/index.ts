@@ -23,6 +23,12 @@ client.once('ready', () => {
     console.log(`Logged in as ${client.user?.tag}!`);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     (client.channels.cache.get("717683408553377815")! as TextChannel).send(`i'm bakke!!! ${e.happy.e}`);
+    client.user?.setPresence({
+        activities: [{
+            name: "yu !!",
+            type: "LISTENING"
+        }]
+    });
 });
 
 client.on('messageCreate', (msg: Message) => {
