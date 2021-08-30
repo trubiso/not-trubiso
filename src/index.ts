@@ -1,4 +1,4 @@
-import { Client, Collection, Message, TextChannel } from "discord.js";
+import { Client, Collection, Message, MessageReaction, TextChannel } from "discord.js";
 
 import fs from "fs";
 
@@ -10,7 +10,7 @@ import { loadModule } from "./utils/loadModule";
 import { Command } from "./types/command";
 import { Handler } from "./types/handler";
 
-const client = new Client({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS"], allowedMentions: {repliedUser: false}});
+const client = new Client({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS", "GUILD_MESSAGE_REACTIONS"], allowedMentions: {repliedUser: false}});
 const handler = new Handler(new Collection(), [], "<", client, []);
 
 const categoryFiles = fs.readdirSync('./categories').filter((file: string) => file.endsWith('.js'));
@@ -67,12 +67,14 @@ client.on('messageCreate', (msg: Message) => {
     }
 });
 
-client.on('messageReactionAdd', () => {
-    handler.polls.forEach(v => v.updateMessage(handler));
+client.on('messageReactionAdd', reaction => {
+    handler.polls.forEach(v => v.updateMessage(reaction as MessageReaction));
+    // console.log(`Reaction ${reaction.emoji.toString()} (${reaction.count})`);
 });
 
-client.on('messageReactionRemove', () => {
-    handler.polls.forEach(v => v.updateMessage(handler));
+client.on('messageReactionRemove', reaction => {
+    handler.polls.forEach(v => v.updateMessage(reaction as MessageReaction));
+    // console.log(`Reaction ${reaction.emoji.toString()} (${reaction.count})`);
 });
 
 process.on('unhandledRejection', error => {

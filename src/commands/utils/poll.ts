@@ -16,7 +16,7 @@ export = {
         if (!message.member?.permissions.has("ADMINISTRATOR")) {
             return permissionError(message);
         }
-        
+
         const rawArgs = args.join(' ').split('|').map(v => v.trim());
         const title = rawArgs[0];
         const description = rawArgs[1];
@@ -45,15 +45,16 @@ export = {
                 },
                 {
                     name: "statse",
-                    value: ""
+                    value: "no reactionese yet !"
                 }
             ],
             author: {name: `starteded by ${message.author.username} !!`}
         };
 
         const pollMessage = await message.reply({embeds: [embed]});
-        rawOptions.forEach(v => pollMessage.react(v.emoji));
-        const pollObject = new Poll(rawOptions.map(v => ({emojiId: parseInt(v.emoji), message: pollMessage} as PollOptionResolvable)), pollMessage);
+        rawOptions.forEach(async v => await pollMessage.react(v.emoji));
+        const pollObject = new Poll(rawOptions.map(v => ({emojiId: v.emoji, message: pollMessage} as PollOptionResolvable)), pollMessage);
+        pollObject.updateMessage();
         handler.polls.push(pollObject);
 	}
 } as Command;

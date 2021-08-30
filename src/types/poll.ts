@@ -1,5 +1,4 @@
-import { Message } from "discord.js";
-import { Handler } from "./handler";
+import { Message, MessageReaction } from "discord.js";
 import { PollOption } from "./pollOption";
 import { PollOptionResolvable } from "./pollOptionResolvable";
 
@@ -12,12 +11,16 @@ export class Poll {
         this.message = message;
     }
 
-    public updateMessage(handler: Handler) : void {
-        const reactionCounts : number[] = this.pollOptions.map(v => v.getReactionCount());
+    public async updateMessage(reaction?: MessageReaction) : Promise<void> {
+        const reactionCounts : number[] = await Promise.all(this.pollOptions.map(async v => await v.getReactionCount(reaction)));
         const totalReactions = reactionCounts.reduce((a, b) => a+b);
-        const percentages = this.pollOptions.map(v => `${handler.client.emojis.cache.get(v.emojiId.toString())}: ${v.getReactionCount()} (${v.getReactionCount() * 100 / totalReactions}%)`).join(', ');
+        const percentageArray = await Promise.all(this.pollOptions.map(async v => `${this.message.guild?.emojis.cache.get(v.emojiId.toString())?.toString()}: ${await v.getReactionCount(reaction)} (${(await v.getReactionCount(reaction) * 100 / totalReactions).toFixed(0)}%)`));
+        let percentages = percentageArray.join(', ');
+        if (!percentages) percentages = "no reactionese yet !";
+        const embed = this.message.embeds[0];
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        this.message.embeds[0].fields.find(v => v.name == "statse")!.value = percentages;
+        embed.fields.find(v => v.name === "statse")!.value = percentages;
+        this.message.edit({embeds: [embed]});
     }
 
 }
