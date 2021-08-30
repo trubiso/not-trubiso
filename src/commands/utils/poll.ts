@@ -29,7 +29,12 @@ export = {
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 emojiId = getEmojis(optionParts[0])[0];
             } else {
-                emojiId = optionParts[0].split(':')[2].slice(0, -1);
+                try {
+                    emojiId = optionParts[0].split(':')[2].slice(0, -1);
+                } catch (error) {
+                    message.reply(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} yu hav to use proper emojise for option emojiese ${e.sad.e}`);
+                    throw "non-proper emojiese in option emojiese";
+                }
             }
             const emojiDescription = optionParts[1];
             return {

@@ -11,18 +11,18 @@ export class Poll {
         this.message = message;
     }
 
-    public async updateMessage(reaction?: MessageReaction) : Promise<void> {
-        const reactionCounts : number[] = await Promise.all(this.pollOptions.map(async v => await v.getReactionCount(reaction)));
+    public updateMessage(reaction?: MessageReaction) : void {
+        const reactionCounts : number[] = this.pollOptions.map(v => v.getReactionCount(reaction));
         const totalReactions = reactionCounts.reduce((a, b) => a+b);
-        const percentageArray = await Promise.all(this.pollOptions.map(async v => {
+        const percentageArray = this.pollOptions.map(v => {
             let emoji;
             if (v.isUnicodeEmoji) emoji = v.emojiId;
             else emoji = this.message.guild?.emojis.cache.get(v.emojiId)?.toString();
-            const reactionCount = await v.getReactionCount(reaction);
+            const reactionCount = v.getReactionCount(reaction);
             const percentage = reactionCount * 100 / totalReactions;
             const percentageString = isNaN(percentage) ? "0" : percentage.toFixed(0);
             return `${emoji}: ${reactionCount} (${percentageString}%)`;
-        }));
+        });
         let percentages = percentageArray.join(', ');
         if (!percentages) percentages = "no reactionese yet !";
         const embed = this.message.embeds[0];

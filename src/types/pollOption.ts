@@ -13,7 +13,7 @@ export class PollOption {
         else return new PollOption(resolvable.emojiId, resolvable.message);
     }
 
-    public async getReactionCount(reaction?: MessageReaction) : Promise<number> {
+    public getReactionCount(reaction?: MessageReaction) : number {
         if (this.isUnicodeEmoji) {
             if (reaction) if (reaction.emoji.name === this.emojiId) this.count = reaction.count;
         } else {
