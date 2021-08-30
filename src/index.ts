@@ -10,7 +10,7 @@ import { loadModule } from "./utils/loadModule";
 import { Command } from "./types/command";
 import { Handler } from "./types/handler";
 
-const client = new Client({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS"], allowedMentions: {parse: ["users"], repliedUser: false}});
+const client = new Client({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS"], allowedMentions: {repliedUser: false}});
 const handler = new Handler(new Collection(), [], "<", client);
 
 const categoryFiles = fs.readdirSync('./categories').filter((file: string) => file.endsWith('.js'));

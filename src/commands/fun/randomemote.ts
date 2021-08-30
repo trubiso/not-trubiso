@@ -9,7 +9,7 @@ export = {
 		usage: 'randomemote [num (up to 5)]'
 	},
     execute(message, args) {
-        const num = Math.min(Math.max(args[0] ? parseInt(args[0]) : 1, 5), 1);
+        const num = Math.min(Math.max(args[0] ? parseInt(args[0]) : 1, 1), 5);
         const arr = message.guild?.emojis.cache.map(v => v.toString()) ?? [];
         const emojis : string[] = [];
 
