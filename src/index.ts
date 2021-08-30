@@ -36,7 +36,7 @@ async function findPollMessages() {
 client.once('ready', () => {
     console.log(`Logged in as ${client.user?.tag}!`);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    // (client.channels.cache.get("717683408553377815")! as TextChannel).send(`i'm bakke!!! ${e.happy.e}`);
+    (client.channels.cache.get("717683408553377815")! as TextChannel).send(`i'm bakke!!! ${e.happy.e}`);
     client.user?.setPresence({
         activities: [{
             name: "yu !!",
@@ -44,10 +44,10 @@ client.once('ready', () => {
         }]
     });
     findPollMessages().then(v => {
-        const restoredPolls = v.map(v => Poll.restorePollFromMessage(v, handler));
+        const restoredPolls = v.map(v => Poll.restorePollFromMessage(v));
         handler.polls.push(...restoredPolls.filter(Boolean) as Poll[]);
     }).then(() => {
-        console.log(handler.polls.map(v => {return {pollOptions: v.pollOptions.map(v => `${v.emojiId} -> ${v.count}`), message: v.message.url}; }));
+        // console.log(handler.polls.map(v => {return {pollOptions: v.pollOptions.map(v => `${v.emojiId} -> ${v.count}`), message: v.message.url}; }));
     });
 });
 

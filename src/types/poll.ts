@@ -2,7 +2,6 @@ import { Message, MessageReaction } from "discord.js";
 import { customEmoteRegex } from "../utils/customEmoteRegex";
 import { emojiRegex } from "../utils/emojiRegex";
 import { isEmoji } from "../utils/isEmoji";
-import { Handler } from "./handler";
 import { PollOption } from "./pollOption";
 import { PollOptionResolvable } from "./pollOptionResolvable";
 
@@ -15,7 +14,7 @@ export class Poll {
         this.message = message;
     }
 
-    static restorePollFromMessage(message: Message, handler: Handler) : Poll | undefined {
+    static restorePollFromMessage(message: Message) : Poll | undefined {
         const optionEmojiRegex = new RegExp(new RegExp(emojiRegex).source + '|' + new RegExp(customEmoteRegex).source, 'g');
         const optionEmojis = Array.from(message.embeds[0].fields[1].value.matchAll(optionEmojiRegex), m => m[0]).filter(v => v.length);
         const options = optionEmojis.map(v => {

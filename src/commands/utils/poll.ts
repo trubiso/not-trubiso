@@ -3,7 +3,6 @@ import { Poll } from "../../types/poll";
 import { PollOptionResolvable } from "../../types/pollOptionResolvable";
 import { getEmojis } from "../../utils/getEmojis";
 import { isEmoji } from "../../utils/isEmoji";
-import { permissionError } from "../../utils/permissionError";
 
 const { e } = require('../../vars.json');
 
@@ -15,10 +14,6 @@ export = {
 		usage: 'poll <title> | <description> | <optionEmoji> -> <optionDescription>,...',
 	},
 	async execute(message, args, handler) {
-        if (!message.member?.permissions.has("ADMINISTRATOR")) {
-            return permissionError(message);
-        }
-
         const rawArgs = args.join(' ').split('|').map(v => v.trim());
         const title = rawArgs[0];
         const description = rawArgs[1];
