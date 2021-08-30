@@ -9,6 +9,9 @@ export = {
 		usage: 'say <text>'
 	},
     execute(message, args) {
+        if (!args.length) {
+            throw "gib me text to sey !!";
+        }
         const text = args.join(' ');
         message.reply(Util.cleanContent(text, message.channel));
     },
