@@ -13,7 +13,7 @@ export class PollOption {
 
     public async getReactionCount(reaction?: MessageReaction) : Promise<number> {
         if (reaction) if (reaction.emoji.id === this.emojiId) this.count = reaction.count;
-        return this.count - 1;
+        return Math.max(this.count - 1, 0);
     }
 
     constructor(emojiId: string, message: Message) {
