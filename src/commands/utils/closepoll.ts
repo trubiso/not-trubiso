@@ -18,7 +18,7 @@ export = {
         if (!poll) {
             throw "dat poll is alredi closeded !";
         }
-        if (poll.message.author.id !== message.author.id && !message.member?.permissions.has("ADMINISTRATOR")) {
+        if (!message.member?.permissions.has("ADMINISTRATOR")) {
             return permissionError(message);
         }
         const embed = poll.message.embeds[0];
