@@ -9,6 +9,7 @@ import { loadModule } from "./utils/loadModule";
 
 import { Command } from "./types/command";
 import { Handler } from "./types/handler";
+import { Poll } from "./types/poll";
 
 const client = new Client({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS", "GUILD_MESSAGE_REACTIONS"], allowedMentions: {repliedUser: false}});
 const handler = new Handler(new Collection(), [], "<", client, []);
@@ -19,15 +20,34 @@ for (const file of categoryFiles) {
     loadModule(file, handler);
 }
 
+//for (const message of )
+async function findPollMessages() {
+    const textChannels = handler.client.channels.cache.filter(v => v.isText());
+    const messages = await Promise.all(textChannels.map(async v => await (v as TextChannel).messages.fetch({
+        limit: 100
+    }).then(messages => {
+        const botMessages = [...messages.filter(v => v.author.id === client.user?.id).values()];
+        return botMessages.filter(v => !!v.embeds).filter(v => v.embeds[0]?.title === `polle !! ${e.shock_handless.e}`);
+    })));
+    const messageArr = messages.filter(v => v.length).flat(1);
+    return messageArr;
+}
+
 client.once('ready', () => {
     console.log(`Logged in as ${client.user?.tag}!`);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    (client.channels.cache.get("717683408553377815")! as TextChannel).send(`i'm bakke!!! ${e.happy.e}`);
+    // (client.channels.cache.get("717683408553377815")! as TextChannel).send(`i'm bakke!!! ${e.happy.e}`);
     client.user?.setPresence({
         activities: [{
             name: "yu !!",
             type: "LISTENING"
         }]
+    });
+    findPollMessages().then(v => {
+        const restoredPolls = v.map(v => Poll.restorePollFromMessage(v, handler));
+        handler.polls.push(...restoredPolls.filter(Boolean) as Poll[]);
+    }).then(() => {
+        console.log(handler.polls.map(v => {return {pollOptions: v.pollOptions.map(v => `${v.emojiId} -> ${v.count}`), message: v.message.url}; }));
     });
 });
 

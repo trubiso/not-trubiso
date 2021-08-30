@@ -1,1 +1,3 @@
-export const isEmoji = (text : string) : boolean => !!text.match(/(\p{Extended_Pictographic}|\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]|🇦|🇧|🇨|🇩|🇪|🇫|🇬|🇭|🇮|🇯|🇰|🇱|🇲|🇳|🇴|🇵|🇶|🇷|🇸|🇹|🇺|🇻|🇼|🇽|🇾|🇿)/gu);
+import { emojiRegex } from "./emojiRegex";
+
+export const isEmoji = (text : string) : boolean => !!text.match(emojiRegex);
