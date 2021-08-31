@@ -4,6 +4,12 @@ import { Module } from "../types/module";
 
 import fs from "fs";
 
+/**
+ * Loads a module/category into a bot handler.
+ * @param file The name of the category file (should contain file extension).
+ * @param handler The bot handler to load the module/category into.
+ * @throws Will throw an error if the module cannot be loaded.
+ */
 export const loadModule = (file: string, handler: Handler) : void => {
     try {
         const category = require(`../categories/${file}`) as Module;

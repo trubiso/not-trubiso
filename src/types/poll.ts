@@ -1,25 +1,43 @@
 import { Message, MessageReaction } from "discord.js";
 import { customEmoteRegex } from "../utils/customEmoteRegex";
 import { emojiRegex } from "../utils/emojiRegex";
-import { isEmoji } from "../utils/isEmoji";
+import { containsEmoji } from "../utils/containsEmoji";
 import { PollOption } from "./pollOption";
 import { PollOptionResolvable } from "./pollOptionResolvable";
 
+/**
+ * Takes care of managing, updating and restoring polls.
+ */
 export class Poll {
+    /**
+     * The options for the poll.
+     */
     public pollOptions : PollOption[];
+    /**
+     * The message associated with the poll.
+     */
     public message : Message;
 
+    /**
+     * @param pollOptions Options for the poll (can be either a poll properties array or a PollOption array).
+     * @param message The message associated with the poll.
+     */
     constructor(pollOptions: PollOptionResolvable[] | PollOption[], message: Message) {
         this.pollOptions = pollOptions.map(v => PollOption.resolve(v));
         this.message = message;
     }
 
+    /**
+     * Tries to restore a poll from a messsage.
+     * @param message The message associated with the poll.
+     * @returns Either the restored poll or undefined if the poll couldn't be restored.
+     */
     static restorePollFromMessage(message: Message) : Poll | undefined {
         const optionEmojiRegex = new RegExp(new RegExp(emojiRegex).source + '|' + new RegExp(customEmoteRegex).source, 'g');
         const optionEmojis = Array.from(message.embeds[0].fields[1].value.matchAll(optionEmojiRegex), m => m[0]).filter(v => v.length);
         const options = optionEmojis.map(v => {
             let emojiId: string;
-            if (isEmoji(v)) {
+            if (containsEmoji(v)) {
                 emojiId = v;
             } else {
                 try {
@@ -49,6 +67,10 @@ export class Poll {
         else return undefined;
     }
 
+    /**
+     * Updates the poll's message.
+     * @param reaction The reaction given by the messageReaction events in the client (optional).
+     */
     public updateMessage(reaction?: MessageReaction) : void {
         const reactionCounts : number[] = this.pollOptions.map(v => v.getReactionCount(reaction));
         let totalReactions = 1;

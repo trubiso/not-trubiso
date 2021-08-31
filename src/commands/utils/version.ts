@@ -9,6 +9,6 @@ export = {
 		usage: 'version'
 	},
     execute(message) {
-        message.reply(`my vresione is **TS Rewrite Beta 3** ${e.think.e}`);
+        message.reply(`my vresione is **TS Rewrite Beta 6** ${e.think.e}`);
     },
 } as Command;

@@ -2,7 +2,7 @@ import { Command } from "../../types/command";
 import { Poll } from "../../types/poll";
 import { PollOptionResolvable } from "../../types/pollOptionResolvable";
 import { getEmojis } from "../../utils/getEmojis";
-import { isEmoji } from "../../utils/isEmoji";
+import { containsEmoji } from "../../utils/containsEmoji";
 
 const { e } = require('../../vars.json');
 
@@ -20,7 +20,7 @@ export = {
         const rawOptions = rawArgs[2].split(',').map(v => v.trim()).map(v => {
             const optionParts = v.split('->').map(v => v.trim());
             let emojiId : string;
-            if (isEmoji(optionParts[0])) {
+            if (containsEmoji(optionParts[0])) {
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 emojiId = getEmojis(optionParts[0])[0];
             } else {
@@ -65,7 +65,7 @@ export = {
                 {
                     name: "optionse!",
                     value: rawOptions.map(v => {
-                        return `${isEmoji(v.emoji) ? v.emoji : handler.client.emojis.cache.get(v.emoji)} for ${v.description}`;
+                        return `${containsEmoji(v.emoji) ? v.emoji : handler.client.emojis.cache.get(v.emoji)} for ${v.description}`;
                     }).join(', ')
                 },
                 {
