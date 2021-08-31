@@ -11,7 +11,8 @@
     "@types/convert-units": "^2.3.5",
     "@typescript-eslint/eslint-plugin": "^4.29.3",
     "@typescript-eslint/parser": "^4.29.3",
-    "eslint": "^7.32.0"
+    "eslint": "^7.32.0",
+    "eslint-plugin-tsdoc": "^0.2.14"
   },
   "scripts": {
     "run": "tsc && cp src/config.json out/config.json || echo && cp src/vars.json out/vars.json && cd out && node ."
