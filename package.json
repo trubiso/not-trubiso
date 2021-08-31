@@ -14,7 +14,7 @@
     "eslint": "^7.32.0"
   },
   "scripts": {
-    "run": "tsc && cp src/config.json out/config.json && cp src/vars.json out/vars.json && cd out && node ."
+    "run": "tsc && cp src/config.json out/config.json || echo && cp src/vars.json out/vars.json && cd out && node ."
   },
   "name": "not-trubiso",
   "author": "trubiso",
