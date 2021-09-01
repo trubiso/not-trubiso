@@ -7,7 +7,8 @@ import { Handler } from "./handler";
 
 const { e } = require('../vars.json');
 
-const validatePiece = (piece : string) : boolean => !!(piece.match(ConnectGame.pieceRegex) && (piece.match(ConnectGame.pieceRegex) ?? [])[0] === piece);
+const validatePiece = (piece : string) : boolean => !!(piece.match(ConnectGame.pieceRegex) && piece.normalize().split('') !== '⚪'.split(''));
+const getValidPieces = (piece : string) : string[] | undefined => piece.match(ConnectGame.pieceRegex)?.map(v => v.toString());
 
 const ConnectStartCommand = {
     name: 'connect4',
@@ -17,7 +18,7 @@ const ConnectStartCommand = {
         usage: 'connect4 <opponent> <piece (emoji / custom emote)>'
     },
     async execute(message, args, handler) {
-        if (handler.connectGames.some(v => v.channel.id === message.channelId)) {
+        if (handler.connectGames.some(v => v.channel?.id === message.channelId)) {
             throw `der alredi is a gaem in dis chanel !!`;
         }
 
@@ -40,14 +41,14 @@ const ConnectStartCommand = {
             throw `yu shuld only be mentioninge wan preson`;
         }
 
-        const challengerPiece = args[1];
+        let challengerPiece = args[1];
 
         if (!validatePiece(challengerPiece)) {
-            console.log((challengerPiece.match(ConnectGame.pieceRegex) ?? [])[0].trim());
-            console.log(challengerPiece.trim());
-            console.log((challengerPiece.match(ConnectGame.pieceRegex) ?? [])[0].trim().normalize() === challengerPiece.trim().normalize());
             throw `pleas input a proper emojie for yur second prameter !`;
         }
+
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        challengerPiece = getValidPieces(challengerPiece)![0];
 
         const challenger = message.author;
         const opponent = await handler.client.users.fetch(mention[0].replace(/[<@!>]/g, ''));
@@ -79,7 +80,7 @@ type ConnectPlayer = {
 };
 
 class ConnectGame {
-    public channel : TextChannel;
+    public channel : TextChannel | undefined;
     public challenger : ConnectPlayer;
     public opponent : ConnectPlayer;
     public grid : ConnectGrid;
@@ -100,15 +101,18 @@ class ConnectGame {
             if (msg.author.id === this.opponent.user.id) {
                 if (validatePiece(msg.content.trim())) {
                     msg.reply(`${e.happy.e} started matche betweene ${this.challenger.user.toString()} ande ${this.opponent.user.toString()}!`);
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                    this.opponent.piece = getValidPieces(msg.content.trim())![0];
                     this.confirmed = true;
+                    console.log(this);
                 }
                 if (msg.content === "cancel") {
                     msg.reply(`sucesfulie canceled matche betweene ${this.challenger.user.toString()} ande ${this.opponent.user.toString()}! ${e.sad2.e} i reali waned to see yu guyse pley`);
-                    handler.connectGames.filter(v => v.channel.id !== this.channel.id);
+                    handler.connectGames.filter(v => v.channel?.id !== this.channel?.id);
                     // eslint-disable-next-line @typescript-eslint/no-empty-function
                     this.handleMessage = ()=>{};
+                    this.channel = undefined;
                 }
-                console.log(msg.content);
             }
         }
     }

@@ -42,8 +42,8 @@ client.on('messageCreate', async (msg: Message) => {
         }
     }
 
-    if (handler.connectGames.some(v => v.channel.id === msg.channelId)) {
-        handler.connectGames.find(v => v.channel.id === msg.channelId)?.handleMessage(msg, handler);
+    if (handler.connectGames.some(v => v.channel?.id === msg.channelId)) {
+        handler.connectGames.find(v => v.channel?.id === msg.channelId)?.handleMessage(msg, handler);
     } else if (!msg.author.bot && msg.content.startsWith(handler.prefix)) {
         await handleCommand(msg, handler);
     }
