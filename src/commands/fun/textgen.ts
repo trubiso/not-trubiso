@@ -12,6 +12,10 @@ export = {
         usage: 'textGen <text>'
     },
     async execute(message, args) {
+        if (!args.length) {
+            message.reply(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} com on !! giv me texte !! ${e.sad.e}`);
+            return;
+        }
         deepai.setApiKey(deepai_token);
         const resp = await (async function() {
             return await deepai.callStandardApi("text-generator", {
