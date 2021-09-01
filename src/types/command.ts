@@ -42,5 +42,6 @@ export type Command = {
 	 * @param args Each argument that has been inputted to the command.
 	 * @param handler The bot handler.
 	 */
-	execute(message: Message, args: string[], handler: Handler) : void
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	execute(message: Message, args: string[], handler: Handler) : Promise<unknown> | void
 }

@@ -15,8 +15,7 @@ export = {
 	},
 	async execute(message, args, handler) {
         if (!args.length) {
-            message.reply(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} com on !! giv me arguments !! ${e.sad.e}`);
-            return;
+            throw `com on !! giv me arguments !! ${e.sad.e}`;
         }
         const rawArgs = args.join(' ').split('|').map(v => v.trim());
         const title = rawArgs[0];
@@ -48,26 +47,22 @@ export = {
             });
         } catch (error) {
             if (error === "emojis") {
-                message.reply(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} yu hav to use proper emojise for option emojiese ${e.sad.e}`);
-                return;
+                throw `yu hav to use proper emojise for option emojiese ${e.sad.e}`;
             }
         }
         
         const rawOptionsEmojis = rawOptions.map(v => v.emoji);
 
         if (new Set(rawOptionsEmojis).size !== rawOptionsEmojis.length) {
-            message.reply(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} yu cant hav moar dan wan optione asocieted to wan emoji ! ${e.sad.e}`);
-            return;
+            throw `yu cant hav moar dan wan optione asocieted to wan emoji ! ${e.sad.e}`;
         }
 
         if (!title) {
-            message.reply(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} giv a titel to de poll !! ${e.sad.e}`);
-            return;
+            throw `giv a titel to de poll !! ${e.sad.e}`;
         }
 
         if (!description) {
-            message.reply(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} yu hav to giv a descriptionene for de polle ! ${e.sad.e}`);
-            return;
+            throw `yu hav to giv a descriptionene for de polle ! ${e.sad.e}`;
         }
 
         const embed = {

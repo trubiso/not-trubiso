@@ -13,8 +13,7 @@ export = {
     },
     async execute(message, args) {
         if (!args.length) {
-            message.reply(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} com on !! giv me texte !! ${e.sad.e}`);
-            return;
+            throw `com on !! giv me texte !! ${e.sad.e}`;
         }
         deepai.setApiKey(deepai_token);
         const resp = await (async function() {

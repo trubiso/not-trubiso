@@ -30,7 +30,7 @@ client.once('ready', () => {
     });
 });
 
-client.on('messageCreate', (msg: Message) => {
+client.on('messageCreate', async (msg: Message) => {
     if (!msg.mentions.everyone) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         if (msg.mentions.has(client.user!)) {
@@ -43,7 +43,7 @@ client.on('messageCreate', (msg: Message) => {
     }
 
     if (!msg.author.bot && msg.content.startsWith(handler.prefix)) {
-        handleCommand(msg, handler);
+        await handleCommand(msg, handler);
     }
 });
 

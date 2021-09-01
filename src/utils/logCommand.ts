@@ -13,6 +13,6 @@ export const logCommand = (msg : Message, args : string[], command : string, han
     const isAlias = !handler.commands.get(command) && handler.commands.find(v => v.aliases?.includes(command) ?? false);
     const commandName = handler.commands.get(command)?.name ?? handler.commands.find(v => v.aliases?.includes(command) ?? false)?.name ?? 'undefined';
     console.log(`${chalk.bgGrey('[LOG]')} ${
-        chalk.grey(`${msg.author.username}#${msg.author.discriminator} used ${handler.prefix}${commandName}${isAlias ? ` (Alias of ${command})` : ``} (Arguments: ${args.join(' ')})`)
+        chalk.grey(`${msg.author.username}#${msg.author.discriminator} used ${handler.prefix}${commandName}${isAlias ? ` (Alias of ${command})` : ``} ${args.length ? `(Arguments: ${args.join(' ')})` : `(No arguments)`}`)
     }`);
 };
