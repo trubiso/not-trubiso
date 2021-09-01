@@ -52,7 +52,7 @@ client.once('ready', () => {
 });
 
 client.on('messageCreate', (msg: Message) => {
-    if (!msg.content.startsWith(handler.prefix) && !msg.mentions.everyone) {
+    if (!msg.mentions.everyone) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         if (msg.mentions.has(client.user!)) {
             msg.react("👋");
