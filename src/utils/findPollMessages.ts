@@ -2,7 +2,7 @@ import { Message, TextChannel } from "discord.js";
 import ora from "ora";
 import { Handler } from "../types/handler";
 
-const { e } = require('./vars.json');
+const { e } = require('../vars.json');
 
 /**
  * Finds poll messages that the bot has posted.
