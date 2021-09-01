@@ -2,7 +2,7 @@ import { Client, Collection, Message, MessageReaction, TextChannel } from "disco
 
 import fs from "fs";
 
-const token : string = process.env["NT_TOKEN"] ?? require('./config.json').token;
+const token : string = process.env.NT_TOKEN ?? require('./config.json').token;
 const { e } = require('./vars.json');
 
 import { loadModule } from "./utils/loadModule";
