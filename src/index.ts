@@ -12,7 +12,7 @@ const token : string = process.env.NT_TOKEN ?? require('./config.json').token;
 const { e } = require('./vars.json');
 
 const client = new Client({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS", "GUILD_MESSAGE_REACTIONS"], allowedMentions: {repliedUser: false}});
-const handler = new Handler(new Collection(), [], "<", client, []);
+const handler = new Handler(new Collection(), [], "<", client, [], []);
 
 const categoryFiles = fs.readdirSync('./categories').filter((file: string) => file.endsWith('.js'));
 categoryFiles.forEach(file => loadModule(file, handler));
@@ -20,7 +20,7 @@ categoryFiles.forEach(file => loadModule(file, handler));
 client.once('ready', () => {
     console.log(`Logged in as ${client.user?.tag}!`);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    if (client.guilds.cache.get("717683408012181505")) (client.channels.cache.get("717683408553377815")! as TextChannel).send(`i'm bakke!!! ${e.happy.e}`);
+    // if (client.guilds.cache.get("717683408012181505")) (client.channels.cache.get("717683408553377815")! as TextChannel).send(`i'm bakke!!! ${e.happy.e}`);
     client.user?.setPresence({ activities: [{ name: "yu !!", type: "LISTENING" }]});
     findPollMessages(handler).then(v => {
         const restoredPolls = v.map(v => Poll.restorePollFromMessage(v));
@@ -42,7 +42,9 @@ client.on('messageCreate', async (msg: Message) => {
         }
     }
 
-    if (!msg.author.bot && msg.content.startsWith(handler.prefix)) {
+    if (handler.connectGames.some(v => v.channel.id === msg.channelId)) {
+        handler.connectGames.find(v => v.channel.id === msg.channelId)?.handleMessage(msg, handler);
+    } else if (!msg.author.bot && msg.content.startsWith(handler.prefix)) {
         await handleCommand(msg, handler);
     }
 });

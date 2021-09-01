@@ -1,0 +1,1 @@
+export const mentionRegex = /<@![0-9]{18}>/g;
