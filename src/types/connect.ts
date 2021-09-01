@@ -75,7 +75,7 @@ const ConnectStartCommand = {
 } as Command;
 
 type ConnectPlayer = {
-    user : User,
+    user : User
     piece : string
 };
 
