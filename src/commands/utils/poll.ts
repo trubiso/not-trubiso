@@ -14,6 +14,10 @@ export = {
 		usage: 'poll <title> | <description> | <optionEmoji> -> <optionDescription>,...',
 	},
 	async execute(message, args, handler) {
+        if (!args.length) {
+            message.reply(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} com on !! giv me arguments !! ${e.sad.e}`);
+            return;
+        }
         const rawArgs = args.join(' ').split('|').map(v => v.trim());
         const title = rawArgs[0];
         const description = rawArgs[1];
