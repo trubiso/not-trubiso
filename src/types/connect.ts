@@ -60,13 +60,13 @@ const ConnectStartCommand = {
             throw `yu cant chaleng a bot !!`;
         }
 
-        handler.connectGames.push(new ConnectGame(message.channel as TextChannel, {
+        /*handler.connectGames.push(new ConnectGame(message.channel as TextChannel, {
             user: challenger,
             piece: challengerPiece
         }, {
             user: opponent,
             piece: ''
-        }, 7));
+        }, 7));*/
         
         message.reply(`${opponent.toString()}, yu hav been chalenged ! ${e.shock_handless.e} pleas choos a custom emot or emnoji ! ${e.please.e} (or tyep "cancel" to cancel de matche !) i wil be weitin ${e.stare.e}`);
         
