@@ -10,7 +10,8 @@ world'se frist smili bot !!
  - run the bot, either by:
 	 - `npm run run` (works on systems that use bash)
 	 - `tsc` to compile, copy the `vars.json` file into the `out` folder (also the `config.json` file if you created it) and then go to the `out` folder and run `node .`
- - in the terminal you should see `Logged in as <username and discriminator>!`, it might send an error about not being able to send a message, in that case go to the `client.once('ready')` event and remove the line that sends a message into a text channel.
+ - in the terminal you should see `Logged in as <username and discriminator>!`.
+ - if you encounter any errors during this process, feel free to open an issue and/or a pull request
 ## How to make a command
  - if you are trying to make a command in a category that doesn't exist, you should make a new category file in the `categories` folder which will define your category and will also make sure that your command loads.
 	 - make sure to set up the metadata as dictated by the `Module` type

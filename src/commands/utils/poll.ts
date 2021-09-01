@@ -21,27 +21,38 @@ export = {
         const rawArgs = args.join(' ').split('|').map(v => v.trim());
         const title = rawArgs[0];
         const description = rawArgs[1];
-        const rawOptions = rawArgs[2].split(',').map(v => v.trim()).map(v => {
-            const optionParts = v.split('->').map(v => v.trim());
-            let emojiId : string;
-            if (containsEmoji(optionParts[0])) {
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                emojiId = getEmojis(optionParts[0])[0];
-            } else {
-                try {
-                    emojiId = optionParts[0].split(':')[2].slice(0, -1);
-                } catch (error) {
-                    message.reply(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} yu hav to use proper emojise for option emojiese ${e.sad.e}`);
-                    throw "non-proper emojiese in option emojiese";
+        type rawOption = {
+            emoji: string,
+            description: string
+        };
+        let rawOptions : rawOption[] = [];
+        try {
+            rawOptions = rawArgs[2].split(',').map(v => v.trim()).map(v => {
+                const optionParts = v.split('->').map(v => v.trim());
+                let emojiId : string;
+                if (containsEmoji(optionParts[0])) {
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                    emojiId = getEmojis(optionParts[0])[0];
+                } else {
+                    try {
+                        emojiId = optionParts[0].split(':')[2].slice(0, -1);
+                    } catch (error) {
+                        throw "emojis";
+                    }
                 }
+                const emojiDescription = optionParts[1];
+                return {
+                    emoji: emojiId,
+                    description: emojiDescription
+                };
+            });
+        } catch (error) {
+            if (error === "emojis") {
+                message.reply(`${e.shock_handless.e} ther was an eror executinge yuor comande !! ${e.sad.e} yu hav to use proper emojise for option emojiese ${e.sad.e}`);
+                return;
             }
-            const emojiDescription = optionParts[1];
-            return {
-                emoji: emojiId,
-                description: emojiDescription
-            };
-        });
-
+        }
+        
         const rawOptionsEmojis = rawOptions.map(v => v.emoji);
 
         if (new Set(rawOptionsEmojis).size !== rawOptionsEmojis.length) {
