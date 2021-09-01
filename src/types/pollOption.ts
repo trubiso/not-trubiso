@@ -1,5 +1,5 @@
 import { Message, MessageReaction } from "discord.js";
-import { isEmoji } from "../utils/containsEmoji";
+import { containsEmoji } from "../utils/containsEmoji";
 import { PollOptionResolvable } from "./pollOptionResolvable";
 
 /**
@@ -53,7 +53,7 @@ export class PollOption {
      */
     constructor(emojiId: string, message: Message) {
         this.emojiId = emojiId;
-        this.isUnicodeEmoji = isEmoji(emojiId);
+        this.isUnicodeEmoji = containsEmoji(emojiId);
         this.message = message;
         this.count = 0;
     }
