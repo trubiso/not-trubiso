@@ -14,6 +14,7 @@ const getValidPieces = (piece : string) : string[] | undefined => piece.match(Co
 
 const ConnectStartCommand = {
     name: 'connect4',
+    aliases: ['c4'],
     help: {
         category: 'games',
         brief: 'chaleng anodar pleyer to pley conect 4 wit yuo !',
