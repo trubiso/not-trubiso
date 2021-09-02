@@ -47,6 +47,8 @@ client.on('messageCreate', async (msg: Message) => {
         const connectGame = handler.connectGames.find(v => v.channel?.id === msg.channelId)!;
         if (msg.author.id === connectGame.challenger.user.id || msg.author.id === connectGame.opponent.user.id) {
             connectGame.handleMessage(msg, handler);
+        } else if (!msg.author.bot && msg.content.startsWith(handler.prefix)) {
+            await handleCommand(msg, handler);
         }
     } else if (!msg.author.bot && msg.content.startsWith(handler.prefix)) {
         await handleCommand(msg, handler);
