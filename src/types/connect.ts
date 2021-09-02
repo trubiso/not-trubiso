@@ -2,12 +2,13 @@ import { Message, TextChannel, User } from "discord.js";
 import { customEmoteRegex } from "../utils/customEmoteRegex";
 import { emojiRegex } from "../utils/emojiRegex";
 import { mentionRegex } from "../utils/mentionRegex";
+import { validateCustomEmote } from "../utils/validateCustomEmote";
 import { Command } from "./command";
 import { Handler } from "./handler";
 
 const { e } = require('../vars.json');
 
-const validatePiece = (piece : string) : boolean => !!(piece.match(ConnectGame.pieceRegex) && piece.normalize().split('') !== '⚪'.split('') && !([':one:',':two:',':three:',':four:',':five:',':six:',':seven:',':eight:',':nine:',':asterisk:',':hash:',':1234:',e.greneblogie.e].includes(piece)));
+const validatePiece = (piece : string, handler: Handler) : boolean => !!(piece.match(ConnectGame.pieceRegex) && (piece.match(customEmoteRegex) ? validateCustomEmote(e, handler) : true) && piece.normalize().split('') !== '⚪'.split('') && !([':one:',':two:',':three:',':four:',':five:',':six:',':seven:',':eight:',':nine:',':asterisk:',':hash:',':1234:',e.greneblogie.e].includes(piece)));
 const getValidPieces = (piece : string) : string[] | undefined => piece.match(ConnectGame.pieceRegex)?.map(v => v?.toString());
 
 const ConnectStartCommand = {
@@ -43,7 +44,7 @@ const ConnectStartCommand = {
 
         let challengerPiece = args[1];
 
-        if (!validatePiece(challengerPiece)) {
+        if (!validatePiece(challengerPiece, handler)) {
             throw `pleas input a proper emojie for yur second prameter !`;
         }
 
@@ -133,7 +134,7 @@ class ConnectGame {
     public handleMessage(msg : Message, handler : Handler) : void {
         if (!this.confirmed) {
             if (msg.author.id === this.opponent.user.id) {
-                if (validatePiece(msg.content.trim())) {
+                if (validatePiece(msg.content.trim(), handler)) {
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     if (getValidPieces(msg.content.trim())![0] === this.challenger.piece) {
                         msg.reply(`${e.think.e} yu shuldnt hav de saem piec as de odar preson !`);

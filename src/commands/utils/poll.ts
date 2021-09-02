@@ -3,6 +3,8 @@ import { Poll } from "../../types/poll";
 import { PollOptionResolvable } from "../../types/pollOptionResolvable";
 import { getEmojis } from "../../utils/getEmojis";
 import { containsEmoji } from "../../utils/containsEmoji";
+import { customEmoteRegex } from "../../utils/customEmoteRegex";
+import { validateCustomEmote } from "../../utils/validateCustomEmote";
 
 const { e } = require('../../vars.json');
 
@@ -55,6 +57,10 @@ export = {
 
         if (new Set(rawOptionsEmojis).size !== rawOptionsEmojis.length) {
             throw `yu cant hav moar dan wan optione asocieted to wan emoji ! ${e.sad.e}`;
+        }
+
+        if (rawOptionsEmojis.some(v => !(v.match(customEmoteRegex) ? validateCustomEmote(v, handler) : true))) {
+            throw `yu gaev me an emotete i cant accese !`;
         }
 
         if (!title) {
