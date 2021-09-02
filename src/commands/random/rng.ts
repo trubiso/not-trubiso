@@ -6,7 +6,7 @@ export = {
 	name: 'rng',
 	aliases: ['random-number'],
 	help: {
-        category: 'fun',
+        category: 'random',
 		brief: 'picks numbr acording to de limits yu giv it !',
 		usage: 'rng <max|min, max>',
 	},

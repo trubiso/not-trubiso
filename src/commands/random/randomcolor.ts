@@ -5,7 +5,7 @@ export = {
 	name: 'randomcolor',
     aliases: ['rc'],
 	help: {
-        category: 'fun',
+        category: 'random',
 		brief: 'randome colorere',
 		usage: 'randomcolor'
 	},

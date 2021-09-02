@@ -4,7 +4,7 @@ export = {
 	name: 'randomemote',
     aliases: ['re'],
 	help: {
-        category: 'fun',
+        category: 'random',
 		brief: 'sends a random emot for yu !',
 		usage: 'randomemote [num (up to 5)]'
 	},

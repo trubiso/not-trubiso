@@ -5,7 +5,7 @@ export = {
 	name: 'randomwords',
     aliases: ['rw'],
 	help: {
-        category: 'fun',
+        category: 'random',
 		brief: 'sends randome wordse for yu !',
 		usage: 'randomwords [num (up to 25)]'
 	},

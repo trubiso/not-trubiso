@@ -5,7 +5,7 @@ const answers = require('../../vars').eightball_answers;
 export = {
 	name: '8ball',
 	help: {
-        category: 'fun',
+        category: 'random',
 		brief: 'da smili gods will decied if they can agree with somthing!',
 		usage: '8ball <question>'
 	},
