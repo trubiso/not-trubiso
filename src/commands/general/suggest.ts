@@ -1,6 +1,7 @@
 import { Command } from "../../types/command";
 
 const author : string = require('../../vars.json').author;
+const e = require('../../vars.json').e;
 
 export = {
 	name: 'suggest',
@@ -19,5 +20,10 @@ export = {
             title: 'New suggestion!',
             description: `${message.author.toString()} has suggested: ${text}`
         }]});
+        if (dm) {
+            message.reply(`just handeded over yur sugestion to trumbinso !`);
+        } else {
+            message.reply(`somthin went rong... ${e.sad.e}`);
+        }
     },
 } as Command;
