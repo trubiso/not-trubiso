@@ -7,9 +7,13 @@ import { Handler } from "../types/handler";
  * @returns Whether the emote is accessible by the bot.
  */
 export const validateCustomEmote = (emote : string, handler : Handler) : boolean => {
-    let e = emote;
-    if (emote.split('').includes(':')) {
-        e = emote.split(':')[2].slice(0, -1);
+    try {
+        let e = emote;
+        if (emote.includes(':')) {
+            e = emote.split(':')[2].slice(0, -1);
+        }
+        return !!handler.client.emojis.cache.get(e);
+    } catch (err) {
+        return false;
     }
-    return !!handler.client.emojis.cache.get(e);
 };

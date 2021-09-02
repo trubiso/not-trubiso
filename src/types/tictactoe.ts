@@ -9,15 +9,16 @@ import { GameGrid, GameTurns, GridGame, GridGamePiece } from  "./game";
 
 const { e } = require('../vars.json');
 
-const validatePiece = (piece : string, handler: Handler) : boolean => !!(piece.match(ConnectGame.pieceRegex) && (piece.match(customEmoteRegex) ? validateCustomEmote(e, handler) : piece.match(emojiRegex)) && piece.normalize().split('') !== '⚪'.split('') && !([':one:',':two:',':three:',':four:',':five:',':six:',':seven:',':eight:',':nine:',':asterisk:',':hash:',':1234:',e.greneblogie.e].includes(piece)));
-const getValidPieces = (piece : string) : string[] | undefined => piece.match(ConnectGame.pieceRegex)?.map(v => v?.toString());
+const validatePiece = (piece : string, handler: Handler) : boolean => !!(piece.match(TicTacToeGame.pieceRegex) && (piece.match(customEmoteRegex) ? validateCustomEmote(e, handler) : piece.match(emojiRegex)) && piece.normalize().split('') !== '⚪'.split('') && !([':one:',':two:',':three:',':four:',':five:',':six:',':seven:',':eight:',':nine:',':asterisk:',':hash:',':1234:',e.greneblogie.e].includes(piece)));
+const getValidPieces = (piece : string) : string[] | undefined => piece.match(TicTacToeGame.pieceRegex)?.map(v => v?.toString());
 
-const ConnectStartCommand = {
-    name: 'connect4',
+const TicTacToeStartCommand = {
+    name: 'tictactoe',
+    aliases: ['ttt'],
     help: {
         category: 'games',
-        brief: 'chaleng anodar pleyer to pley conect 4 wit yuo !',
-        usage: 'connect4 <opponent> <piece (emoji / custom emote)>'
+        brief: 'chaleng anodar pleyer to pley tic tac toe wit yuo !',
+        usage: 'tictactoe <opponent> <piece (emoji / custom emote)>'
     },
     async execute(message, args, handler) {
         if (handler.games.some(v => v.channel?.id === message.channelId)) {
@@ -62,13 +63,13 @@ const ConnectStartCommand = {
             throw `yu cant chaleng a bot !!`;
         }
 
-        handler.games.push(new ConnectGame(message.channel as TextChannel, {
+        handler.games.push(new TicTacToeGame(message.channel as TextChannel, {
             user: challenger,
             piece: challengerPiece
         }, {
             user: opponent,
             piece: ''
-        }, 7));
+        }));
         
         message.reply(`${opponent.toString()}, yu hav been chalenged ! ${e.shock_handless.e} pleas choos a custom emot or emnoji ! ${e.please.e} (or tyep "cancel" to cancel de matche !) i wil be weitin ${e.stare.e}`);
         
@@ -76,17 +77,17 @@ const ConnectStartCommand = {
     }
 } as Command;
 
-type ConnectPlayer = {
+type TicTacToePlayer = {
     user : User
     piece : string
 };
 
-class ConnectTurns implements GameTurns {
+class TicTacToeTurns implements GameTurns {
     public currentTurn : string;
-    public challenger : ConnectPlayer;
-    public opponent : ConnectPlayer;
+    public challenger : TicTacToePlayer;
+    public opponent : TicTacToePlayer;
 
-    constructor(challenger : ConnectPlayer, opponent : ConnectPlayer) {
+    constructor(challenger : TicTacToePlayer, opponent : TicTacToePlayer) {
         this.currentTurn = "C";
         this.challenger = challenger;
         this.opponent = opponent;
@@ -106,23 +107,23 @@ class ConnectTurns implements GameTurns {
     }
 }
 
-class ConnectGame implements GridGame {
+class TicTacToeGame implements GridGame {
     public channel : TextChannel | undefined;
-    public challenger : ConnectPlayer;
-    public opponent : ConnectPlayer;
-    public grid : ConnectGrid;
+    public challenger : TicTacToePlayer;
+    public opponent : TicTacToePlayer;
+    public grid : TicTacToeGrid;
     public confirmed : boolean;
-    public turns : ConnectTurns;
+    public turns : TicTacToeTurns;
 
     static pieceRegex = new RegExp(new RegExp(customEmoteRegex).source + '|' + new RegExp(emojiRegex).source);
 
-    constructor(channel : TextChannel, challenger : ConnectPlayer, opponent : ConnectPlayer, gridSize : number) {
+    constructor(channel : TextChannel, challenger : TicTacToePlayer, opponent : TicTacToePlayer) {
         this.channel = channel;
         this.challenger = challenger;
         this.opponent = opponent;
-        this.grid = new ConnectGrid(gridSize, gridSize - 1);
+        this.grid = new TicTacToeGrid();
         this.confirmed = false;
-        this.turns = new ConnectTurns(challenger, opponent);
+        this.turns = new TicTacToeTurns(challenger, opponent);
     }
 
     public destroySelf(handler : Handler): void {
@@ -155,10 +156,10 @@ class ConnectGame implements GridGame {
         } else {
             if (!msg.author.bot && this.turns.validateMessage(msg) && parseInt(msg.content)) {
                 const num = parseInt(msg.content);
-                if (num > 0 && num < this.grid.width + 1) {
-                    const piece = this.grid.placePiece(num, this.turns.currentTurn);
+                if (num > 0 && num < 10) {
+                    const piece = this.grid.placePiece([(num - 1) % 3 + 1, this.grid.height - 1 - Math.floor((num - 1) / 3)], this.turns.currentTurn);
                     if (!piece) {
-                        msg.reply(`dat row is fulle !! ${e.sad.e}`);
+                        msg.reply(`dat spaec is fulle !! ${e.sad.e}`);
                         return;
                     }
                     if (this.grid.isGridFull()) {
@@ -182,14 +183,13 @@ class ConnectGame implements GridGame {
     }
 }
 
-class ConnectGrid implements GameGrid {
+class TicTacToeGrid implements GameGrid {
     public width : number;
     public height : number;
-    public pieces : ConnectPiece[];
+    public pieces : TicTacToePiece[];
 
-    constructor(width : number, height : number, pieces : ConnectPiece[] = []) {
-        this.width = width;
-        this.height = height;
+    constructor(pieces : TicTacToePiece[] = []) {
+        [this.width, this.height] = [3, 3];
         this.pieces = pieces;
     }
 
@@ -201,29 +201,20 @@ class ConnectGrid implements GameGrid {
         return arr;
     }
 
-    public render(challenger : ConnectPlayer, opponent : ConnectPlayer) : string {
+    public render(challenger : TicTacToePlayer, opponent : TicTacToePlayer) : string {
         let grid = this.toCharArr().map(v => v.join(' ')).join('\n');
         grid = grid.replaceAll('*', '⚪');
         grid = grid.replaceAll('C', challenger.piece);
         grid = grid.replaceAll('O', opponent.piece);
         grid = grid.replaceAll('W', e.greneblogie.e);
-        grid += '\n:one: :two: :three: :four: :five: :six: :seven:' + (this.width > 7 ? ' :eight:' : '') + (this.width === 9 ? ' :nine:' : '');
         return grid;
     }
 
-    public columnToPosition(column : number) : number[] | undefined {
-        for (let i = 0 ; i < this.height ; i ++) {
-            if (!this.pieces.some(v => v.position[0] === column && v.position[1] === i)) {
-                return [column, i];
-            }
-        }
-        return undefined;
-    }
-
-    public placePiece(column : number, placedBy : string) : ConnectPiece | undefined {
-        if (this.columnToPosition(column)) {
-            const piece = new ConnectPiece(column, this, placedBy);
+    public placePiece(position : number[], placedBy : string) : TicTacToePiece | undefined {
+        if (!this.pieces.some(v => v.position[0] === position[0] && v.position[1] === position[1])) {
+            const piece = new TicTacToePiece(position, this, placedBy);
             this.pieces.push(piece);
+            console.log(this.pieces.map(v => v.position));
             return piece;
         } else {
             return undefined;
@@ -243,12 +234,12 @@ class ConnectGrid implements GameGrid {
         type dirObjType = {
             direction: number[],
             piecesFound: number,
-            piecesFoundArr: ConnectPiece[]
+            piecesFoundArr: TicTacToePiece[]
         }
         type axisType = {
             directions: number[][],
             piecesFound: number,
-            piecesFoundArr: ConnectPiece[]
+            piecesFoundArr: TicTacToePiece[]
         }
         const dirObjs = directions.map(v => {return {
             direction: v,
@@ -286,7 +277,7 @@ class ConnectGrid implements GameGrid {
             } as axisType;
         });
         for (const paxis of processedAxis) {
-            if (paxis.piecesFound >= 3) {
+            if (paxis.piecesFound >= 2) {
                 this.pieces.forEach(v => [...paxis.piecesFoundArr.map(a => a.position), cpPos].includes(v.position) ? v.placedBy = "W" : 1);
                 return true;
             }
@@ -295,17 +286,19 @@ class ConnectGrid implements GameGrid {
     }
 }
 
-class ConnectPiece implements GridGamePiece {
+class TicTacToePiece implements GridGamePiece {
     public position : number[];
-    public grid : ConnectGrid;
+    public grid : TicTacToeGrid;
     public placedBy : string;
 
-    constructor(column : number, grid : ConnectGrid, placedBy : string) {
+    constructor(position : number[], grid : TicTacToeGrid, placedBy : string) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        this.position = grid.columnToPosition(column)!;
+        if (grid.pieces.every(v => v.position !== position)) {
+            this.position = position;
+        } else this.position = [-1, -1];
         this.grid = grid;
         this.placedBy = placedBy;
     }
 }
 
-export {ConnectStartCommand, ConnectPlayer, ConnectTurns, ConnectGame, ConnectGrid, ConnectPiece};
+export {TicTacToeStartCommand, TicTacToePlayer, TicTacToeTurns, TicTacToeGame, TicTacToeGrid, TicTacToePiece};

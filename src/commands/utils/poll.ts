@@ -3,7 +3,6 @@ import { Poll } from "../../types/poll";
 import { PollOptionResolvable } from "../../types/pollOptionResolvable";
 import { getEmojis } from "../../utils/getEmojis";
 import { containsEmoji } from "../../utils/containsEmoji";
-import { customEmoteRegex } from "../../utils/customEmoteRegex";
 import { validateCustomEmote } from "../../utils/validateCustomEmote";
 
 const { e } = require('../../vars.json');
@@ -32,7 +31,6 @@ export = {
                 const optionParts = v.split('->').map(v => v.trim());
                 let emojiId : string;
                 if (containsEmoji(optionParts[0])) {
-                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     emojiId = getEmojis(optionParts[0])[0];
                 } else {
                     try {
@@ -59,7 +57,7 @@ export = {
             throw `yu cant hav moar dan wan optione asocieted to wan emoji ! ${e.sad.e}`;
         }
 
-        if (rawOptionsEmojis.some(v => !(v.match(customEmoteRegex) ? validateCustomEmote(v, handler) : true))) {
+        if (!rawOptionsEmojis.every(v => (parseInt(v) ? validateCustomEmote(v, handler) : containsEmoji(v)))) {
             throw `yu gaev me an emotete i cant accese !`;
         }
 

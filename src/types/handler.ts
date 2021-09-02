@@ -1,6 +1,6 @@
 import { Client, Collection } from "discord.js";
 import { Command } from "./command";
-import { ConnectGame } from "./connect";
+import { Game } from "./game";
 import { Module } from "./module";
 import { Poll } from "./poll";
 
@@ -31,7 +31,7 @@ export class Handler{
     /**
      * Collection of all Connect 4 games currently ongoing.
      */
-    public connectGames : ConnectGame[];
+    public games : Game[];
 
     /**
      * @param commands Collection of all commands.
@@ -40,12 +40,12 @@ export class Handler{
      * @param client Bot client object.
      * @param polls Poll array.
      */
-    constructor(commands: Collection<string, Command>, categories: Module[], prefix: string, client: Client, polls: Poll[], connectGames : ConnectGame[]) {
+    constructor(commands: Collection<string, Command>, categories: Module[], prefix: string, client: Client, polls: Poll[], games: Game[]) {
         this.commands = commands;
         this.categories = categories;
         this.prefix = prefix;
         this.client = client;
         this.polls = polls;
-        this.connectGames = connectGames;
+        this.games = games;
     }
 }
