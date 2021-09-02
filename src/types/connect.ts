@@ -8,7 +8,7 @@ import { Handler } from "./handler";
 const { e } = require('../vars.json');
 
 const validatePiece = (piece : string) : boolean => !!(piece.match(ConnectGame.pieceRegex) && piece.normalize().split('') !== '⚪'.split(''));
-const getValidPieces = (piece : string) : string[] | undefined => piece.match(ConnectGame.pieceRegex)?.map(v => v.toString());
+const getValidPieces = (piece : string) : string[] | undefined => piece.match(ConnectGame.pieceRegex)?.map(v => v?.toString());
 
 const ConnectStartCommand = {
     name: 'connect4',
