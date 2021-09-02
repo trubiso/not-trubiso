@@ -8,7 +8,7 @@ import { Handler } from "../types/handler";
  */
 export const validateCustomEmote = (emote : string, handler : Handler) : boolean => {
     let e = emote;
-    if (emote.includes(':')) {
+    if (emote.split('').includes(':')) {
         e = emote.split(':')[2].slice(0, -1);
     }
     return !!handler.client.emojis.cache.get(e);
