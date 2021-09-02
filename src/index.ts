@@ -43,7 +43,11 @@ client.on('messageCreate', async (msg: Message) => {
     }
 
     if (handler.connectGames.some(v => v.channel?.id === msg.channelId)) {
-        handler.connectGames.find(v => v.channel?.id === msg.channelId)?.handleMessage(msg, handler);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const connectGame = handler.connectGames.find(v => v.channel?.id === msg.channelId)!;
+        if (msg.author.id === connectGame.challenger.user.id || msg.author.id === connectGame.opponent.user.id) {
+            connectGame.handleMessage(msg, handler);
+        }
     } else if (!msg.author.bot && msg.content.startsWith(handler.prefix)) {
         await handleCommand(msg, handler);
     }

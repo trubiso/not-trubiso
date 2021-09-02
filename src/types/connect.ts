@@ -172,6 +172,9 @@ class ConnectGame {
                     this.turns.switchTurn();
                     msg.reply(`it's ${this.turns.getCurrentTurnUser().toString()}'s turne !! \n${this.grid.render(this.challenger, this.opponent)}`);
                 }
+            } else if (!msg.author.bot && msg.content.trim() === "cancel") {
+                msg.reply(`wat a looser !! imagin bakking oute !! ${e.funny.e}${e.stare.e} (succesfuli canceled de matche ${e.sad.e})`);
+                this.destroySelf(handler);
             }
         }
     }
