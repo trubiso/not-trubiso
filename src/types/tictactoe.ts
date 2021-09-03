@@ -9,7 +9,7 @@ import { GameGrid, GameTurns, GridGame, GridGamePiece } from  "./game";
 
 const { e } = require('../vars.json');
 
-const validatePiece = (piece : string, handler: Handler) : boolean => !!(piece.match(TicTacToeGame.pieceRegex) && (piece.match(customEmoteRegex) ? validateCustomEmote(e, handler) : piece.match(emojiRegex)) && piece.normalize().split('') !== '⚪'.split('') && !([':one:',':two:',':three:',':four:',':five:',':six:',':seven:',':eight:',':nine:',':asterisk:',':hash:',':1234:',e.greneblogie.e].includes(piece)));
+const validatePiece = (piece : string, handler: Handler) : boolean => !!(piece.match(TicTacToeGame.pieceRegex) && (piece.match(customEmoteRegex) ? validateCustomEmote(piece, handler) : piece.match(emojiRegex)) && piece.normalize().split('') !== '⚪'.split('') && !([':one:',':two:',':three:',':four:',':five:',':six:',':seven:',':eight:',':nine:',':asterisk:',':hash:',':1234:',e.greneblogie.e].includes(piece)));
 const getValidPieces = (piece : string) : string[] | undefined => piece.match(TicTacToeGame.pieceRegex)?.map(v => v?.toString());
 
 const TicTacToeStartCommand = {
