@@ -114,6 +114,7 @@ class TicTacToeGame implements GridGame {
     public grid : TicTacToeGrid;
     public confirmed : boolean;
     public turns : TicTacToeTurns;
+    public message?: Message;
 
     static pieceRegex = new RegExp(new RegExp(customEmoteRegex).source + '|' + new RegExp(emojiRegex).source);
 
@@ -129,11 +130,11 @@ class TicTacToeGame implements GridGame {
     public destroySelf(handler : Handler): void {
         handler.games.filter(v => v.channel?.id !== this.channel?.id);
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        this.handleMessage = ()=>{};
+        this.handleMessage = async ()=>{};
         this.channel = undefined;
     }
 
-    public handleMessage(msg : Message, handler : Handler) : void {
+    public async handleMessage(msg : Message, handler : Handler) : Promise<void> {
         if (!this.confirmed) {
             if (msg.author.id === this.opponent.user.id) {
                 if (validatePiece(msg.content.trim(), handler)) {
@@ -146,7 +147,7 @@ class TicTacToeGame implements GridGame {
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     this.opponent.piece = getValidPieces(msg.content.trim())![0];
                     this.confirmed = true;
-                    msg.reply(`it's ${this.challenger.user.toString()}'s turne !! \n${this.grid.render(this.challenger, this.opponent)}`);
+                    this.message = await msg.reply(`it's ${this.challenger.user.toString()}'s turne !! \n${this.grid.render(this.challenger, this.opponent)}`);
                 }
                 if (msg.content === "cancel") {
                     msg.reply(`sucesfulie canceled matche betweene ${this.challenger.user.toString()} ande ${this.opponent.user.toString()}! ${e.sad2.e} i reali waned to see yu guyse pley`);
@@ -162,18 +163,19 @@ class TicTacToeGame implements GridGame {
                         msg.reply(`dat spaec is fulle !! ${e.sad.e}`);
                         return;
                     }
-                    if (this.grid.isGridFull()) {
-                        msg.reply(`it's a drawe !! GG !!! ${e.shock_handless.e} \n${this.grid.render(this.challenger, this.opponent)}`);
+                    await msg.delete();
+                    if (this.grid.checkWin(piece.position, piece.placedBy)) {
+                        await this.message?.edit(`${this.turns.getCurrentTurnUser().toString()} wone !!! ${e.shock_handless.e}${e.party.e} GG !!! \n${this.grid.render(this.challenger, this.opponent)}`);
                         this.destroySelf(handler);
                         return;
                     }
-                    if (this.grid.checkWin(piece.position, piece.placedBy)) {
-                        msg.reply(`${this.turns.getCurrentTurnUser().toString()} wone !!! ${e.shock_handless.e}${e.party.e} GG !!! \n${this.grid.render(this.challenger, this.opponent)}`);
+                    if (this.grid.isGridFull()) {
+                        await this.message?.edit(`it's a drawe !! GG !!! ${e.shock_handless.e} \n${this.grid.render(this.challenger, this.opponent)}`);
                         this.destroySelf(handler);
                         return;
                     }
                     this.turns.switchTurn();
-                    msg.reply(`it's ${this.turns.getCurrentTurnUser().toString()}'s turne !! \n${this.grid.render(this.challenger, this.opponent)}`);
+                    await this.message?.edit(`it's ${this.turns.getCurrentTurnUser().toString()}'s turne !! (last moov: ${num}) \n${this.grid.render(this.challenger, this.opponent)}`);
                 }
             } else if (!msg.author.bot && msg.content.trim() === "cancel") {
                 msg.reply(`wat a looser !! imagin bakking oute !! ${e.funny.e}${e.stare.e} (succesfuli canceled de matche ${e.sad.e})`);
@@ -214,7 +216,6 @@ class TicTacToeGrid implements GameGrid {
         if (!this.pieces.some(v => v.position[0] === position[0] && v.position[1] === position[1])) {
             const piece = new TicTacToePiece(position, this, placedBy);
             this.pieces.push(piece);
-            console.log(this.pieces.map(v => v.position));
             return piece;
         } else {
             return undefined;
