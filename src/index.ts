@@ -48,20 +48,44 @@ client.on('messageCreate', async (msg: Message) => {
 
 client.on('interactionCreate', async (interaction : Interaction) => {
     if (interaction.isButton()) {
-        const cmd = interaction.customId.split('_')[0];
-        const actualCmd = handler.commands.find(v => v.name === cmd);
-        if (actualCmd && actualCmd.handleButton) {
-            await (actualCmd.handleButton(interaction, handler) as Promise<unknown>)?.catch(error => {
-                logError(error);
-            });
+        const execCmd = async () => {
+            const cmd = interaction.customId.split('_')[0];
+            const actualCmd = handler.commands.find(v => v.name === cmd);
+            if (actualCmd && actualCmd.handleButton) {
+                await (actualCmd.handleButton(interaction, handler) as Promise<unknown>)?.catch(error => {
+                    logError(error);
+                });
+            }
+        };
+        if (handler.games.some(v => v.channel?.id === interaction.channelId)) {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            const game = handler.games.find(v => v.channel?.id === interaction.channelId)!;
+            if (interaction.user.id === game.challenger.user.id || interaction.user.id === game.opponent.user.id) {
+                if (game.handleButton)
+                    game.handleButton(interaction, handler);
+            } else await execCmd();
+        } else {
+            await execCmd();
         }
     } else if (interaction.isSelectMenu()) {
-        const cmd = interaction.customId.split('_')[0];
-        const actualCmd = handler.commands.find(v => v.name === cmd);
-        if (actualCmd && actualCmd.handleSelectMenu) {
-            await (actualCmd.handleSelectMenu(interaction, handler) as Promise<unknown>)?.catch(error => {
-                logError(error);
-            });
+        const execCmd = async () => {
+            const cmd = interaction.customId.split('_')[0];
+            const actualCmd = handler.commands.find(v => v.name === cmd);
+            if (actualCmd && actualCmd.handleSelectMenu) {
+                await (actualCmd.handleSelectMenu(interaction, handler) as Promise<unknown>)?.catch(error => {
+                    logError(error);
+                });
+            }
+        };
+        if (handler.games.some(v => v.channel?.id === interaction.channelId)) {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            const game = handler.games.find(v => v.channel?.id === interaction.channelId)!;
+            if (interaction.user.id === game.challenger.user.id || interaction.user.id === game.opponent.user.id) {
+                if (game.handleSelectMenu)
+                    game.handleSelectMenu(interaction, handler);
+            } else await execCmd();
+        } else {
+            await execCmd();
         }
     }
 });

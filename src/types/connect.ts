@@ -1,4 +1,4 @@
-import { Message, TextChannel, User } from "discord.js";
+import { ButtonInteraction, Message, MessageActionRow, MessageButton, TextChannel, User } from "discord.js";
 import { customEmoteRegex } from "../utils/customEmoteRegex";
 import { emojiRegex } from "../utils/emojiRegex";
 import { mentionRegex } from "../utils/mentionRegex";
@@ -147,39 +147,49 @@ class ConnectGame implements GridGame {
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     this.opponent.piece = getValidPieces(msg.content.trim())![0];
                     this.confirmed = true;
-                    this.message = await msg.reply(`it's ${this.challenger.user.toString()}'s turne !! \n${this.grid.render(this.challenger, this.opponent)}`);
-                }
-                if (msg.content === "cancel") {
-                    msg.reply(`sucesfulie canceled matche betweene ${this.challenger.user.toString()} ande ${this.opponent.user.toString()}! ${e.sad2.e} i reali waned to see yu guyse pley`);
-                    this.destroySelf(handler);
+                    this.message = await msg.reply({
+                        components: this.grid.toComponentArr(),
+                        content: `it's ${this.challenger.user.toString()}'s turne !! \n${this.grid.render(this.challenger, this.opponent)}`
+                    });
                 }
             }
+            if (msg.content === "cancel") {
+                msg.reply(`sucesfulie canceled matche betweene ${this.challenger.user.toString()} ande ${this.opponent.user.toString()}! ${e.sad2.e} i reali waned to see yu guyse pley`);
+                this.destroySelf(handler);
+            }
         } else {
-            if (!msg.author.bot && this.turns.validateMessage(msg) && parseInt(msg.content)) {
-                const num = parseInt(msg.content);
-                if (num > 0 && num < this.grid.width + 1) {
-                    const piece = this.grid.placePiece(num, this.turns.currentTurn);
-                    if (!piece) {
-                        msg.reply(`dat row is fulle !! ${e.sad.e}`);
-                        return;
-                    }
-                    await msg.delete();
-                    if (this.grid.checkWin(piece.position, piece.placedBy)) {
-                        await this.message?.edit(`${this.turns.getCurrentTurnUser().toString()} wone !!! ${e.shock_handless.e}${e.party.e} GG !!! \n${this.grid.render(this.challenger, this.opponent)}`);
-                        this.destroySelf(handler);
-                        return;
-                    }
-                    if (this.grid.isGridFull()) {
-                        await this.message?.edit(`it's a drawe !! GG !!! ${e.shock_handless.e} \n${this.grid.render(this.challenger, this.opponent)}`);
-                        this.destroySelf(handler);
-                        return;
-                    }
-                    this.turns.switchTurn();
-                    await this.message?.edit(`it's ${this.turns.getCurrentTurnUser().toString()}'s turne !! (last moov: ${num}) \n${this.grid.render(this.challenger, this.opponent)}`);
-                }
-            } else if (!msg.author.bot && msg.content.trim() === "cancel") {
+            if (!msg.author.bot && msg.content.trim() === "cancel") {
                 msg.reply(`wat a looser !! imagin bakking oute !! ${e.funny.e}${e.stare.e} (succesfuli canceled de matche ${e.sad.e})`);
                 this.destroySelf(handler);
+            }
+        }
+    }
+
+    public async handleButton(interaction : ButtonInteraction, handler : Handler) : Promise<void> {
+        if (interaction.user.id === this.turns.getCurrentTurnUser().id) {
+            const piece = this.grid.placePiece(parseInt(interaction.customId.split('_')[1]), this.turns.currentTurn);
+            if (piece) {
+                if (this.grid.checkWin(piece.position, piece.placedBy)) {
+                    await interaction.update({
+                        components: this.grid.toComponentArr(),
+                        content: `${this.turns.getCurrentTurnUser().toString()} wone !!! ${e.shock_handless.e}${e.party.e} GG !!!\n${this.grid.render(this.challenger, this.opponent)}`
+                    });
+                    this.destroySelf(handler);
+                    return;
+                }
+                if (this.grid.isGridFull()) {
+                    await interaction.update({
+                        components: this.grid.toComponentArr(),
+                        content: `it's a drawe !! GG !!! ${e.shock_handless.e}\n${this.grid.render(this.challenger, this.opponent)}`
+                    });
+                    this.destroySelf(handler);
+                    return;
+                }
+                this.turns.switchTurn();
+                await interaction.update({
+                    components: this.grid.toComponentArr(),
+                    content: `it's ${this.turns.getCurrentTurnUser().toString()}'s turne !!\n${this.grid.render(this.challenger, this.opponent)}`
+                });
             }
         }
     }
@@ -204,13 +214,22 @@ class ConnectGrid implements GameGrid {
         return arr;
     }
 
+    public toComponentArr() : MessageActionRow[] {
+        const btnArr = [...Array(this.width).keys()].map(v => new MessageButton()
+            .setCustomId(`connect4_${v + 1}`)
+            .setEmoji(['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣'][v])
+            .setStyle('PRIMARY')
+            .setDisabled(this.toCharArr().map(v => v.join(' ')).join('\n').includes('W') || !this.columnToPosition(v + 1))
+        );
+        return [new MessageActionRow().addComponents(...btnArr.slice(0, 4)), new MessageActionRow().addComponents(...btnArr.slice(4))];
+    }
+
     public render(challenger : ConnectPlayer, opponent : ConnectPlayer) : string {
         let grid = this.toCharArr().map(v => v.join(' ')).join('\n');
         grid = grid.replaceAll('*', '⚪');
         grid = grid.replaceAll('C', challenger.piece);
         grid = grid.replaceAll('O', opponent.piece);
         grid = grid.replaceAll('W', e.greneblogie.e);
-        grid += '\n:one: :two: :three: :four: :five: :six: :seven:' + (this.width > 7 ? ' :eight:' : '') + (this.width === 9 ? ' :nine:' : '');
         return grid;
     }
 

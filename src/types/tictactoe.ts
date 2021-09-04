@@ -1,4 +1,4 @@
-import { Message, TextChannel, User } from "discord.js";
+import { ButtonInteraction, Message, MessageActionRow, MessageButton, TextChannel, User } from "discord.js";
 import { customEmoteRegex } from "../utils/customEmoteRegex";
 import { emojiRegex } from "../utils/emojiRegex";
 import { mentionRegex } from "../utils/mentionRegex";
@@ -131,6 +131,8 @@ class TicTacToeGame implements GridGame {
         handler.games.filter(v => v.channel?.id !== this.channel?.id);
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         this.handleMessage = async ()=>{};
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        this.handleButton = async ()=>{};
         this.channel = undefined;
     }
 
@@ -147,39 +149,49 @@ class TicTacToeGame implements GridGame {
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     this.opponent.piece = getValidPieces(msg.content.trim())![0];
                     this.confirmed = true;
-                    this.message = await msg.reply(`it's ${this.challenger.user.toString()}'s turne !! \n${this.grid.render(this.challenger, this.opponent)}`);
-                }
-                if (msg.content === "cancel") {
-                    msg.reply(`sucesfulie canceled matche betweene ${this.challenger.user.toString()} ande ${this.opponent.user.toString()}! ${e.sad2.e} i reali waned to see yu guyse pley`);
-                    this.destroySelf(handler);
+                    this.message = await msg.reply({
+                        components: this.grid.toComponentArr(this.challenger, this.opponent),
+                        content: `it's ${this.challenger.user.toString()}'s turne !!`
+                    });
                 }
             }
+            if (msg.content === "cancel") {
+                msg.reply(`sucesfulie canceled matche betweene ${this.challenger.user.toString()} ande ${this.opponent.user.toString()}! ${e.sad2.e} i reali waned to see yu guyse pley`);
+                this.destroySelf(handler);
+            }
         } else {
-            if (!msg.author.bot && this.turns.validateMessage(msg) && parseInt(msg.content)) {
-                const num = parseInt(msg.content);
-                if (num > 0 && num < 10) {
-                    const piece = this.grid.placePiece([(num - 1) % 3 + 1, this.grid.height - 1 - Math.floor((num - 1) / 3)], this.turns.currentTurn);
-                    if (!piece) {
-                        msg.reply(`dat spaec is fulle !! ${e.sad.e}`);
-                        return;
-                    }
-                    await msg.delete();
-                    if (this.grid.checkWin(piece.position, piece.placedBy)) {
-                        await this.message?.edit(`${this.turns.getCurrentTurnUser().toString()} wone !!! ${e.shock_handless.e}${e.party.e} GG !!! \n${this.grid.render(this.challenger, this.opponent)}`);
-                        this.destroySelf(handler);
-                        return;
-                    }
-                    if (this.grid.isGridFull()) {
-                        await this.message?.edit(`it's a drawe !! GG !!! ${e.shock_handless.e} \n${this.grid.render(this.challenger, this.opponent)}`);
-                        this.destroySelf(handler);
-                        return;
-                    }
-                    this.turns.switchTurn();
-                    await this.message?.edit(`it's ${this.turns.getCurrentTurnUser().toString()}'s turne !! (last moov: ${num}) \n${this.grid.render(this.challenger, this.opponent)}`);
-                }
-            } else if (!msg.author.bot && msg.content.trim() === "cancel") {
+            if (!msg.author.bot && msg.content.trim() === "cancel") {
                 msg.reply(`wat a looser !! imagin bakking oute !! ${e.funny.e}${e.stare.e} (succesfuli canceled de matche ${e.sad.e})`);
                 this.destroySelf(handler);
+            }
+        }
+    }
+
+    public async handleButton(interaction : ButtonInteraction, handler : Handler) : Promise<void> {
+        if (interaction.user.id === this.turns.getCurrentTurnUser().id) {
+            const piece = this.grid.placePiece([parseInt(interaction.customId.split('_')[1]) + 1, this.grid.height - 1 - parseInt(interaction.customId.split('_')[2])], this.turns.currentTurn);
+            if (piece) {
+                if (this.grid.checkWin(piece.position, piece.placedBy)) {
+                    await interaction.update({
+                        components: this.grid.toComponentArr(this.challenger, this.opponent),
+                        content: `${this.turns.getCurrentTurnUser().toString()} wone !!! ${e.shock_handless.e}${e.party.e} GG !!!`
+                    });
+                    this.destroySelf(handler);
+                    return;
+                }
+                if (this.grid.isGridFull()) {
+                    await interaction.update({
+                        components: this.grid.toComponentArr(this.challenger, this.opponent),
+                        content: `it's a drawe !! GG !!! ${e.shock_handless.e}`
+                    });
+                    this.destroySelf(handler);
+                    return;
+                }
+                this.turns.switchTurn();
+                await interaction.update({
+                    components: this.grid.toComponentArr(this.challenger, this.opponent),
+                    content: `it's ${this.turns.getCurrentTurnUser().toString()}'s turne !!`
+                });
             }
         }
     }
@@ -201,6 +213,30 @@ class TicTacToeGrid implements GameGrid {
             arr[this.height - piece.position[1] - 1][piece.position[0] - 1] = piece.placedBy;
         }
         return arr;
+    }
+
+    public toComponentArr(challenger : TicTacToePlayer, opponent : TicTacToePlayer) : MessageActionRow[] {
+        const charArr = this.toCharArr();
+        const btnArr = charArr.map((v, i) => v.map((y, j) => {
+            const emj = this.charToEmoji(challenger, opponent, y);
+            return new MessageButton()
+            .setCustomId(`tictactoe_${j}_${i}`)
+            .setEmoji(emj)
+            .setStyle(emj !== e.blank.e ? (emj === e.greneblogie.e ? 'SUCCESS' : 'SECONDARY') : 'PRIMARY');
+        })).map(v => new MessageActionRow()
+            .addComponents(v)
+        );
+        return btnArr;
+    }
+
+    public charToEmoji(challenger : TicTacToePlayer, opponent : TicTacToePlayer, g : string) : string {
+        return g === '*' ? e.blank.e : (
+            g === 'C' ? challenger.piece : (
+                g === 'O' ? opponent.piece : (
+                    g === 'W' ? e.greneblogie.e : ''
+                )
+            )
+        );
     }
 
     public render(challenger : TicTacToePlayer, opponent : TicTacToePlayer) : string {

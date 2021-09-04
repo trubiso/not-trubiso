@@ -1,4 +1,4 @@
-import { Message, TextChannel, User } from "discord.js";
+import { ButtonInteraction, Message, SelectMenuInteraction, TextChannel, User } from "discord.js";
 import { Handler } from "./handler";
 
 type GamePlayer = {
@@ -13,6 +13,8 @@ interface Game {
 
     destroySelf(handler : Handler) : void;
     handleMessage(msg : Message, handler : Handler) : void;
+    handleButton?(interaction: ButtonInteraction, handler : Handler) : void,
+    handleSelectMenu?(interaction: SelectMenuInteraction, handler : Handler) : void
 }
 
 interface GameGrid {
