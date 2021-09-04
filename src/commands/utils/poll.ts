@@ -78,12 +78,6 @@ export = {
                     value: description
                 },
                 {
-                    name: "optionse!",
-                    value: rawOptions.map(v => {
-                        return `${containsEmoji(v.emoji) ? v.emoji : handler.client.emojis.cache.get(v.emoji)} for ${v.description}`;
-                    }).join(', ')
-                },
-                {
                     name: "statse",
                     value: "no reactionese yet !"
                 }
