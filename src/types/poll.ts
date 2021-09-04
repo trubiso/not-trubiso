@@ -1,7 +1,4 @@
-import { Message, MessageReaction } from "discord.js";
-import { customEmoteRegex } from "../utils/customEmoteRegex";
-import { emojiRegex } from "../utils/emojiRegex";
-import { containsEmoji } from "../utils/containsEmoji";
+import { Message } from "discord.js";
 import { PollOption } from "./pollOption";
 import { PollOptionResolvable } from "./pollOptionResolvable";
 
@@ -28,51 +25,10 @@ export class Poll {
     }
 
     /**
-     * Tries to restore a poll from a messsage.
-     * @param message The message associated with the poll.
-     * @returns Either the restored poll or undefined if the poll couldn't be restored.
-     */
-    static restorePollFromMessage(message: Message) : Poll | undefined {
-        const optionEmojiRegex = new RegExp(new RegExp(emojiRegex).source + '|' + new RegExp(customEmoteRegex).source, 'g');
-        const optionEmojis = Array.from(message.embeds[0].fields[1].value.matchAll(optionEmojiRegex), m => m[0]).filter(v => v.length);
-        const options = optionEmojis.map(v => {
-            let emojiId: string;
-            if (containsEmoji(v)) {
-                emojiId = v;
-            } else {
-                try {
-                    emojiId = v.split(':')[2].slice(0, -1);
-                } catch (e) {
-                    return {
-                        emojiId: '',
-                        message: message
-                    };
-                }
-            }
-            return {
-                emojiId: emojiId,
-                message: message
-            } as PollOptionResolvable;
-        }).filter(v => v.emojiId !== '');
-        if (options) {
-            const processedOptions = options.map(v => PollOption.resolve(v));
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            try { processedOptions.forEach(v => {
-                const count = message.reactions.cache.get(v.emojiId)?.count;
-                if (count) v.count = count;
-                else throw undefined;
-            }); } catch(e) { return undefined; }
-            return new Poll(processedOptions, message);
-        }
-        else return undefined;
-    }
-
-    /**
      * Updates the poll's message.
-     * @param reaction The reaction given by the messageReaction events in the client (optional).
      */
-    public updateMessage(reaction?: MessageReaction) : void {
-        const reactionCounts : number[] = this.pollOptions.map(v => v.getReactionCount(reaction));
+    public updateMessage() : void {
+        const reactionCounts : number[] = this.pollOptions.map(v => v.getReactionCount());
         let totalReactions = 1;
         try {
             totalReactions = reactionCounts.reduce((a, b) => a+b);
@@ -82,7 +38,7 @@ export class Poll {
             let emoji;
             if (v.isUnicodeEmoji) emoji = v.emojiId;
             else emoji = this.message.guild?.emojis.cache.get(v.emojiId)?.toString();
-            const reactionCount = v.getReactionCount(reaction);
+            const reactionCount = v.getReactionCount();
             const percentage = reactionCount * 100 / totalReactions;
             const percentageString = isNaN(percentage) ? "0" : percentage.toFixed(0);
             return `${emoji}: ${reactionCount} (${percentageString}%)`;

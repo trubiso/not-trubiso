@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { ButtonInteraction, Message, SelectMenuInteraction } from "discord.js";
 import { Handler } from "./handler";
 
 /**
@@ -36,12 +36,27 @@ export type Command = {
 	},
 	/**
 	 * The function that gets called to execute the command.
-	 * Can be set as async, although the error handler does not work with async commands currently.
+	 * Can be set as asynchronous.
 	 * 
 	 * @param message The message that executed this command.
 	 * @param args Each argument that has been inputted to the command.
 	 * @param handler The bot handler.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	execute(message: Message, args: string[], handler: Handler) : Promise<unknown> | void
+	execute(message: Message, args: string[], handler: Handler) : Promise<unknown> | void,
+	/**
+	 * The function that gets called to handle button interactions.
+	 * Can be set as asynchronous.
+	 * 
+	 * @param interaction The interaction received by the 'interactionCreate' event.
+	 * @param handler The bot handler.
+	 */
+	handleButton?(interaction: ButtonInteraction, handler : Handler) : Promise<unknown> | void,
+	/**
+	 * The function that gets called to handle select menu interactions.
+	 * Can be set as asynchronous.
+	 * 
+	 * @param interaction The interaction received by the 'interactionCreate' event.
+	 * @param handler The bot handler.
+	 */
+	handleSelectMenu?(interaction: SelectMenuInteraction, handler : Handler) : Promise<unknown> | void
 }

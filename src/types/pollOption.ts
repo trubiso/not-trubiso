@@ -1,4 +1,4 @@
-import { Message, MessageReaction } from "discord.js";
+import { Message } from "discord.js";
 import { containsEmoji } from "../utils/containsEmoji";
 import { PollOptionResolvable } from "./pollOptionResolvable";
 
@@ -22,6 +22,10 @@ export class PollOption {
      * How many reactions this poll option has (excluding the bot's reactions).
      */
     public count;
+    /**
+     * The people that have clicked on this option.
+     */
+    public users : string[];
 
     /**
      * Turns a resolvable poll option object into a PollOption instance.
@@ -35,16 +39,10 @@ export class PollOption {
 
     /**
      * Gets how many reactions this poll option has and updates the internal count number.
-     * @param reaction The reaction given by the messageReaction events in the client (optional).
      * @returns How many reactions this poll option has.
      */
-    public getReactionCount(reaction?: MessageReaction) : number {
-        if (this.isUnicodeEmoji) {
-            if (reaction) if (reaction.emoji.name === this.emojiId) this.count = reaction.count;
-        } else {
-            if (reaction) if (reaction.emoji.id === this.emojiId) this.count = reaction.count;
-        }
-        return Math.max(this.count - 1, 0);
+    public getReactionCount() : number {
+        return Math.max(this.count, 0);
     }
     
     /**
@@ -56,5 +54,6 @@ export class PollOption {
         this.isUnicodeEmoji = containsEmoji(emojiId);
         this.message = message;
         this.count = 0;
+        this.users = [];
     }
 }

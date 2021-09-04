@@ -1,12 +1,9 @@
-import { Client, Collection, Message, MessageReaction, TextChannel } from "discord.js";
+import { Client, Collection, Interaction, Message, TextChannel } from "discord.js";
 import fs from "fs";
 import { loadModule } from "./utils/loadModule";
 import { Handler } from "./types/handler";
-import { Poll } from "./types/poll";
-import chalk from "chalk";
 import { handleCommand } from "./utils/handleCommand";
 import { logError } from "./utils/logError";
-import { findPollMessages } from "./utils/findPollMessages";
 
 const token : string = process.env.NT_TOKEN ?? require('./config.json').token;
 const { e } = require('./vars.json');
@@ -22,12 +19,6 @@ client.once('ready', () => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     if (client.guilds.cache.get("717683408012181505")) (client.channels.cache.get("717683408553377815")! as TextChannel).send(`i'm bakke!!! ${e.happy.e}`);
     client.user?.setPresence({ activities: [{ name: "yu !!", type: "LISTENING" }]});
-    findPollMessages(handler).then(v => {
-        const restoredPolls = v.map(v => Poll.restorePollFromMessage(v));
-        const verifiedRestoredPolls = restoredPolls.filter(Boolean) as Poll[];
-        handler.polls.push(...verifiedRestoredPolls);
-        console.log(chalk.green(`Restored ${verifiedRestoredPolls.length} polls.`));
-    });
 });
 
 client.on('messageCreate', async (msg: Message) => {
@@ -55,11 +46,25 @@ client.on('messageCreate', async (msg: Message) => {
     }
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const pollReactionBehavior = (reaction: any) : void => handler.polls.forEach(v => v.updateMessage(reaction as MessageReaction));
-
-client.on('messageReactionAdd', pollReactionBehavior);
-client.on('messageReactionRemove', pollReactionBehavior);
+client.on('interactionCreate', async (interaction : Interaction) => {
+    if (interaction.isButton()) {
+        const cmd = interaction.customId.split('_')[0];
+        const actualCmd = handler.commands.find(v => v.name === cmd);
+        if (actualCmd && actualCmd.handleButton) {
+            await (actualCmd.handleButton(interaction, handler) as Promise<unknown>)?.catch(error => {
+                logError(error);
+            });
+        }
+    } else if (interaction.isSelectMenu()) {
+        const cmd = interaction.customId.split('_')[0];
+        const actualCmd = handler.commands.find(v => v.name === cmd);
+        if (actualCmd && actualCmd.handleSelectMenu) {
+            await (actualCmd.handleSelectMenu(interaction, handler) as Promise<unknown>)?.catch(error => {
+                logError(error);
+            });
+        }
+    }
+});
 
 process.on('unhandledRejection', logError);
 
