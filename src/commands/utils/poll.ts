@@ -107,30 +107,26 @@ export = {
         handler.polls.push(pollObject);
 	},
     async handleSelectMenu(interaction, handler) {
-        if (interaction.customId === 'poll_select') {            
-            const poll = handler.polls.find(v => v.message.id === interaction.message.id);
-            if (poll) {
-                const option = poll.pollOptions.find(v => v.emojiId === interaction.values[0]);
-                if (option) {
-                    if (!option.users.includes(interaction.user.id)) {
-                        if (poll.pollOptions.filter(v => v.emojiId !== option.emojiId).filter(v => v.users.includes(interaction.user.id)).length) {
-                            poll.pollOptions.filter(v => v.emojiId !== option.emojiId).filter(v => v.users.includes(interaction.user.id)).forEach(v => {
-                                v.users = v.users.filter(y => y !== interaction.user.id);
-                                v.count --;
-                            });
-                        }
-                        option.users.push(interaction.user.id);
-                        option.count ++;
-                        await interaction.update({embeds: poll.message.embeds, components: poll.message.components});
-                        poll.updateMessage();
-                    } else {
-                        option.users = option.users.filter(v => v !== interaction.user.id);
-                        option.count --;
-                        await interaction.update({embeds: poll.message.embeds, components: poll.message.components});
-                        poll.updateMessage();
-                    }
-                }
+        if (interaction.customId !== 'poll_select') return;
+        const poll = handler.polls.find(v => v.message.id === interaction.message.id);
+        if (!poll) return;
+        const option = poll.pollOptions.find(v => v.emojiId === interaction.values[0]);
+        if (!option) return;
+
+        if (!option.users.includes(interaction.user.id)) {
+            if (poll.pollOptions.filter(v => v.emojiId !== option.emojiId).filter(v => v.users.includes(interaction.user.id)).length) {
+                poll.pollOptions.filter(v => v.emojiId !== option.emojiId).filter(v => v.users.includes(interaction.user.id)).forEach(v => {
+                    v.users = v.users.filter(y => y !== interaction.user.id);
+                    v.count --;
+                });
             }
+            option.users.push(interaction.user.id);
+            option.count ++;
+        } else {
+            option.users = option.users.filter(v => v !== interaction.user.id);
+            option.count --;
         }
+        await interaction.update({embeds: poll.message.embeds, components: poll.message.components});
+        poll.updateMessage();
     }
 } as Command;
