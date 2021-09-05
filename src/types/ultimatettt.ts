@@ -12,14 +12,6 @@ const { e } = require('../vars.json');
 const validatePiece = (piece : string, handler: Handler) : boolean => !!(piece.match(UltimateTicTacToeGame.pieceRegex) && (piece.match(customEmoteRegex) ? validateCustomEmote(piece, handler) : piece.match(emojiRegex)) && piece.normalize().split('') !== '⚪'.split('') && !([':one:',':two:',':three:',':four:',':five:',':six:',':seven:',':eight:',':nine:',':asterisk:',':hash:',':1234:',e.greneblogie.e].includes(piece)));
 const getValidPieces = (piece : string) : string[] | undefined => piece.match(UltimateTicTacToeGame.pieceRegex)?.map(v => v?.toString());
 
-const chunkArray = <T>(arr : T[], chunkSize : number) : T[][] => {
-    const finalArr : T[][] = [];
-    for (let i = 0 ; i < arr.length; i += chunkSize) {
-        finalArr.push(arr.slice(i, i + chunkSize));
-    }
-    return finalArr;
-};
-
 const UltimateTicTacToeStartCommand = {
     name: 'ultimatetictactoe',
     aliases: ['uttt', 'ultimatettt', 'utictactoe'],
@@ -64,9 +56,9 @@ const UltimateTicTacToeStartCommand = {
         const challenger = message.author;
         const opponent = await handler.client.users.fetch(mention[0].replace(/[<@!>]/g, ''));
 
-        if (challenger.toString() === opponent.toString()) {
+        /*if (challenger.toString() === opponent.toString()) {
             throw `yu cant chaleng yurslef !!`;
-        }
+        }*/
         if (opponent.bot) {
             throw `yu cant chaleng a bot !!`;
         }
@@ -136,7 +128,7 @@ class UltimateTicTacToeGame implements Game {
             if (!msg.author.bot && this.turns.validateMessage(msg) && parseInt(msg.content)) {
                 const num = parseInt(msg.content);
                 if (num > 0 && num < 10) {
-                    const piece = this.grid.placePiece(num, 3, this.turns.currentTurn);
+                    const piece = this.grid.placePiece(num, 9, this.turns.currentTurn);
                     if (!piece) {
                         msg.reply(`dat spaec is fulle !! ${e.sad.e}`);
                         return;
@@ -178,7 +170,9 @@ class UltimateTicTacToeGrid {
 
     public placePiece(pos : number, gridNum : number, placedBy : string) : TicTacToePiece | undefined {
         const gridPos = this.numToPos(gridNum);
-        const grid = this.grids[gridPos[0] - 1][gridPos[1] - 2];
+        const pgPos = [2 - gridPos[1], gridPos[0] - 1];
+        console.log(pgPos);
+        const grid = this.grids[pgPos[0]][pgPos[1]];
         if (!grid) return undefined;
         const piece = grid.placePiece(this.numToPos(pos), placedBy);
         if (!piece) return undefined;
@@ -187,23 +181,20 @@ class UltimateTicTacToeGrid {
 
     public render(challenger : TicTacToePlayer, opponent: TicTacToePlayer) : string {
         const rawCharArrs = this.grids.map(v => v.map(i => i.toCharArr()));
-        const chars = rawCharArrs.flat(4);
-        const renderedChars = chars.map(v => {
-            return v.replaceAll('*', '⚪').replaceAll('C', challenger.piece).replaceAll('O', opponent.piece).replaceAll('W', '🟢');
+        const charArrs = rawCharArrs.map(v => v.map(r => r.map(y => y.join(' '))));
+        const pCharArrs : string[] = [];
+        charArrs.forEach(v => {
+            for (let i = 0 ; i < v.length / 3 ; i += 3) {
+                pCharArrs.push(v[i][0] + ' ⚫ ' + v[i + 1][0] + ' ⚫ ' + v[i + 2][0]);
+                pCharArrs.push(v[i][1] + ' ⚫ ' + v[i + 1][1] + ' ⚫ ' + v[i + 2][1]);
+                pCharArrs.push(v[i][2] + ' ⚫ ' + v[i + 1][2] + ' ⚫ ' + v[i + 2][2]);
+            }
         });
-        const charsGroup1 = chunkArray(renderedChars, 27);
-        const charsPass1 = charsGroup1.map(v => v.join(' ')).join('\n');
-        const charsGroup2 = chunkArray(charsPass1.split(' '), 9);
-        const regroup2 = (arr : string[][]) : string[][] => {
-            const g1 = arr.map(v => v.slice(0, 3));
-            const g2 = arr.map(v => v.slice(3, 6));
-            const g3 = arr.map(v => v.slice(6, 9));
-            const g = [g1.map(v => v.join(' ')), g2.map(v => v.join(' ')), g3.map(v => v.join(' '))];
-            return g;
-        };
-        console.log(regroup2(charsGroup2).map(v => v.join(' ')));
-        const charsPass2 = regroup2(charsGroup2).map(v => v.join(' ')).join('\n');
-        return charsPass2;
+        const outArr : string[] = [];
+        for (let i = 0 ; i < pCharArrs.length ; i += 3) {
+            outArr.push(pCharArrs[i] + '\n' + pCharArrs[i + 1] + '\n' + pCharArrs[i + 2]);
+        }
+        return outArr.join('\n⚫ ⚫ ⚫ ⚫ ⚫ ⚫ ⚫ ⚫ ⚫ ⚫ ⚫\n').replaceAll('*', '⚪').replaceAll('C', challenger.piece).replaceAll('O', opponent.piece).replaceAll('W', '🟢');
     }
 }
 
