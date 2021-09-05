@@ -7,5 +7,5 @@ import chalk from "chalk";
  * @param error The error to log.
  */
 export const logError = (error: any) : void => {
-    console.error(`${chalk.red('[ERROR]')} ${chalk.redBright(error.toString())}`);
+    console.error(`${chalk.red('[ERROR]')} ${chalk.redBright(error.toString())} ${(error as Error).stack}`);
 };

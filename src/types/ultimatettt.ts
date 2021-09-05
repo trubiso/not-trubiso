@@ -56,9 +56,9 @@ const UltimateTicTacToeStartCommand = {
         const challenger = message.author;
         const opponent = await handler.client.users.fetch(mention[0].replace(/[<@!>]/g, ''));
 
-        /*if (challenger.toString() === opponent.toString()) {
+        if (challenger.toString() === opponent.toString()) {
             throw `yu cant chaleng yurslef !!`;
-        }*/
+        }
         if (opponent.bot) {
             throw `yu cant chaleng a bot !!`;
         }
@@ -117,7 +117,7 @@ class UltimateTicTacToeGame implements Game {
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     this.opponent.piece = getValidPieces(msg.content.trim())![0];
                     this.confirmed = true;
-                    this.message = await msg.reply(`it's ${this.challenger.user.toString()}'s turne !! \n${this.grid.render(this.challenger, this.opponent)}`);
+                    this.message = await msg.reply(`it's ${this.challenger.user.toString()}'s turne !! (curent grid: none) \n${this.grid.render(this.challenger, this.opponent)}`);
                 }
             }
             if (msg.content === "cancel") {
@@ -128,24 +128,38 @@ class UltimateTicTacToeGame implements Game {
             if (!msg.author.bot && this.turns.validateMessage(msg) && parseInt(msg.content)) {
                 const num = parseInt(msg.content);
                 if (num > 0 && num < 10) {
-                    const piece = this.grid.placePiece(num, 9, this.turns.currentTurn);
-                    if (!piece) {
-                        msg.reply(`dat spaec is fulle !! ${e.sad.e}`);
-                        return;
+                    const a = this.grid.currentGrid;
+                    if (this.grid.currentGrid > 0) {
+                        const piece = this.grid.placePiece(num, this.grid.currentGrid, this.turns.currentTurn);
+                        if (!piece) {
+                            msg.reply(`dat spaec is fulle !! ${e.sad.e}`);
+                            return;
+                        }
+                        if (this.grid.getCurrentGrid().checkWin(piece.position, piece.placedBy)) {
+                            this.grid.getCurrentGrid().win(this.turns.currentTurn as gridWonByType);
+                        }
+                    }
+                    if (this.grid.getGrid(num).gridWonBy !== '' || this.grid.getGrid(num).isGridFull()) {
+                        this.grid.currentGrid = -1;
+                    } else {
+                        this.grid.currentGrid = num;
                     }
                     await msg.delete();
-                    /*if (this.grid.checkWin(piece.position, piece.placedBy)) {
-                        await this.message?.edit(`${this.turns.getCurrentTurnUser().toString()} wone !!! ${e.shock_handless.e}${e.party.e} GG !!! \n${this.grid.render(this.challenger, this.opponent)}`);
-                        this.destroySelf(handler);
-                        return;
+                    const g = ExtTTTGrid.fromCharArr(this.grid.grids.map(r => r.map(v => v.gridWonBy)));
+                    if (g.pieces.length) {
+                        if (g.checkWin(g.pieces[0].position, g.pieces[0].placedBy)) {
+                            await this.message?.edit(`${this.turns.getCurrentTurnUser().toString()} wone !!! ${e.shock_handless.e}${e.party.e} GG !!! \n${this.grid.render(this.challenger, this.opponent)}`);
+                            this.destroySelf(handler);
+                            return;
+                        }
+                        if (g.isGridFull()) {
+                            await this.message?.edit(`it's a drawe !! GG !!! ${e.shock_handless.e} \n${this.grid.render(this.challenger, this.opponent)}`);
+                            this.destroySelf(handler);
+                            return;
+                        }
                     }
-                    if (this.grid.isGridFull()) {
-                        await this.message?.edit(`it's a drawe !! GG !!! ${e.shock_handless.e} \n${this.grid.render(this.challenger, this.opponent)}`);
-                        this.destroySelf(handler);
-                        return;
-                    }*/
-                    this.turns.switchTurn();
-                    await this.message?.edit(`it's ${this.turns.getCurrentTurnUser().toString()}'s turne !! (last moov: ${num}) \n${this.grid.render(this.challenger, this.opponent)}`);
+                    if (a !== -1) this.turns.switchTurn();
+                    await this.message?.edit(`it's ${this.turns.getCurrentTurnUser().toString()}'s turne !! (curent grid: ${this.grid.currentGrid > 0 ? this.grid.currentGrid : 'none'}, last moov: ${num}) \n${this.grid.render(this.challenger, this.opponent)}`);
                 }
             } else if (!msg.author.bot && msg.content.trim() === "cancel") {
                 msg.reply(`wat a looser !! imagin bakking oute !! ${e.funny.e}${e.stare.e} (succesfuli canceled de matche ${e.sad.e})`);
@@ -155,12 +169,59 @@ class UltimateTicTacToeGame implements Game {
     }
 }
 
+type gridWonByType = 'C' | 'O' | ''
+
+const utttPattern = (byWhom : gridWonByType) : string[][] => {
+    switch(byWhom) {
+        case 'C':
+            return [
+                ['W', '*', 'W'],
+                ['*', 'W', '*'],
+                ['W', '*', 'W']
+            ];
+        case 'O':
+            return [
+                ['W', 'W', 'W'],
+                ['W', '*', 'W'],
+                ['W', 'W', 'W']
+            ];
+        default:
+            return [];
+    }
+};
+
+class ExtTTTGrid extends TicTacToeGrid {
+    public gridWonBy : gridWonByType;
+
+    constructor(pieces : TicTacToePiece[] = []) {
+        super(pieces);
+        this.gridWonBy = '';
+    }
+
+    static fromCharArr(charArr : string[][]) : ExtTTTGrid {
+        const g = new ExtTTTGrid();
+        if (charArr.length)
+            charArr.forEach((r, i) => r.forEach((v, j) => { g.pieces.push(new TicTacToePiece([j + 1, 2 - i], g, v)); }));
+        g.pieces = g.pieces.filter(v => v.placedBy !== '');
+        return g;
+    }
+
+    public toCharArr() : string[][] {
+        if (this.gridWonBy === '') return super.toCharArr();
+        else return utttPattern(this.gridWonBy);
+    }
+
+    public win(byWhom : gridWonByType) : void {
+        this.gridWonBy = byWhom;
+    }
+}
+
 class UltimateTicTacToeGrid {
-    public grids : TicTacToeGrid[][];
+    public grids : ExtTTTGrid[][];
     public currentGrid : number;
 
     constructor() {
-        this.grids = [[new TicTacToeGrid(), new TicTacToeGrid(), new TicTacToeGrid()], [new TicTacToeGrid(), new TicTacToeGrid(), new TicTacToeGrid()], [new TicTacToeGrid(), new TicTacToeGrid(), new TicTacToeGrid()]];
+        this.grids = [[new ExtTTTGrid(), new ExtTTTGrid(), new ExtTTTGrid()], [new ExtTTTGrid(), new ExtTTTGrid(), new ExtTTTGrid()], [new ExtTTTGrid(), new ExtTTTGrid(), new ExtTTTGrid()]];
         this.currentGrid = -1;
     }
 
@@ -168,11 +229,18 @@ class UltimateTicTacToeGrid {
         return [(num - 1) % 3 + 1, 2 - Math.floor((num - 1) / 3)];
     }
 
-    public placePiece(pos : number, gridNum : number, placedBy : string) : TicTacToePiece | undefined {
-        const gridPos = this.numToPos(gridNum);
+    public getCurrentGrid() : ExtTTTGrid {
+        return this.getGrid(this.currentGrid);
+    }
+
+    public getGrid(num : number) : ExtTTTGrid {
+        const gridPos = this.numToPos(num);
         const pgPos = [2 - gridPos[1], gridPos[0] - 1];
-        console.log(pgPos);
-        const grid = this.grids[pgPos[0]][pgPos[1]];
+        return this.grids[pgPos[0]][pgPos[1]];
+    }
+
+    public placePiece(pos : number, gridNum : number, placedBy : string) : TicTacToePiece | undefined {
+        const grid = this.getGrid(gridNum);
         if (!grid) return undefined;
         const piece = grid.placePiece(this.numToPos(pos), placedBy);
         if (!piece) return undefined;

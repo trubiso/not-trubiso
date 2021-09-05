@@ -210,7 +210,10 @@ class TicTacToeGrid implements GameGrid {
     public toCharArr() : string[][] {
         const arr = Array.from({ length: this.height }, () => Array.from({ length: this.width }, () => '*'));
         for (const piece of this.pieces) {
-            arr[this.height - piece.position[1] - 1][piece.position[0] - 1] = piece.placedBy;
+            try {
+                arr[this.height - piece.position[1] - 1][piece.position[0] - 1] = piece.placedBy;
+            // eslint-disable-next-line no-empty
+            } catch (e) {}
         }
         return arr;
     }
