@@ -21,6 +21,14 @@ client.once('ready', () => {
     client.user?.setPresence({ activities: [{ name: "yu !!", type: "LISTENING" }]});
 });
 
+client.on('guildMemberAdd', member => {
+    if (member.guild.id === '717683408012181505') {
+        const r = ['725843105445576796', '725843316662468641'];
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        member.roles.add(client.guilds.cache.get('717683408012181505')!.roles.resolve(r[Math.floor(Math.random() * r.length)])!);
+    }
+});
+
 client.on('messageCreate', async (msg: Message) => {
     if (!msg.mentions.everyone) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

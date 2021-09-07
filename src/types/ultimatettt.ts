@@ -14,7 +14,7 @@ const getValidPieces = (piece : string) : string[] | undefined => piece.match(Ul
 
 const UltimateTicTacToeStartCommand = {
     name: 'ultimatetictactoe',
-    aliases: ['uttt', 'ultimatettt', 'utictactoe'],
+    aliases: ['uttt', 'ultimatettt', 'utictactoe', 'ñandufrances'],
     help: {
         category: 'games',
         brief: 'chaleng anodar pleyer to pley da ultimat tic tac toe wit yuo !',
@@ -157,6 +157,11 @@ class UltimateTicTacToeGame implements Game {
                             this.destroySelf(handler);
                             return;
                         }
+                    }
+                    if (this.grid.grids.flat(1).every(v => v.gridWonBy !== '' || v.isGridFull())) {
+                        await this.message?.edit(`it's a drawe !! GG !!! ${e.shock_handless.e} \n${this.grid.render(this.challenger, this.opponent)}`);
+                        this.destroySelf(handler);
+                        return;
                     }
                     if (a !== -1) this.turns.switchTurn();
                     await this.message?.edit(`it's ${this.turns.getCurrentTurnUser().toString()}'s turne !! (curent grid: ${this.grid.currentGrid > 0 ? this.grid.currentGrid : 'none'}, last moov: ${num}) \n${this.grid.render(this.challenger, this.opponent)}`);
