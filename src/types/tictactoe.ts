@@ -1,16 +1,10 @@
-import { ButtonInteraction, Message, MessageActionRow, MessageButton, TextChannel, User } from "discord.js";
-import { customEmoteRegex } from "../utils/customEmoteRegex";
-import { emojiRegex } from "../utils/emojiRegex";
-import { mentionRegex } from "../utils/mentionRegex";
-import { validateCustomEmote } from "../utils/validateCustomEmote";
+import { ButtonInteraction, Message, MessageActionRow, MessageButton, TextChannel } from "discord.js";
 import { Command } from "./command";
 import { Handler } from "./handler";
-import { GameGrid, GameTurns, GridGame, GridGamePiece } from  "./game";
+import { PieceGamePlayer } from  "./game";
+import { connectAnyCommandExecute, ConnectAnyGame, ConnectAnyGrid, ConnectAnyHandleMessage, ConnectAnyPiece, ConnectAnyTurns, getValidPieces } from "./connectAny";
 
 const { e } = require('../vars.json');
-
-const validatePiece = (piece : string, handler: Handler) : boolean => !!(piece.match(TicTacToeGame.pieceRegex) && (piece.match(customEmoteRegex) ? validateCustomEmote(piece, handler) : piece.match(emojiRegex)) && piece.normalize().split('') !== '⚪'.split('') && !([':one:',':two:',':three:',':four:',':five:',':six:',':seven:',':eight:',':nine:',':asterisk:',':hash:',':1234:',e.greneblogie.e].includes(piece)));
-const getValidPieces = (piece : string) : string[] | undefined => piece.match(TicTacToeGame.pieceRegex)?.map(v => v?.toString());
 
 const TicTacToeStartCommand = {
     name: 'tictactoe',
@@ -21,110 +15,26 @@ const TicTacToeStartCommand = {
         usage: 'tictactoe <opponent> <piece (emoji / custom emote)>'
     },
     async execute(message, args, handler) {
-        if (handler.games.some(v => v.channel?.id === message.channelId)) {
-            throw `der alredi is a gaem in dis chanel !!`;
-        }
-
-        if (!args.length) {
-            throw `plees choos a person to chaleng !`;
-        }
-        if (args.length === 1) {
-            throw `pleas choos a piec for yu to pley withe !`;
-        }
-        if (args.length > 2) {
-            throw `rong amount of parameterse !`;
-        }
-
-        const mention = args[0].match(mentionRegex);
-
-        if (!mention) {
-            throw `mention a person propreli !!`;
-        }
-        if (mention[1]) {
-            throw `yu shuld only be mentioninge wan preson`;
-        }
-
-        let challengerPiece = args[1];
-
-        if (!validatePiece(challengerPiece, handler)) {
-            throw `pleas input a proper emojie for yur second prameter !`;
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        challengerPiece = getValidPieces(challengerPiece)![0];
-
-        const challenger = message.author;
-        const opponent = await handler.client.users.fetch(mention[0].replace(/[<@!>]/g, ''));
-
-        if (challenger.toString() === opponent.toString()) {
-            throw `yu cant chaleng yurslef !!`;
-        }
-        if (opponent.bot) {
-            throw `yu cant chaleng a bot !!`;
-        }
-
-        handler.games.push(new TicTacToeGame(message.channel as TextChannel, {
-            user: challenger,
-            piece: challengerPiece
-        }, {
-            user: opponent,
-            piece: ''
-        }));
-        
-        message.reply(`${opponent.toString()}, yu hav been chalenged ! ${e.shock_handless.e} pleas choos a custom emot or emnoji ! ${e.please.e} (or tyep "cancel" to cancel de matche !) i wil be weitin ${e.stare.e}`);
-        
-        return;
+        connectAnyCommandExecute(message, args, handler, TicTacToeGame);
     }
 } as Command;
 
-type TicTacToePlayer = {
-    user : User
-    piece : string
-};
-
-class TicTacToeTurns implements GameTurns {
-    public currentTurn : string;
-    public challenger : TicTacToePlayer;
-    public opponent : TicTacToePlayer;
-
-    constructor(challenger : TicTacToePlayer, opponent : TicTacToePlayer) {
-        this.currentTurn = "C";
-        this.challenger = challenger;
-        this.opponent = opponent;
-    }
-
-    public getCurrentTurnUser() : User {
-        return this.currentTurn === "C" ? this.challenger.user : this.opponent.user;
-    }
-
-    public switchTurn() : string {
-        this.currentTurn = this.currentTurn === "C" ? "O" : "C";
-        return this.currentTurn;
-    }
-
-    public validateMessage(msg : Message) : boolean {
-        return msg.author.id === (this.getCurrentTurnUser().id);
-    }
-}
-
-class TicTacToeGame implements GridGame {
+class TicTacToeGame implements ConnectAnyGame {
     public channel : TextChannel | undefined;
-    public challenger : TicTacToePlayer;
-    public opponent : TicTacToePlayer;
+    public challenger : PieceGamePlayer;
+    public opponent : PieceGamePlayer;
     public grid : TicTacToeGrid;
     public confirmed : boolean;
-    public turns : TicTacToeTurns;
+    public turns : ConnectAnyTurns;
     public message?: Message;
 
-    static pieceRegex = new RegExp(new RegExp(customEmoteRegex).source + '|' + new RegExp(emojiRegex).source);
-
-    constructor(channel : TextChannel, challenger : TicTacToePlayer, opponent : TicTacToePlayer) {
+    constructor(channel : TextChannel, challenger : PieceGamePlayer, opponent : PieceGamePlayer) {
         this.channel = channel;
         this.challenger = challenger;
         this.opponent = opponent;
         this.grid = new TicTacToeGrid();
         this.confirmed = false;
-        this.turns = new TicTacToeTurns(challenger, opponent);
+        this.turns = new ConnectAnyTurns(challenger, opponent);
     }
 
     public destroySelf(handler : Handler): void {
@@ -137,34 +47,15 @@ class TicTacToeGame implements GridGame {
     }
 
     public async handleMessage(msg : Message, handler : Handler) : Promise<void> {
-        if (!this.confirmed) {
-            if (msg.author.id === this.opponent.user.id) {
-                if (validatePiece(msg.content.trim(), handler)) {
-                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                    if (getValidPieces(msg.content.trim())![0] === this.challenger.piece) {
-                        msg.reply(`${e.think.e} yu shuldnt hav de saem piec as de odar preson !`);
-                        return;
-                    }
-                    msg.reply(`${e.happy.e} started matche betweene ${this.challenger.user.toString()} ande ${this.opponent.user.toString()}!`);
-                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                    this.opponent.piece = getValidPieces(msg.content.trim())![0];
-                    this.confirmed = true;
-                    this.message = await msg.reply({
-                        components: this.grid.toComponentArr(this.challenger, this.opponent),
-                        content: `it's ${this.challenger.user.toString()}'s turne !!`
-                    });
-                }
-            }
-            if (msg.content === "cancel") {
-                msg.reply(`sucesfulie canceled matche betweene ${this.challenger.user.toString()} ande ${this.opponent.user.toString()}! ${e.sad2.e} i reali waned to see yu guyse pley`);
-                this.destroySelf(handler);
-            }
-        } else {
-            if (!msg.author.bot && msg.content.trim() === "cancel") {
-                msg.reply(`wat a looser !! imagin bakking oute !! ${e.funny.e}${e.stare.e} (succesfuli canceled de matche ${e.sad.e})`);
-                this.destroySelf(handler);
-            }
-        }
+        ConnectAnyHandleMessage(msg, handler, this, async (msg, game) => {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            game.opponent.piece = getValidPieces(msg.content.trim())![0];
+            game.confirmed = true;
+            return await msg.reply({
+                components: game.grid.toComponentArr(),
+                content: `it's ${game.challenger.user.toString()}'s turne !!`
+            });
+        });
     }
 
     public async handleButton(interaction : ButtonInteraction, handler : Handler) : Promise<void> {
@@ -197,7 +88,7 @@ class TicTacToeGame implements GridGame {
     }
 }
 
-class TicTacToeGrid implements GameGrid {
+class TicTacToeGrid implements ConnectAnyGrid {
     public width : number;
     public height : number;
     public pieces : TicTacToePiece[];
@@ -218,7 +109,7 @@ class TicTacToeGrid implements GameGrid {
         return arr;
     }
 
-    public toComponentArr(challenger : TicTacToePlayer, opponent : TicTacToePlayer) : MessageActionRow[] {
+    public toComponentArr(challenger : PieceGamePlayer, opponent : PieceGamePlayer) : MessageActionRow[] {
         const charArr = this.toCharArr();
         const btnArr = charArr.map((v, i) => v.map((y, j) => {
             const emj = this.charToEmoji(challenger, opponent, y);
@@ -232,7 +123,7 @@ class TicTacToeGrid implements GameGrid {
         return btnArr;
     }
 
-    public charToEmoji(challenger : TicTacToePlayer, opponent : TicTacToePlayer, g : string) : string {
+    public charToEmoji(challenger : PieceGamePlayer, opponent : PieceGamePlayer, g : string) : string {
         return g === '*' ? e.blank.e : (
             g === 'C' ? challenger.piece : (
                 g === 'O' ? opponent.piece : (
@@ -240,15 +131,6 @@ class TicTacToeGrid implements GameGrid {
                 )
             )
         );
-    }
-
-    public render(challenger : TicTacToePlayer, opponent : TicTacToePlayer) : string {
-        let grid = this.toCharArr().map(v => v.join(' ')).join('\n');
-        grid = grid.replaceAll('*', '⚪');
-        grid = grid.replaceAll('C', challenger.piece);
-        grid = grid.replaceAll('O', opponent.piece);
-        grid = grid.replaceAll('W', e.greneblogie.e);
-        return grid;
     }
 
     public placePiece(position : number[], placedBy : string) : TicTacToePiece | undefined {
@@ -326,7 +208,7 @@ class TicTacToeGrid implements GameGrid {
     }
 }
 
-class TicTacToePiece implements GridGamePiece {
+class TicTacToePiece implements ConnectAnyPiece {
     public position : number[];
     public grid : TicTacToeGrid;
     public placedBy : string;
@@ -341,4 +223,4 @@ class TicTacToePiece implements GridGamePiece {
     }
 }
 
-export {TicTacToeStartCommand, TicTacToePlayer, TicTacToeTurns, TicTacToeGame, TicTacToeGrid, TicTacToePiece};
+export {TicTacToeStartCommand, TicTacToeGame, TicTacToeGrid, TicTacToePiece};

@@ -2,15 +2,13 @@ import { Message, TextChannel } from "discord.js";
 import { customEmoteRegex } from "../utils/customEmoteRegex";
 import { emojiRegex } from "../utils/emojiRegex";
 import { mentionRegex } from "../utils/mentionRegex";
-import { validateCustomEmote } from "../utils/validateCustomEmote";
 import { Command } from "./command";
 import { Game } from "./game";
 import { Handler } from "./handler";
-import { TicTacToePlayer, TicTacToeGrid, TicTacToePiece, TicTacToeTurns } from "./tictactoe";
+import { PieceGamePlayer } from "./game"; 
+import { validatePiece, getValidPieces, ConnectAnyTurns } from "./connectAny";
+import { TicTacToeGrid, TicTacToePiece } from "./tictactoe";
 const { e } = require('../vars.json');
-
-const validatePiece = (piece : string, handler: Handler) : boolean => !!(piece.match(UltimateTicTacToeGame.pieceRegex) && (piece.match(customEmoteRegex) ? validateCustomEmote(piece, handler) : piece.match(emojiRegex)) && piece.normalize().split('') !== '⚪'.split('') && !([':one:',':two:',':three:',':four:',':five:',':six:',':seven:',':eight:',':nine:',':asterisk:',':hash:',':1234:',e.greneblogie.e].includes(piece)));
-const getValidPieces = (piece : string) : string[] | undefined => piece.match(UltimateTicTacToeGame.pieceRegex)?.map(v => v?.toString());
 
 const UltimateTicTacToeStartCommand = {
     name: 'ultimatetictactoe',
@@ -79,22 +77,22 @@ const UltimateTicTacToeStartCommand = {
 
 class UltimateTicTacToeGame implements Game {
     public channel : TextChannel | undefined;
-    public challenger : TicTacToePlayer;
-    public opponent : TicTacToePlayer;
+    public challenger : PieceGamePlayer;
+    public opponent : PieceGamePlayer;
     public grid : UltimateTicTacToeGrid;
     public confirmed : boolean;
-    public turns : TicTacToeTurns;
+    public turns : ConnectAnyTurns;
     public message?: Message;
 
     static pieceRegex = new RegExp(new RegExp(customEmoteRegex).source + '|' + new RegExp(emojiRegex).source);
 
-    constructor(channel : TextChannel, challenger : TicTacToePlayer, opponent : TicTacToePlayer) {
+    constructor(channel : TextChannel, challenger : PieceGamePlayer, opponent : PieceGamePlayer) {
         this.channel = channel;
         this.challenger = challenger;
         this.opponent = opponent;
         this.grid = new UltimateTicTacToeGrid();
         this.confirmed = false;
-        this.turns = new TicTacToeTurns(challenger, opponent);
+        this.turns = new ConnectAnyTurns(challenger, opponent);
     }
     
     public destroySelf(handler : Handler): void {
@@ -252,7 +250,7 @@ class UltimateTicTacToeGrid {
         else return piece;
     }
 
-    public render(challenger : TicTacToePlayer, opponent: TicTacToePlayer) : string {
+    public render(challenger : PieceGamePlayer, opponent: PieceGamePlayer) : string {
         const rawCharArrs = this.grids.map(v => v.map(i => i.toCharArr()));
         const charArrs = rawCharArrs.map(v => v.map(r => r.map(y => y.join(' '))));
         const pCharArrs : string[] = [];

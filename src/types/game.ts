@@ -5,6 +5,11 @@ type GamePlayer = {
     user: User
 }
 
+type PieceGamePlayer = {
+    user : User,
+    piece : string
+}
+
 interface Game {
     channel : TextChannel | undefined;
     challenger : GamePlayer;
@@ -37,4 +42,4 @@ interface GameTurns {
     currentTurn: string;
 }
 
-export {GamePlayer, Game, GameGrid, GridGame, GridGamePiece, GameTurns};
+export {GamePlayer, PieceGamePlayer, Game, GameGrid, GridGame, GridGamePiece, GameTurns};
