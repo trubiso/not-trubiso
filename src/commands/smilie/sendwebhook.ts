@@ -13,6 +13,9 @@ export = {
 		usage: 'sendwebhook <name> | <avatar URL / emote> | <text>'
 	},
     async execute(message, args) {
+        if (!args.length || !args.join(' ').split('|').length) {
+            throw "chek da usag, mr smili";
+        }
         const channel = message.channel as TextChannel;
         const webhooks = await channel.fetchWebhooks();
         let webhook = webhooks.find(v => v.name === "smilie");
