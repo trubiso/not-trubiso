@@ -1,12 +1,11 @@
 import { Message, TextChannel } from "discord.js";
 import { customEmoteRegex } from "../utils/customEmoteRegex";
 import { emojiRegex } from "../utils/emojiRegex";
-import { mentionRegex } from "../utils/mentionRegex";
 import { Command } from "./command";
 import { Game } from "./game";
 import { Handler } from "./handler";
 import { PieceGamePlayer } from "./game"; 
-import { validatePiece, getValidPieces, ConnectAnyTurns } from "./connectAny";
+import { validatePiece, getValidPieces, ConnectAnyTurns, connectAnyCommandExecute } from "./connectAny";
 import { TicTacToeGrid, TicTacToePiece } from "./tictactoe";
 const { e } = require('../vars.json');
 
@@ -19,59 +18,7 @@ const UltimateTicTacToeStartCommand = {
         usage: 'ultimatetictactoe <opponent> <piece (emoji / custom emote)>'
     },
     async execute(message, args, handler) {
-        if (handler.games.some(v => v.channel?.id === message.channelId)) {
-            throw `der alredi is a gaem in dis chanel !!`;
-        }
-
-        if (!args.length) {
-            throw `plees choos a person to chaleng !`;
-        }
-        if (args.length === 1) {
-            throw `pleas choos a piec for yu to pley withe !`;
-        }
-        if (args.length > 2) {
-            throw `rong amount of parameterse !`;
-        }
-
-        const mention = args[0].match(mentionRegex);
-
-        if (!mention) {
-            throw `mention a person propreli !!`;
-        }
-        if (mention[1]) {
-            throw `yu shuld only be mentioninge wan preson`;
-        }
-
-        let challengerPiece = args[1];
-
-        if (!validatePiece(challengerPiece, handler)) {
-            throw `pleas input a proper emojie for yur second prameter !`;
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        challengerPiece = getValidPieces(challengerPiece)![0];
-
-        const challenger = message.author;
-        const opponent = await handler.client.users.fetch(mention[0].replace(/[<@!>]/g, ''));
-
-        if (challenger.toString() === opponent.toString()) {
-            throw `yu cant chaleng yurslef !!`;
-        }
-        if (opponent.bot) {
-            throw `yu cant chaleng a bot !!`;
-        }
-
-        handler.games.push(new UltimateTicTacToeGame(message.channel as TextChannel, {
-            user: challenger,
-            piece: challengerPiece
-        }, {
-            user: opponent,
-            piece: ''
-        }));
-        
-        message.reply(`${opponent.toString()}, yu hav been chalenged ! ${e.shock_handless.e} pleas choos a custom emot or emnoji ! ${e.please.e} (or tyep "cancel" to cancel de matche !) i wil be weitin ${e.stare.e}`);
-        
-        return;
+        connectAnyCommandExecute(message, args, handler, UltimateTicTacToeGame);
     }
 } as Command;
 

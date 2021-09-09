@@ -3,7 +3,7 @@ import { customEmoteRegex } from "../utils/customEmoteRegex";
 import { emojiRegex } from "../utils/emojiRegex";
 import { mentionRegex } from "../utils/mentionRegex";
 import { validateCustomEmote } from "../utils/validateCustomEmote";
-import { GameGrid, GameTurns, GridGame, GridGamePiece, PieceGamePlayer } from "./game";
+import { Game, GameGrid, GameTurns, GridGame, GridGamePiece, PieceGamePlayer } from "./game";
 import { Handler } from "./handler";
 
 const { e } = require('../vars.json');
@@ -13,7 +13,7 @@ const validatePiece = (piece : string, handler: Handler) : boolean => !!(piece.m
 const getValidPieces = (piece : string) : string[] | undefined => piece.match(pieceRegex)?.map(v => v?.toString());
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const connectAnyCommandExecute = async (message : Message, args : string[], handler : Handler, gameType : new (...args: any[]) => GridGame) : Promise<void> => {
+const connectAnyCommandExecute = async (message : Message, args : string[], handler : Handler, gameType : new (...args: any[]) => Game) : Promise<void> => {
 
     if (handler.games.some(v => v.channel?.id === message.channelId)) throw `der alredi is a gaem in dis chanel !!`;
     if (!args.length) throw `plees choos a person to chaleng !`;
