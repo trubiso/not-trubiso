@@ -1,4 +1,4 @@
-import { ButtonInteraction, Client, Collection, Interaction, Message, SelectMenuInteraction, TextChannel } from "discord.js";
+import { Client, Collection, Interaction, Message, TextChannel } from "discord.js";
 import fs from "fs";
 import { loadModule } from "./utils/loadModule";
 import { Handler } from "./types/handler";
@@ -58,26 +58,44 @@ client.on('messageCreate', async (msg: Message) => {
     }
 });
 
-const execInteraction = async (interactionElem : 'handleButton' | 'handleSelectMenu', interaction : Interaction) : Promise<void> => {
+const execInteraction = async (interactionElem : 'button' | 'selectMenu', interaction : Interaction) : Promise<void> => {
     if (!interaction.isButton() && !interaction.isSelectMenu()) return undefined;
+    switch (interactionElem) {
+    case 'button':
+        if (!interaction.isButton()) return; break;
+    case 'selectMenu':
+        if (!interaction.isSelectMenu()) return; break;
+    }
     const execCmd = async () => {
         const cmd = interaction.customId.split('_')[0];
         const actualCmd = handler.commands.find(v => v.name === cmd);
         if (actualCmd) {
-            const a = actualCmd[interactionElem] as (interaction: SelectMenuInteraction | ButtonInteraction, handler : Handler) => Promise<unknown> | void;
-            if (!a) return;
-            await (a(interaction, handler) as Promise<unknown>)?.catch(error => {
-                logError(error);
-            });
+            switch (interactionElem) {
+            case 'button':
+                if (!interaction.isButton()) return;
+                if (!actualCmd.handleButton) return;
+                else await (actualCmd.handleButton(interaction, handler) as Promise<unknown>)?.catch(error => { logError(error); }); break;
+            case 'selectMenu':
+                if (!interaction.isSelectMenu()) return;
+                if (!actualCmd.handleSelectMenu) return;
+                else await (actualCmd.handleSelectMenu(interaction, handler) as Promise<unknown>)?.catch(error => { logError(error); }); break;
+            }
         }
     };
     if (handler.games.some(v => v.channel?.id === interaction.channelId)) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const game = handler.games.find(v => v.channel?.id === interaction.channelId)!;
         if (interaction.user.id === game.challenger.user.id || interaction.user.id === game.opponent?.user.id) {
-            const a = game[interactionElem] as (interaction: SelectMenuInteraction | ButtonInteraction, handler : Handler) => Promise<unknown> | void;
-            if (!a) return;
-            await a(interaction, handler);
+            switch (interactionElem) {
+            case 'button':
+                if (!interaction.isButton()) return;
+                if (!game.handleButton) return;
+                else game.handleButton(interaction, handler); break;
+            case 'selectMenu':
+                if (!interaction.isSelectMenu()) return;
+                if (!game.handleSelectMenu) return;
+                else game.handleSelectMenu(interaction, handler); break;
+            }
         } else await execCmd();
     } else {
         await execCmd();
@@ -86,9 +104,9 @@ const execInteraction = async (interactionElem : 'handleButton' | 'handleSelectM
 
 client.on('interactionCreate', async (interaction : Interaction) => {
     if (interaction.isButton()) {
-        execInteraction("handleButton", interaction);
+        execInteraction("button", interaction);
     } else if (interaction.isSelectMenu()) {
-        execInteraction("handleSelectMenu", interaction);
+        execInteraction("selectMenu", interaction);
     }
 });
 

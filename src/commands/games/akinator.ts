@@ -10,6 +10,7 @@ export = {
 		usage: 'akinator [childMode]'
 	},
     execute(message, args, handler) {
+        if (handler.games.some(v => v.channel?.id === message.channelId)) throw `der alredi is a gaem in dis chanel !!`;
         let childMode = false;
         if (args.length) {
             if (args[0].toLowerCase() === "childmode") {
