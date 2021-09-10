@@ -13,13 +13,13 @@ type PieceGamePlayer = {
 interface Game {
     channel : TextChannel | undefined;
     challenger : GamePlayer;
-    opponent : GamePlayer;
-    confirmed : boolean;
+    opponent?: GamePlayer;
+    confirmed?: boolean;
 
     destroySelf(handler : Handler) : void;
-    handleMessage(msg : Message, handler : Handler) : void;
-    handleButton?(interaction: ButtonInteraction, handler : Handler) : void,
-    handleSelectMenu?(interaction: SelectMenuInteraction, handler : Handler) : void
+    handleMessage?(msg : Message, handler : Handler) : void;
+    handleButton?(interaction: ButtonInteraction, handler : Handler) : void;
+    handleSelectMenu?(interaction: SelectMenuInteraction, handler : Handler) : void;
 }
 
 interface GameGrid {

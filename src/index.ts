@@ -17,7 +17,7 @@ categoryFiles.forEach(file => loadModule(file, handler));
 client.once('ready', () => {
     console.log(`Logged in as ${client.user?.tag}!`);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    if (client.guilds.cache.get("717683408012181505")) (client.channels.cache.get("717683408553377815")! as TextChannel).send(`i'm bakke!!! ${e.happy.e}`);
+    // if (client.guilds.cache.get("717683408012181505")) (client.channels.cache.get("717683408553377815")! as TextChannel).send(`i'm bakke!!! ${e.happy.e}`);
     client.user?.setPresence({ activities: [{ name: "yu !!", type: "LISTENING" }]});
 });
 
@@ -44,9 +44,13 @@ client.on('messageCreate', async (msg: Message) => {
     if (handler.games.some(v => v.channel?.id === msg.channelId)) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const game = handler.games.find(v => v.channel?.id === msg.channelId)!;
-        if (msg.author.id === game.challenger.user.id || msg.author.id === game.opponent.user.id) {
-            game.handleMessage(msg, handler);
-        } else if (!msg.author.bot && msg.content.startsWith(handler.prefix)) {
+        if (game.handleMessage) {
+            if (msg.author.id === game.challenger.user.id || msg.author.id === game.opponent?.user.id) {
+                game.handleMessage(msg, handler);
+            } else if (!msg.author.bot && msg.content.startsWith(handler.prefix)) {
+                await handleCommand(msg, handler);
+            }
+        } else {
             await handleCommand(msg, handler);
         }
     } else if (!msg.author.bot && msg.content.startsWith(handler.prefix)) {
@@ -68,7 +72,7 @@ client.on('interactionCreate', async (interaction : Interaction) => {
         if (handler.games.some(v => v.channel?.id === interaction.channelId)) {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             const game = handler.games.find(v => v.channel?.id === interaction.channelId)!;
-            if (interaction.user.id === game.challenger.user.id || interaction.user.id === game.opponent.user.id) {
+            if (interaction.user.id === game.challenger.user.id || interaction.user.id === game.opponent?.user.id) {
                 if (game.handleButton)
                     game.handleButton(interaction, handler);
             } else await execCmd();
@@ -88,7 +92,7 @@ client.on('interactionCreate', async (interaction : Interaction) => {
         if (handler.games.some(v => v.channel?.id === interaction.channelId)) {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             const game = handler.games.find(v => v.channel?.id === interaction.channelId)!;
-            if (interaction.user.id === game.challenger.user.id || interaction.user.id === game.opponent.user.id) {
+            if (interaction.user.id === game.challenger.user.id || interaction.user.id === game.opponent?.user.id) {
                 if (game.handleSelectMenu)
                     game.handleSelectMenu(interaction, handler);
             } else await execCmd();
