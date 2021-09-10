@@ -1,4 +1,4 @@
-import { Client, Collection, Interaction, Message, TextChannel } from "discord.js";
+import { ButtonInteraction, Client, Collection, Interaction, Message, SelectMenuInteraction, TextChannel } from "discord.js";
 import fs from "fs";
 import { loadModule } from "./utils/loadModule";
 import { Handler } from "./types/handler";
@@ -58,47 +58,37 @@ client.on('messageCreate', async (msg: Message) => {
     }
 });
 
+const execInteraction = async (interactionElem : 'handleButton' | 'handleSelectMenu', interaction : Interaction) : Promise<void> => {
+    if (!interaction.isButton() && !interaction.isSelectMenu()) return undefined;
+    const execCmd = async () => {
+        const cmd = interaction.customId.split('_')[0];
+        const actualCmd = handler.commands.find(v => v.name === cmd);
+        if (actualCmd) {
+            const a = actualCmd[interactionElem] as (interaction: SelectMenuInteraction | ButtonInteraction, handler : Handler) => Promise<unknown> | void;
+            if (!a) return;
+            await (a(interaction, handler) as Promise<unknown>)?.catch(error => {
+                logError(error);
+            });
+        }
+    };
+    if (handler.games.some(v => v.channel?.id === interaction.channelId)) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const game = handler.games.find(v => v.channel?.id === interaction.channelId)!;
+        if (interaction.user.id === game.challenger.user.id || interaction.user.id === game.opponent?.user.id) {
+            const a = game[interactionElem] as (interaction: SelectMenuInteraction | ButtonInteraction, handler : Handler) => Promise<unknown> | void;
+            if (!a) return;
+            await a(interaction, handler);
+        } else await execCmd();
+    } else {
+        await execCmd();
+    }
+};
+
 client.on('interactionCreate', async (interaction : Interaction) => {
     if (interaction.isButton()) {
-        const execCmd = async () => {
-            const cmd = interaction.customId.split('_')[0];
-            const actualCmd = handler.commands.find(v => v.name === cmd);
-            if (actualCmd && actualCmd.handleButton) {
-                await (actualCmd.handleButton(interaction, handler) as Promise<unknown>)?.catch(error => {
-                    logError(error);
-                });
-            }
-        };
-        if (handler.games.some(v => v.channel?.id === interaction.channelId)) {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            const game = handler.games.find(v => v.channel?.id === interaction.channelId)!;
-            if (interaction.user.id === game.challenger.user.id || interaction.user.id === game.opponent?.user.id) {
-                if (game.handleButton)
-                    game.handleButton(interaction, handler);
-            } else await execCmd();
-        } else {
-            await execCmd();
-        }
+        execInteraction("handleButton", interaction);
     } else if (interaction.isSelectMenu()) {
-        const execCmd = async () => {
-            const cmd = interaction.customId.split('_')[0];
-            const actualCmd = handler.commands.find(v => v.name === cmd);
-            if (actualCmd && actualCmd.handleSelectMenu) {
-                await (actualCmd.handleSelectMenu(interaction, handler) as Promise<unknown>)?.catch(error => {
-                    logError(error);
-                });
-            }
-        };
-        if (handler.games.some(v => v.channel?.id === interaction.channelId)) {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            const game = handler.games.find(v => v.channel?.id === interaction.channelId)!;
-            if (interaction.user.id === game.challenger.user.id || interaction.user.id === game.opponent?.user.id) {
-                if (game.handleSelectMenu)
-                    game.handleSelectMenu(interaction, handler);
-            } else await execCmd();
-        } else {
-            await execCmd();
-        }
+        execInteraction("handleSelectMenu", interaction);
     }
 });
 
