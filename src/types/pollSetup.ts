@@ -48,7 +48,7 @@ export class PollSetup implements Game {
     private pollOptionsField(handler?: Handler) {
         return {
             name: 'optionese !',
-            value: (this.pollOptions.length ? this.pollOptions.map(v => `${handler?.client.emojis.resolve(v.emoji)} -> ${v.description}`).join(', ') : "none yet !!") + (this.pollDescription !== "" ? "\n\nadd moar by usinge da `<emojei / custom emot> -> <emot descreption>` syntaxe, finish da poll by seying \"done\" and cancel it by seying \"cancel\"!" : "")
+            value: (this.pollOptions.length ? this.pollOptions.map(v => `${handler?.client.emojis.resolve(v.emoji)} ${v.description ? ` -> ${v.description}` : ``}`).join(', ') : "none yet !!") + (this.pollDescription !== "" ? "\n\nadd moar by usinge da `<emojei / custom emot> -> <emot descreption>` syntaxe, finish da poll by seying \"done\" and cancel it by seying \"cancel\"!" : "")
         };
     }
 
@@ -58,7 +58,7 @@ export class PollSetup implements Game {
             description: 'let\'s set up a polle !',
             fields: [{
                 name: this.pollTitle,
-                value: this.pollDescription !== "" ? this.pollDescription : "giv me a descripteion !"
+                value: this.pollDescription !== "" ? this.pollDescription : "giv me a descripteion ! (send a mesag withe it)"
             }, this.pollOptionsField(handler)]
         } as MessageEmbed;
     }
