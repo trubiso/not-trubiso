@@ -8,7 +8,7 @@ export = {
 	help: {
         category: 'utils',
 		brief: 'set up a polleing !',
-		usage: 'poll <title>',
+		usage: 'pollsetup <title>',
 	},
 	execute(message, args, handler) {
         if (!args.length) throw `giv me a title to giv to yur dum poll ! ${e.angry_pink.e}`;
