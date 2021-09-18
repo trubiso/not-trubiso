@@ -1,10 +1,9 @@
 import { Command } from "../../types/command";
 import { Poll } from "../../types/poll";
-import { PollOptionResolvable } from "../../types/pollOptionResolvable";
-import { getEmojis } from "../../utils/getEmojis";
 import { containsEmoji } from "../../utils/containsEmoji";
 import { validateCustomEmote } from "../../utils/validateCustomEmote";
 import { MessageActionRow, MessageSelectMenu } from "discord.js";
+import { PollSetup, rawOption } from "../../types/pollSetup";
 
 const { e } = require('../../vars.json');
 
@@ -22,32 +21,13 @@ export = {
         const rawArgs = args.join(' ').split('|').map(v => v.trim());
         const title = rawArgs[0];
         const description = rawArgs[1];
-        type rawOption = {
-            emoji: string,
-            description: string
-        };
         let rawOptions : rawOption[] = [];
         try {
             rawOptions = rawArgs[2].split(',').map(v => v.trim()).map(v => {
-                const optionParts = v.split('->').map(v => v.trim());
-                let emojiId : string;
-                if (containsEmoji(optionParts[0])) {
-                    emojiId = getEmojis(optionParts[0])[0];
-                } else {
-                    try {
-                        emojiId = optionParts[0].split(':')[2].slice(0, -1);
-                    } catch (error) {
-                        throw "emojis";
-                    }
-                }
-                const emojiDescription = optionParts[1];
-                return {
-                    emoji: emojiId,
-                    description: emojiDescription
-                };
+                return PollSetup.parseEmojiOption(v);
             });
         } catch (error) {
-            if (error === "emojis") {
+            if (error === "invalid emojies !") {
                 throw `yu hav to use proper emojise for option emojiese ${e.sad.e}`;
             }
         }
@@ -103,7 +83,7 @@ export = {
             );
 
         const pollMessage = await message.reply({embeds: [embed], components: [select]});
-        const pollObject = new Poll(rawOptions.map(v => ({emojiId: v.emoji, message: pollMessage} as PollOptionResolvable)), pollMessage);
+        const pollObject = new Poll(rawOptions.map(v => PollSetup.rawOptionToResolvable(v, pollMessage)), pollMessage);
         handler.polls.push(pollObject);
 	},
     async handleSelectMenu(interaction, handler) {
