@@ -29,6 +29,8 @@ const smilieEnglish = (s : string) : string => {
         r.match(/[aeiou]gg[aeiou]/g)?.forEach(y => {
             r = r.replace(y, y.replace(/gg/g, 'g'));
         });
+        r = r.replace(/ce$/, 's');
+        r = r.replace(/ye$/, 'ie');
         const b = r + (v.match(/[^a-z']+/) ?? []).join(' ');
         return b.replace(/[!]+/g, getRandomExclamationMarks(b.match(/[!]+/g)?.map(v => v.length).reduce((a,b)=>a+b) ?? 1));
     }).join(' ');
