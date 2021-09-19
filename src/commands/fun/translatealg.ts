@@ -16,9 +16,10 @@ const smilieEnglish = (s : string) : string => {
     const leRegex = new RegExp(`^[${consonants}]+e\$`,'g');
     const fcRegex = new RegExp(`[${consonants}]\$`,'g');
     const ouRegex = new RegExp(`[${consonants}]ou[${consonants}]?`,'g');
+    const vcRegex = /[^a-z-']+/g;
     return s.toLowerCase().split(' ').map(v => {
         if (v.match(customEmoteRegex) || containsEmoji(v)) return v;
-        let r = v.replace(/[^a-z']+/g, '');
+        let r = v.replace(vcRegex, '');
         r = r.replace(/'/g, '');
         r = r.replace(/ei/g, 'ie');
         if (Math.random() < 0.3 && !r.match(leRegex)) r = r.replace(/e$/g, '');
@@ -32,7 +33,7 @@ const smilieEnglish = (s : string) : string => {
         });
         r = r.replace(/ce$/, 's');
         r = r.replace(/ye$/, 'ie');
-        const b = r + (v.match(/[^a-z']+/) ?? []).join(' ');
+        const b = r + (v.match(vcRegex) ?? []).join(' ');
         return b.replace(/[!]+/g, getRandomExclamationMarks(b.match(/[!]+/g)?.map(v => v.length).reduce((a,b)=>a+b) ?? 1));
     }).join(' ');
 };
