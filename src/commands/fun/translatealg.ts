@@ -19,6 +19,8 @@ const smilieEnglish = (s : string) : string => {
         if (v.match(customEmoteRegex) || containsEmoji(v)) return v;
         let r = v.replace(/[^a-z']+/g, '');
         r = r.replace(/'/g, '');
+        r = r.replace(/ei/g, 'ie');
+        if (Math.random() < 0.3) r = r.replace(/e$/g, '');
         if (r.endsWith('ed')) r += 'ed';
         if (r.match(fcRegex) && Math.random() > 0.6) r += 'e';
         r.match(ouRegex)?.forEach(y => {
