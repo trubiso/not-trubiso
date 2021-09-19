@@ -1,5 +1,7 @@
 import { Util } from "discord.js";
 import { Command } from "../../types/command";
+import { customEmoteRegex } from "../../utils/customEmoteRegex";
+import { containsEmoji } from "../../utils/containsEmoji";
 
 const smilieEnglish = (s : string) : string => {
     const getRandomExclamationMarks = (num : number) : string => {
@@ -14,6 +16,7 @@ const smilieEnglish = (s : string) : string => {
     const fcRegex = new RegExp(`[${consonants}]\$`,'g');
     const ouRegex = new RegExp(`[${consonants}]ou[${consonants}]?`,'g');
     return s.toLowerCase().split(' ').map(v => {
+        if (v.match(customEmoteRegex) || containsEmoji(v)) return v;
         let r = v.replace(/[^a-z']+/g, '');
         r = r.replace(/'/g, '');
         if (r.endsWith('ed')) r += 'ed';
