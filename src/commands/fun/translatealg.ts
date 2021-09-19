@@ -13,6 +13,7 @@ const smilieEnglish = (s : string) : string => {
         return str;
     }
     const consonants = 'bcdfghjklmnpqrstvwxyz';
+    const leRegex = new RegExp(`^[${consonants}]+e\$`,'g');
     const fcRegex = new RegExp(`[${consonants}]\$`,'g');
     const ouRegex = new RegExp(`[${consonants}]ou[${consonants}]?`,'g');
     return s.toLowerCase().split(' ').map(v => {
@@ -20,7 +21,7 @@ const smilieEnglish = (s : string) : string => {
         let r = v.replace(/[^a-z']+/g, '');
         r = r.replace(/'/g, '');
         r = r.replace(/ei/g, 'ie');
-        if (Math.random() < 0.3) r = r.replace(/e$/g, '');
+        if (Math.random() < 0.3 && !r.match(leRegex)) r = r.replace(/e$/g, '');
         if (r.endsWith('ed')) r += 'ed';
         if (r.match(fcRegex) && Math.random() > 0.6) r += 'e';
         r.match(ouRegex)?.forEach(y => {
