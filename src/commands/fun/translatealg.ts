@@ -50,7 +50,7 @@ export = {
             throw "gib me text to translat !!";
         }
         let text = args.join(' ').toLowerCase();
-        text = smilieEnglish(text);
+        text = smilieEnglish(Util.cleanContent(text, message.channel));
         message.reply(Util.cleanContent(text, message.channel));
     },
 } as Command;
