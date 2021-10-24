@@ -24,8 +24,7 @@ export = {
         }
         let text = Util.cleanContent(args.join(' ').trim(), message.channel);
         text = text.split(' ').map(v => {
-            if (Math.random() < 0.7) return v;
-            else return fancifyWord(v);
+            return fancifyWord(v);
         }).join(' ');
 
         if (text.length > 2000) throw `yur text is too bigege !! ${e.sad.e}`;
