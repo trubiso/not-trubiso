@@ -241,5 +241,13 @@
         "𝚊,𝚋,𝚌,𝚍,𝚎,𝚏,𝚐,𝚑,𝚒,𝚓,𝚔,𝚕,𝚖,𝚗,𝚘,𝚙,𝚚,𝚛,𝚜,𝚝,𝚞,𝚟,𝚠,𝚡,𝚢,𝚣,𝙰,𝙱,𝙲,𝙳,𝙴,𝙵,𝙶,𝙷,𝙸,𝙹,𝙺,𝙻,𝙼,𝙽,𝙾,𝙿,𝚀,𝚁,𝚂,𝚃,𝚄,𝚅,𝚆,𝚇,𝚈,𝚉",
         "a̾,b̾,c̾,d̾,e̾,f̾,g̾,h̾,i̾,j̾,k̾,l̾,m̾,n̾,o̾,p̾,q̾,r̾,s̾,t̾,u̾,v̾,w̾,x̾,y̾,z̾,A̾,B̾,C̾,D̾,E̾,F̾,G̾,H̾,I̾,J̾,K̾,L̾,M̾,N̾,O̾,P̾,Q̾,R̾,S̾,T̾,U̾,V̾,W̾,X̾,Y̾,Z̾",
         "a͓̽,b͓̽,c͓̽,d͓̽,e͓̽,f͓̽,g͓̽,h͓̽,i͓̽,j͓̽,k͓̽,l͓̽,m͓̽,n͓̽,o͓̽,p͓̽,q͓̽,r͓̽,s͓̽,t͓̽,u͓̽,v͓̽,w͓̽,x͓̽,y͓̽,z͓̽,A͓̽,B͓̽,C͓̽,D͓̽,E͓̽,F͓̽,G͓̽,H͓̽,I͓̽,J͓̽,K͓̽,L͓̽,M͓̽,N͓̽,O͓̽,P͓̽,Q͓̽,R͓̽,S͓̽,T͓̽,U͓̽,V͓̽,W͓̽,X͓̽,Y͓̽,Z͓̽"
+    ],
+    "alphabetNames": [
+        "n", "rsa", "rsab", "cp", "tp", "mb", "w", "aa", "ru", "fls", "fas", "ffsb", "ffcs", "ffcsbb", "yma", "flg", "ic"
+    ],
+    "fullAlphabetNames": [
+        "Normal", "Royal Spanish Academy", "Royal Spanish Academy Bold", "Cursive Potato", "Thin Potato", "Mafalda Bushmiller", "Warning", "American Abdulha", "Rumble",
+        "Flying Skirmishes", "Falling Skirmishes", "Falling Flying Skirmishes Bold", "Falling Flying Cursive Skirmishes", "Falling Flying Cursive Skirmishes Boldy Bold",
+        "Yesenia Murió Ayer", "Flying Garlands", "Intellectual Crossêsilles"
     ]
 }
