@@ -4,6 +4,7 @@ import { loadModule } from "./utils/loadModule";
 import { Handler } from "./types/handler";
 import { handleCommand } from "./utils/handleCommand";
 import { logError } from "./utils/logError";
+import v from "./vars";
 
 const token : string = process.env.NT_TOKEN ?? require('./config.json').token;
 const { e } = require('./vars.json');
@@ -18,7 +19,7 @@ client.once('ready', () => {
     console.log(`Logged in as ${client.user?.tag}!`);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     if (client.guilds.cache.get("717683408012181505")) (client.channels.cache.get("717683408553377815")! as TextChannel)
-    .send(`hai !! 👋${e.happy.e} i'm bakke!!! ${e.happy.e}${e.shock_handless.e} waching da leavs fal onto da gruond as autumne continueses ${e.whistling.e}`); /*TODO: switch automatically when halloween; og: .send(`i'm bakke!!! ${e.happy.e}`);*/ 
+    .send(v.get_bot_ready_answer());
     client.user?.setPresence({ activities: [{ name: "yu !!", type: "LISTENING" }]});
 });
 

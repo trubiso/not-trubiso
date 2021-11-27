@@ -1,6 +1,37 @@
 const { e } = require("./vars.json");
 
+const non_seasonal_br_answers = [
+    `rolle up yur blindes !! ${e.shock_handless.e} im waching yu !! ${e.silly.e}`,
+    `helololo !!! ${e.silly.e}${e.whistling.e} googo baba googo qug !! graga bogo grono boo !! gigi gogo gaga goo !!! grege gogo bugo qoo !!`,
+    `pleased to meet yu mr / ms smily !! ${e.business.e} i hop yu hav a gud dey tudey !!! ${e.happy.e}`,
+    `привет !!!! ${e.business.e} i am multilinguelale man !! ${e.nerd.e}`,
+    `i'm bakke!!! ${e.happy.e}`
+];
+const bot_ready_answers = [
+    {
+        day: 1,
+        month: 11,
+        messages: [
+            `hai !! 👋${e.happy.e} i'm bakke!!! ${e.happy.e}${e.shock_handless.e} waching da leavs fal onto da gruond as autumne continueses ${e.whistling.e}`,
+            `heye !! 👋${e.happy.e} how ar yu?? ${e.sad.e} da tree nexte to me just loste a leaf !! ${e.sad2.e} and its COLDE !!! ${e.glad.e} but im fien !`,
+            `👋${e.happy.e} gogogo bugoro !! ${e.silly.e} jus kiding !! hav a gud autmune!! ${e.angel.e}`,
+            `halo !! 👋${e.happy.e} an angele was broughte upon me !! ${e.shock_handless.e}${e.angel.e} he told me to wish yu gud luck in da beutiful autumnene !!! ${e.happy.e}`,
+            `ahoj !!! 👋${e.happy.e} da tieds ar calm but da tempreturs ar lo !!! ${e.whistling.e}`,
+            `boogi !! ${e.tribaldance.e} ${e.angry_pink.e} its reining agein !!! frinq da cloudese !!!`
+        ]
+    }
+];
+
 export = {
+    bot_ready_answers: bot_ready_answers,
+    non_seasonal_br_answers: non_seasonal_br_answers,
+    get_bot_ready_answer: () : string => {
+        if (Math.random() > 0.5) return non_seasonal_br_answers[Math.floor(Math.random() * non_seasonal_br_answers.length)];
+        const rn = new Date();
+        const a = bot_ready_answers.filter(v => rn.getMonth() >= v.month - 1 && (rn.getMonth() >= v.month - 1 ? rn.getDate() >= v.day : true))[0];
+        if (!a) return "something went wrong what";
+        return a.messages[Math.floor(Math.random() * a.messages.length)];
+    },
     eightball_answers: [
         `absolutlie, of cuors!! ${e.happy.e}`, `noe.. not at alle.. ${e.sad.e}`,
         `honestlie... ${e.angel.e} i hav no ideae ${e.sad.e}`,
