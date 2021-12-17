@@ -5,7 +5,9 @@ const non_seasonal_br_answers = [
     `helololo !!! ${e.silly.e}${e.whistling.e} googo baba googo qug !! graga bogo grono boo !! gigi gogo gaga goo !!! grege gogo bugo qoo !!`,
     `pleased to meet yu mr / ms smily !! ${e.business.e} i hop yu hav a gud dey tudey !!! ${e.happy.e}`,
     `привет !!!! ${e.business.e} i am multilinguelale man !! ${e.nerd.e}`,
-    `i'm bakke!!! ${e.happy.e}`
+    `i'm bakke!!! ${e.happy.e}`,
+    `toki !! 👋${e.excited.e} mi pona e pona sina!!!`,
+    `lötló !!! ${e.silly.e}`
 ];
 const bot_ready_answers = [
     {
@@ -18,6 +20,19 @@ const bot_ready_answers = [
             `halo !! 👋${e.happy.e} an angele was broughte upon me !! ${e.shock_handless.e}${e.angel.e} he told me to wish yu gud luck in da beutiful autumnene !!! ${e.happy.e}`,
             `ahoj !!! 👋${e.happy.e} da tieds ar calm but da tempreturs ar lo !!! ${e.whistling.e}`,
             `boogi !! ${e.tribaldance.e} ${e.angry_pink.e} its reining agein !!! frinq da cloudese !!!`
+        ]
+    },
+    {
+        day: 15,
+        month: 12,
+        messages: [
+            `${e.sad2.e} im freezinge !!! enywey, helo, sir ! 👋${e.business.e}`,
+            `hai !! 👋${e.happy.e} i bet yu yur such a gud smily dat santa wil gift yu yur favrit toy !!! ${e.excited.e}`,
+            `snowflaks fal on top of me as da cold winds hit me in da cheekse ! itse wintere isnte it... 👋${e.sad2.e}`,
+            `👋${e.happy.e} ar yu a gud smilye ? ${e.think.e} santa only givs gud smilies giftse !! ${e.stare.e} i hop yu wer a gud smily !`,
+            `i wish yu a meri chrismas, i wish yu a meri chrismas, i WISHE yu a meri chrismas and a hapie new yeare !!! ${e.whistling.e} ${e.excited.e}`,
+            `👋${e.sad.e} fields of gras hav becom patches of leavs upon leavs and dede plantse !! ${e.sad2.e} at lest som trees stil hold deir leevs up ${e.happy.e}`,
+            `👋${e.silly.e} i thro snobal to gret yu !!`
         ]
     }
 ];
