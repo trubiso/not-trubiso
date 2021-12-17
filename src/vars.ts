@@ -43,7 +43,8 @@ export = {
     get_bot_ready_answer: () : string => {
         if (Math.random() > 0.5) return non_seasonal_br_answers[Math.floor(Math.random() * non_seasonal_br_answers.length)];
         const rn = new Date();
-        const a = bot_ready_answers.filter(v => rn.getMonth() >= v.month - 1 && (rn.getMonth() >= v.month - 1 ? rn.getDate() >= v.day : true))[0];
+        const ans = [...bot_ready_answers].reverse();
+        const a = ans.filter(v => rn.getMonth() >= v.month - 1 && (rn.getMonth() >= v.month - 1 ? rn.getDate() >= v.day : true))[0];
         if (!a) return "something went wrong what";
         return a.messages[Math.floor(Math.random() * a.messages.length)];
     },
