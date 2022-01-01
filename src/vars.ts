@@ -44,8 +44,14 @@ export = {
         if (Math.random() > 0.5) return non_seasonal_br_answers[Math.floor(Math.random() * non_seasonal_br_answers.length)];
         const rn = new Date();
         const ans = [...bot_ready_answers].reverse();
-        const a = ans.filter(v => rn.getMonth() >= v.month - 1 && (rn.getMonth() >= v.month - 1 ? rn.getDate() >= v.day : true))[0];
-        if (!a) return "something went wrong what";
+        function get_answer_for_date(d: Date) {
+            return ans.filter(v => d.getMonth() >= v.month - 1 && (d.getMonth() >= v.month - 1 ? d.getDate() >= v.day : true))[0];
+        }
+        let a = get_answer_for_date(rn);
+        if (!a) {
+            rn.setMonth(11, 31);
+            a = get_answer_for_date(rn);
+        }
         return a.messages[Math.floor(Math.random() * a.messages.length)];
     },
     eightball_answers: [
