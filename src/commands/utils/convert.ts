@@ -9,7 +9,7 @@ export = {
 		brief: 'convertse unitse',
 		usage: 'convert <number> <source unit> <destination unit>',
 		extra: (()=>{
-			let out = `${e.nerd.e} **posibol unitse**`;
+			let out = `${e.nerd} **posibol unitse**`;
 			for(const measure of converter().measures().filter((v: string) => [
 				"length", "area", "mass", "volume", "temperature", "time", "digital", "speed", "pressure"
 			].includes(v))){
@@ -21,13 +21,13 @@ export = {
 	execute(message, args) {
 		let out = "";
 		if (!args.length || args.length != 3)
-			throw `yu shuld chek de usag on dis comand ${e.think.e} yu hav given me de rong number of prameterse ${e.sad.e}`;
+			throw `yu shuld chek de usag on dis comand ${e.think} yu hav given me de rong number of prameterse ${e.sad}`;
 		const num = parseFloat(args[0]), src = args[1].toString(), dst = args[2].toString();
 		try {
 			const convertedVal : number = converter(num).from(src).to(dst);
 			out = `${num} ${src} = ${convertedVal.toFixed(3)} ${dst}`;
 		} catch (error) {
-			throw `yur units dont mak sens !! ${e.silly.e} yu probabli put em in de wrong ordere... jus do **<help convert**...`;
+			throw `yur units dont mak sens !! ${e.silly} yu probabli put em in de wrong ordere... jus do **<help convert**...`;
 		}
 		return message.reply(out);
 	}

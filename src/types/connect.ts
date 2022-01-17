@@ -64,7 +64,7 @@ class ConnectGame implements GridGame {
                 if (this.grid.checkWin(piece.position, piece.placedBy)) {
                     await interaction.update({
                         components: this.grid.toComponentArr(),
-                        content: `${this.turns.getCurrentTurnUser().toString()} wone !!! ${e.shock_handless.e}${e.party.e} GG !!!\n${this.grid.render(this.challenger, this.opponent)}`
+                        content: `${this.turns.getCurrentTurnUser().toString()} wone !!! ${e.shock_handless.e}${e.party} GG !!!\n${this.grid.render(this.challenger, this.opponent)}`
                     });
                     this.destroySelf(handler);
                     return;
@@ -118,7 +118,7 @@ class ConnectGrid implements ConnectAnyGrid {
 
     public render(challenger : PieceGamePlayer, opponent : PieceGamePlayer) : string {
         const grid = this.toCharArr().map(v => v.join(' ')).join('\n');
-        return grid.replaceAll('*', '⚪').replaceAll('C', challenger.piece).replaceAll('O', opponent.piece).replaceAll('W', e.greneblogie.e);
+        return grid.replaceAll('*', '⚪').replaceAll('C', challenger.piece).replaceAll('O', opponent.piece).replaceAll('W', e.greneblogie);
     }
 
     public columnToPosition(column : number) : number[] | undefined {

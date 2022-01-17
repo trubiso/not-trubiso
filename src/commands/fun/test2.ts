@@ -46,13 +46,13 @@ export = {
     },
     handleButton(interaction) {
         if (interaction.customId === 'test2_button') {
-            interaction.update(interaction.message.content + ' ' + e.whistling.e);
+            interaction.update(interaction.message.content + ' ' + e.whistling);
         }
     },
     handleSelectMenu(interaction) {
         if (interaction.customId === 'test2_select') {
             if (interaction.values[0] === 'cool_option')
-                interaction.update(interaction.message.content + ' ' + e.party.e);
+                interaction.update(interaction.message.content + ' ' + e.party);
             else if (interaction.values[0] === 'cookie')
                 interaction.update(interaction.message.content + ' 🍪');
         }

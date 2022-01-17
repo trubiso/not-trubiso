@@ -16,7 +16,7 @@ export = {
 	},
 	async execute(message, args, handler) {
         if (!args.length) {
-            throw `com on !! giv me arguments !! ${e.sad.e}`;
+            throw `com on !! giv me arguments !! ${e.sad}`;
         }
         const rawArgs = args.join(' ').split('|').map(v => v.trim());
         const title = rawArgs[0];
@@ -28,14 +28,14 @@ export = {
             });
         } catch (error) {
             if (error === "invalid emojies !") {
-                throw `yu hav to use proper emojise for option emojiese ${e.sad.e}`;
+                throw `yu hav to use proper emojise for option emojiese ${e.sad}`;
             }
         }
         
         const rawOptionsEmojis = rawOptions.map(v => v.emoji);
 
         if (new Set(rawOptionsEmojis).size !== rawOptionsEmojis.length) {
-            throw `yu cant hav moar dan wan optione asocieted to wan emoji ! ${e.sad.e}`;
+            throw `yu cant hav moar dan wan optione asocieted to wan emoji ! ${e.sad}`;
         }
 
         if (!rawOptionsEmojis.every(v => (parseInt(v) ? validateCustomEmote(v, handler) : containsEmoji(v)))) {
@@ -43,11 +43,11 @@ export = {
         }
 
         if (!title) {
-            throw `giv a titel to de poll !! ${e.sad.e}`;
+            throw `giv a titel to de poll !! ${e.sad}`;
         }
 
         if (!description) {
-            throw `yu hav to giv a descriptionene for de polle ! ${e.sad.e}`;
+            throw `yu hav to giv a descriptionene for de polle ! ${e.sad}`;
         }
 
         const embed = {

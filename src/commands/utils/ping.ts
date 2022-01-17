@@ -11,7 +11,7 @@ export = {
 	},
 	execute(message, args, handler) {
         const embed = {
-            title: `${e.happy.e} ponge !`,
+            title: `${e.happy} ponge !`,
             fields: [
                 {
                     name: "latencie",

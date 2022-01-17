@@ -18,7 +18,7 @@ export = {
 			throw "yu gaev me too meny arguments !!";
 		}
 		if (isNaN(num)) {
-			throw `yu shuld giv me actual numberse ${e.think.e}`;
+			throw `yu shuld giv me actual numberse ${e.think}`;
 		}
 		const answer = answers[Math.floor(Math.random() * answers.length)].replace(/{i}/g, `**${num}**`);
         return message.reply(answer);

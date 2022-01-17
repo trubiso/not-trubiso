@@ -9,7 +9,7 @@ import { Handler } from "./handler";
 const { e } = require('../vars.json');
 
 const pieceRegex = new RegExp(new RegExp(customEmoteRegex).source + '|' + new RegExp(emojiRegex).source);
-const validatePiece = (piece : string, handler: Handler) : boolean => !!(piece.match(pieceRegex) && (piece.match(customEmoteRegex) ? validateCustomEmote(piece, handler) : piece.match(emojiRegex)) && piece.normalize().split('') !== '⚪'.split('') && !([':one:',':two:',':three:',':four:',':five:',':six:',':seven:',':eight:',':nine:',':asterisk:',':hash:',':1234:',e.greneblogie.e].includes(piece)));
+const validatePiece = (piece : string, handler: Handler) : boolean => !!(piece.match(pieceRegex) && (piece.match(customEmoteRegex) ? validateCustomEmote(piece, handler) : piece.match(emojiRegex)) && piece.normalize().split('') !== '⚪'.split('') && !([':one:',':two:',':three:',':four:',':five:',':six:',':seven:',':eight:',':nine:',':asterisk:',':hash:',':1234:',e.greneblogie].includes(piece)));
 const getValidPieces = (piece : string) : string[] | undefined => piece.match(pieceRegex)?.map(v => v?.toString());
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,7 +40,7 @@ const connectAnyCommandExecute = async (message : Message, args : string[], hand
 
     handler.games.push(new gameType (message.channel as TextChannel, { user: challenger, piece: challengerPiece }, { user: opponent, piece: '' }, 7));
     
-    message.reply(`${opponent.toString()}, yu hav been chalenged ! ${e.shock_handless.e} pleas choos a custom emot or emnoji ! ${e.please.e} (or tyep "cancel" to cancel de matche !) i wil be weitin ${e.stare.e}`);
+    message.reply(`${opponent.toString()}, yu hav been chalenged ! ${e.shock_handless.e} pleas choos a custom emot or emnoji ! ${e.please} (or tyep "cancel" to cancel de matche !) i wil be weitin ${e.stare}`);
     
     return;
 };
@@ -61,10 +61,10 @@ const ConnectAnyHandleMessage = async (msg : Message, handler : Handler, game : 
             if (validatePiece(msg.content.trim(), handler)) {
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 if (getValidPieces(msg.content.trim())![0] === game.challenger.piece) {
-                    msg.reply(`${e.think.e} yu shuldnt hav de saem piec as de odar preson !`);
+                    msg.reply(`${e.think} yu shuldnt hav de saem piec as de odar preson !`);
                     return;
                 }
-                msg.reply(`${e.happy.e} started matche betweene ${game.challenger.user.toString()} ande ${game.opponent.user.toString()}!`);
+                msg.reply(`${e.happy} started matche betweene ${game.challenger.user.toString()} ande ${game.opponent.user.toString()}!`);
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 game.message = await initialRender(msg, game);
             }
@@ -77,7 +77,7 @@ const ConnectAnyHandleMessage = async (msg : Message, handler : Handler, game : 
         if (!msg.author.bot && game.turns.validateMessage(msg) && parseInt(msg.content)) {
             await messageCallback(msg, handler, game);
         } else if (!msg.author.bot && msg.content.trim() === "cancel") {
-            msg.reply(`wat a looser !! imagin bakking oute !! ${e.funny.e}${e.stare.e} (succesfuli canceled de matche ${e.sad.e})`);
+            msg.reply(`wat a looser !! imagin bakking oute !! ${e.funny}${e.stare} (succesfuli canceled de matche ${e.sad})`);
             game.destroySelf(handler);
         }
     }

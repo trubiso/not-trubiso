@@ -102,7 +102,7 @@ export = {
             const cmd = args[0].toString().toLowerCase();
             const ret = get_help(cmd, handler);
             if (ret == false) {
-                out = `i culdn't find anythinge for **${cmd}**... ${e.think.e} did yu meane **${find_closest_cmd_to(cmd, handler)}**?`;
+                out = `i culdn't find anythinge for **${cmd}**... ${e.think} did yu meane **${find_closest_cmd_to(cmd, handler)}**?`;
             }
             else if (typeof ret === "string") out = ret;
             else return message.reply({embeds: [ret]});

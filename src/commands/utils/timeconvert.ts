@@ -33,6 +33,6 @@ export = {
         if (newHour > 24) { processedHour = newHour - 24; dDiff++; }
         const dateString = `${dDiff === -1 ? "yesterdey at " : (dDiff === 1 ? "tumoro at " : "")}${processedHour}:${args[0].split(':')[1] ?? "00"}`;
 
-        message.reply(Util.cleanContent(`after som hevi calculenting ${e.tribaldance.e} i conclud dat da result is **${dateString}**`, message.channel));
+        message.reply(Util.cleanContent(`after som hevi calculenting ${e.tribaldance} i conclud dat da result is **${dateString}**`, message.channel));
     },
 } as Command;

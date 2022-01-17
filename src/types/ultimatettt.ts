@@ -55,10 +55,10 @@ class UltimateTicTacToeGame implements Game {
                 if (validatePiece(msg.content.trim(), handler)) {
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     if (getValidPieces(msg.content.trim())![0] === this.challenger.piece) {
-                        msg.reply(`${e.think.e} yu shuldnt hav de saem piec as de odar preson !`);
+                        msg.reply(`${e.think} yu shuldnt hav de saem piec as de odar preson !`);
                         return;
                     }
-                    msg.reply(`${e.happy.e} started matche betweene ${this.challenger.user.toString()} ande ${this.opponent.user.toString()}!`);
+                    msg.reply(`${e.happy} started matche betweene ${this.challenger.user.toString()} ande ${this.opponent.user.toString()}!`);
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     this.opponent.piece = getValidPieces(msg.content.trim())![0];
                     this.confirmed = true;
@@ -77,7 +77,7 @@ class UltimateTicTacToeGame implements Game {
                     if (this.grid.currentGrid > 0) {
                         const piece = this.grid.placePiece(num, this.grid.currentGrid, this.turns.currentTurn);
                         if (!piece) {
-                            msg.reply(`dat spaec is fulle !! ${e.sad.e}`);
+                            msg.reply(`dat spaec is fulle !! ${e.sad}`);
                             return;
                         }
                         if (this.grid.getCurrentGrid().checkWin(piece.position, piece.placedBy)) {
@@ -93,7 +93,7 @@ class UltimateTicTacToeGame implements Game {
                     const g = ExtTTTGrid.fromCharArr(this.grid.grids.map(r => r.map(v => v.gridWonBy)));
                     if (g.pieces.length) {
                         if (g.checkWin(g.pieces[0].position, g.pieces[0].placedBy)) {
-                            await this.message?.edit(`${this.turns.getCurrentTurnUser().toString()} wone !!! ${e.shock_handless.e}${e.party.e} GG !!! \n${this.grid.render(this.challenger, this.opponent)}`);
+                            await this.message?.edit(`${this.turns.getCurrentTurnUser().toString()} wone !!! ${e.shock_handless.e}${e.party} GG !!! \n${this.grid.render(this.challenger, this.opponent)}`);
                             this.destroySelf(handler);
                             return;
                         }
@@ -112,7 +112,7 @@ class UltimateTicTacToeGame implements Game {
                     await this.message?.edit(`it's ${this.turns.getCurrentTurnUser().toString()}'s turne !! (curent grid: ${this.grid.currentGrid > 0 ? this.grid.currentGrid : 'none'}, last moov: ${num}) \n${this.grid.render(this.challenger, this.opponent)}`);
                 }
             } else if (!msg.author.bot && msg.content.trim() === "cancel") {
-                msg.reply(`wat a looser !! imagin bakking oute !! ${e.funny.e}${e.stare.e} (succesfuli canceled de matche ${e.sad.e})`);
+                msg.reply(`wat a looser !! imagin bakking oute !! ${e.funny}${e.stare} (succesfuli canceled de matche ${e.sad})`);
                 this.destroySelf(handler);
             }
         }

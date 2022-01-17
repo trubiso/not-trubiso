@@ -11,7 +11,7 @@ export = {
 	},
     execute(message, args) {
         if (!args.length) {
-            message.channel.send(`yu hab to ask a questione! ${e.really.e}`);
+            message.channel.send(`yu hab to ask a questione! ${e.really}`);
         }
         else {
             const answer_pos = Math.floor(Math.random()*answers.length);

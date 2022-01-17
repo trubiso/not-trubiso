@@ -17,11 +17,11 @@ export = {
 		}
         const arr = args.join(' ').trim().split(',');
 		if (!arr[1] || !arr[0]) {
-			throw `meybi enter at least 2 elements for me to choos from ?? ${e.sad.e}`;
+			throw `meybi enter at least 2 elements for me to choos from ?? ${e.sad}`;
 		}
 		const item = Util.cleanContent(arr[Math.floor(Math.random() * arr.length)].trim(), message.channel);
 		const answer = answers[Math.floor(Math.random() * answers.length)].replace(/{i}/g, `**${item}**`);
-		if (answer.length > 4000) throw `yur options ar too bigege !! ${e.sad.e}`;
+		if (answer.length > 4000) throw `yur options ar too bigege !! ${e.sad}`;
         return message.reply(answer);
 	}
 } as Command;

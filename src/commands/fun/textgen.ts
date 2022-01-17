@@ -13,7 +13,7 @@ export = {
     },
     async execute(message, args) {
         if (!args.length) {
-            throw `com on !! giv me texte !! ${e.sad.e}`;
+            throw `com on !! giv me texte !! ${e.sad}`;
         }
         deepai.setApiKey(deepai_token);
         const resp = await (async function() {
@@ -21,7 +21,7 @@ export = {
                 text: Util.cleanContent(args.join(' '), message.channel),
             });
         })();
-        const text : string = resp.output ?? `${e.sad.e}`;
+        const text : string = resp.output ?? `${e.sad}`;
 
         const splitText : string[] = [];
         for(let i = 0 ; i < text.length ; i += 1024) {

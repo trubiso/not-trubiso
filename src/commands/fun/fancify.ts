@@ -40,7 +40,7 @@ export = {
             }).join(' ');
         }
 
-        if (text.length > 2000) throw `yur text is too bigege !! ${e.sad.e}`;
+        if (text.length > 2000) throw `yur text is too bigege !! ${e.sad}`;
         else return message.reply(text);
 	}
 } as Command;

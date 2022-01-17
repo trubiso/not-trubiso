@@ -65,7 +65,7 @@ class TicTacToeGame implements ConnectAnyGame {
                 if (this.grid.checkWin(piece.position, piece.placedBy)) {
                     await interaction.update({
                         components: this.grid.toComponentArr(this.challenger, this.opponent),
-                        content: `${this.turns.getCurrentTurnUser().toString()} wone !!! ${e.shock_handless.e}${e.party.e} GG !!!`
+                        content: `${this.turns.getCurrentTurnUser().toString()} wone !!! ${e.shock_handless.e}${e.party} GG !!!`
                     });
                     this.destroySelf(handler);
                     return;
@@ -116,7 +116,7 @@ class TicTacToeGrid implements ConnectAnyGrid {
             return new MessageButton()
             .setCustomId(`tictactoe_${j}_${i}`)
             .setEmoji(emj)
-            .setStyle(emj !== e.blank.e ? (emj === e.greneblogie.e ? 'SUCCESS' : 'SECONDARY') : 'PRIMARY');
+            .setStyle(emj !== e.blank ? (emj === e.greneblogie ? 'SUCCESS' : 'SECONDARY') : 'PRIMARY');
         })).map(v => new MessageActionRow()
             .addComponents(v)
         );
@@ -124,10 +124,10 @@ class TicTacToeGrid implements ConnectAnyGrid {
     }
 
     public charToEmoji(challenger : PieceGamePlayer, opponent : PieceGamePlayer, g : string) : string {
-        return g === '*' ? e.blank.e : (
+        return g === '*' ? e.blank : (
             g === 'C' ? challenger.piece : (
                 g === 'O' ? opponent.piece : (
-                    g === 'W' ? e.greneblogie.e : ''
+                    g === 'W' ? e.greneblogie : ''
                 )
             )
         );

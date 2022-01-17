@@ -23,7 +23,7 @@ export = {
         if (dm) {
             message.reply(`just handeded over yur sugestion to trumbinso !`);
         } else {
-            message.reply(`somthin went rong... ${e.sad.e}`);
+            message.reply(`somthin went rong... ${e.sad}`);
         }
     },
 } as Command;

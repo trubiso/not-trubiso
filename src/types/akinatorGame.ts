@@ -46,8 +46,8 @@ class AkinatorGame implements Game {
         const g = this.finalGuess;
         if (!g) throw "didnt finish da game yu stupide bot";
         return { embeds: [{
-            title: `YEYAHEHE !!! I GUESEDED CORECTLI !! ${e.happy.e}${e.happy.e}${e.happy.e}`,
-            description: `THENKES FOR PLEYING WIT ME !! HAV AN AMEZING DEY !!!! ${e.happy.e} (de charecter wase ${g.name})`,
+            title: `YEYAHEHE !!! I GUESEDED CORECTLI !! ${e.happy}${e.happy}${e.happy}`,
+            description: `THENKES FOR PLEYING WIT ME !! HAV AN AMEZING DEY !!!! ${e.happy} (de charecter wase ${g.name})`,
             image: {
                 url: g.absolute_picture_path
             }
@@ -57,7 +57,7 @@ class AkinatorGame implements Game {
     private getLoseContent() {
         return { embeds: [{
             title: `i loste... ${e.sad3.e}`,
-            description: `hav a gud dey but kno i wont ${e.sad.e}`
+            description: `hav a gud dey but kno i wont ${e.sad}`
         }], components: []} as MessageOptions;
     }
 
@@ -97,8 +97,8 @@ class AkinatorGame implements Game {
         const val = i.values[0];
         if (val === 'cancel') {
             await i.update({ embeds: [{
-                title: `yu canseld de gaem ${e.sad.e}`,
-                description: `hop yu had a niec tiem ${e.glad.e}`
+                title: `yu canseld de gaem ${e.sad}`,
+                description: `hop yu had a niec tiem ${e.glad}`
             }], components: []});
             this.destroySelf(handler);
         } else {
