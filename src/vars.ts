@@ -9,7 +9,7 @@ const non_seasonal_br_answers = [
     `toki !! 👋${e.excited} o tenpo ni li pona tawa sina!!!`,
     `lötló !!! 👋${e.silly}`,
     `${e.drunk} i got drunked !!! ar yu proud ? 👋${e.happy}`,
-    `${e.telekinesis} i can do it !!!`,
+    `${e.telekinesis} yu can do it !!!`,
     `${e.sad2} tiem goes by so fast !!! ${e.glad} but at leaste it goes by hapy!!!! 👋${e.happy}`,
 ];
 const bot_ready_answers = [
