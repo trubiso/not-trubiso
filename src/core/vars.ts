@@ -38,7 +38,8 @@ export const e = {
     'telekinesis': '<:telekinesis:785091277560479764>',
     'flush_happy': '<:flush_happy:852700969963094057>',
     'coolwoah': '<:coolwoah:717684437508161546>',
-    'drunk': '<:drunk:729406247870267412>'
+    'drunk': '<:drunk:729406247870267412>',
+    id: (emote: string) => emote.replace(/<(a)?:/, '').split(':')[1].slice(0, -1)
 };
 
 export const author = '216136238426619904';
