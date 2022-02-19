@@ -1,0 +1,35 @@
+{
+    "dependencies": {
+        "aki-api": "^6.0.8",
+        "chalk": "^4.1.2",
+        "convert-units": "^2.3.4",
+        "deepai": "^1.0.17",
+        "discord.js": "^13.1.0",
+        "get-closest": "^0.0.4",
+        "levenshtein": "^1.0.5",
+        "node": "16.6.1",
+        "ora": "5.4.1",
+        "typescript": "^4.4.2"
+    },
+    "devDependencies": {
+        "@types/convert-units": "^2.3.5",
+        "@typescript-eslint/eslint-plugin": "^4.29.3",
+        "@typescript-eslint/parser": "^4.29.3",
+        "eslint": "^7.32.0",
+        "typescript-eslint": "^0.0.1-alpha.0"
+    },
+    "scripts": {
+        "run": "tsc && cp src/config.json out/config.json && cp src/vars.json out/vars.json && cd out && node .",
+        "heroku": "tsc && cp src/vars.json out/vars.json && cd out && node ."
+    },
+    "name": "not-trubiso",
+    "author": "trubiso",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/trubiso/not-trubiso.git"
+    },
+    "engines": {
+        "node": "16.6.x",
+        "npm": "7.x"
+    }
+}
