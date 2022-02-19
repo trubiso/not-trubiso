@@ -12,7 +12,7 @@ export class Bot {
     public client: Client;
     private logger: Logger;
 
-    private handleError(msg: Message, command: string, error: any) {
+    private $error(msg: Message, command: string, error: any) {
         if (!(error instanceof TypeError)) 
             msg.channel.send(`${e.shock_handless} ther was an eror executinge yuor comande !! ${e.sad} ${(error as any).toString()}`);
         else 
@@ -20,7 +20,7 @@ export class Bot {
         
     }
 
-    private async handleCommand(msg: Message) {
+    private async $command(msg: Message) {
         const args = msg.content.slice(this.prefix.length).trim().split(/ +/);
         const command = args.shift()?.toLowerCase() ?? '';
 
@@ -28,22 +28,22 @@ export class Bot {
             const actualCmd = this.commands.get(command) ?? this.commands.find(v => v.aliases?.includes(command) ?? false);
             if (actualCmd) {
                 await (actualCmd.execute(msg, args, this) as Promise<unknown>)?.catch(error => {
-                    this.handleError(msg, command, error);
+                    this.$error(msg, command, error);
                 });
                 this.logger.logCommand(msg, args, command);
             }
         } catch (error) {
-            this.handleError(msg, command, error);
+            this.$error(msg, command, error);
         }
     }
 
-    private async handleMessageCreate(msg: Message) {
+    private async $messageCreate(msg: Message) {
         if (!msg.mentions.everyone) {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            if (msg.mentions.has(this.client.user!)) {
-                msg.react('👋');
-                msg.react(e.id(e.happy));
-            }
+            if (this.client.user)
+                if (msg.mentions.has(this.client.user)) {
+                    msg.react('👋');
+                    msg.react(e.id(e.happy));
+                }
 
             if (msg.content.includes('busines')) 
                 msg.react(e.id(e.business));
@@ -52,7 +52,7 @@ export class Bot {
         // TODO: check whether there is an ongoing game in that channel; if so,
         // check whether player is in that game, if they are, let game handle, otherwise see below
         if (!msg.author.bot && msg.content.startsWith(this.prefix)) 
-            await this.handleCommand(msg);
+            await this.$command(msg);
     }
 
     public loadModule(file: string) {
@@ -83,7 +83,8 @@ export class Bot {
         const categoryFiles = fs.readdirSync('./categories').filter((file: string) => file.endsWith('.js'));
         categoryFiles.forEach(file => this.loadModule(file));
 
-        this.client.on('messageCreate', this.handleMessageCreate);
+        this.client.on('ready', ()=>console.log('hallo'));
+        this.client.on('messageCreate', msg => this.$messageCreate(msg));
         process.on('unhandledRejection', this.logger.logError);
 
         this.client.login(token);
