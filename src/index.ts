@@ -1,6 +1,5 @@
-import { Bot } from './core/bot';
+import Bot from '@core/bot';
+import { discordToken } from '@core/vars';
 
-const config = require('../config.json');
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const bot = new Bot('<', config.token);
+const bot = new Bot('<');
+bot.start(discordToken);

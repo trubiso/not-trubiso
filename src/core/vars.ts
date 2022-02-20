@@ -250,5 +250,9 @@ export const botReadyAnswers = {
 };
 
 export const customEmoteRegex = /<[a]*?:[0-9a-zA-Z_]{2,32}:[0-9]{18}>/g;
-export const emojiRegex = /(\p{Extended_Pictographic}|\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]|🇦|🇧|🇨|🇩|🇪|🇫|🇬|🇭|🇮|🇯|🇰|🇱|🇲|🇳|🇴|🇵|🇶|🇷|🇸|🇹|🇺|🇻|🇼|🇽|🇾|🇿)/gu;
+export const emojiRegex =
+    /(\p{Extended_Pictographic}|\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]|🇦|🇧|🇨|🇩|🇪|🇫|🇬|🇭|🇮|🇯|🇰|🇱|🇲|🇳|🇴|🇵|🇶|🇷|🇸|🇹|🇺|🇻|🇼|🇽|🇾|🇿)/gu;
 export const mentionRegex = /<@[!]?[0-9]{18}>/g;
+
+export const deepAIToken: string = process.env.DEEPAI_TOKEN ?? require('../../config.json').deepai;
+export const discordToken: string = process.env.NT_TOKEN ?? require('../../config.json').token;

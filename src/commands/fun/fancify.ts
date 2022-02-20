@@ -1,7 +1,6 @@
 import { Util } from 'discord.js';
-import { Command } from '../../core/command';
-
-const { e, alphabets, alphabetNames, fullAlphabetNames } = require('../../core/vars');
+import Command from '@core/command';
+import { e, alphabets, alphabetNames, fullAlphabetNames } from '@core/vars';
 
 export = {
     name: 'fancify',

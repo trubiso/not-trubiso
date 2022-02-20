@@ -1,8 +1,8 @@
-import { Bot } from '../../core/bot';
-import { Command } from '../../core/command';
+import Bot from '@core/bot';
+import Command from '@core/command';
 import { Util } from 'discord.js';
 import Levenshtein from 'levenshtein';
-import { e } from '../../core/vars';
+import { e } from '@core/vars';
 
 const getClosest = require('get-closest');
 
@@ -67,7 +67,7 @@ export = {
                 }
             }
 
-            for (const category of bot.categories) 
+            for (const category of bot.categories)
                 if (category.name === cmd || category.help.name === cmd) {
                     const embed = {
                         title: `help abuot de ${category.help.name} categori`,

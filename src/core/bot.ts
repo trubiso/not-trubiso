@@ -1,11 +1,12 @@
 import { Client, Collection } from 'discord.js';
-import { Command } from './command';
-import { Module } from './module';
+import Command from '@core/command';
+import Module from '@core/module';
 import fs from 'fs';
-import { Logger } from './logger';
-import { Handler } from './handler';
+import Logger from '@core/logger';
+import Handler from '@core/handler';
+import ora from 'ora';
 
-export class Bot {
+export default class Bot {
     public commands: Collection<string, Command>;
     public categories: Module[];
     public prefix: string;
@@ -13,8 +14,10 @@ export class Bot {
     public logger: Logger;
     private handler: Handler;
 
-    public loadModule(file: string) {
+    public loadModule(file: string, progress?: ora.Ora) {
+        const moduleName = file.slice(0, -3);
         try {
+            if (progress) progress.text = `Loading module ${moduleName}...`;
             const category = require(`../categories/${file}`) as Module;
             const commandFiles = fs
                 .readdirSync(`./commands/${category.name}`)
@@ -28,7 +31,7 @@ export class Bot {
             }
 
             this.categories.push({
-                name: file.slice(0, -3),
+                name: moduleName,
                 help: category.help,
                 commands: categoryCommands
             } as Module);
@@ -37,7 +40,7 @@ export class Bot {
         }
     }
 
-    constructor(prefix: string, token: string) {
+    constructor(prefix: string) {
         this.commands = new Collection();
         this.categories = [];
         this.prefix = prefix;
@@ -47,9 +50,15 @@ export class Bot {
         });
         this.handler = new Handler(this);
         this.logger = new Logger(this);
+    }
 
+    public start(token: string) {
+        this.logger.log('Starting bot!');
+
+        const progress = this.logger.startSpinner('Loading modules...', 'bouncingBall');
         const categoryFiles = fs.readdirSync('./categories').filter((file: string) => file.endsWith('.js'));
-        categoryFiles.forEach(file => this.loadModule(file));
+        categoryFiles.forEach(file => this.loadModule(file, progress));
+        progress.succeed(`Loaded ${categoryFiles.length} modules!`);
 
         this.client.on('ready', () => this.handler.$ready());
         this.client.on('messageCreate', msg => this.handler.$messageCreate(msg));

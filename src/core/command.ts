@@ -1,7 +1,7 @@
 import { ButtonInteraction, Message, SelectMenuInteraction } from 'discord.js';
-import { Bot } from './bot';
+import Bot from '@core/bot';
 
-export type Command = {
+export default interface Command {
     name: string;
     aliases?: string[];
     help: {
@@ -14,4 +14,4 @@ export type Command = {
     execute(message: Message, args: string[], bot: Bot): Promise<unknown> | void;
     handleButton?(interaction: ButtonInteraction, bot: Bot): Promise<unknown> | void;
     handleSelectMenu?(interaction: SelectMenuInteraction, bot: Bot): Promise<unknown> | void;
-};
+}

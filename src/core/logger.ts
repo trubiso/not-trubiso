@@ -1,8 +1,10 @@
 import { Message } from 'discord.js';
-import { Bot } from './bot';
+import Bot from '@core/bot';
 import chalk from 'chalk';
+import ora from 'ora';
+import { SpinnerName } from 'cli-spinners';
 
-export class Logger {
+export default class Logger {
     private bot: Bot;
 
     constructor(bot: Bot) {
@@ -29,5 +31,16 @@ export class Logger {
         console.error(`${chalk.bgRed(chalk.whiteBright('[CRITICAL]'))} ${chalk.redBright(error.toString())}\n${
             (error as Error).stack
         }`);
+    }
+
+    public log(msg: any): void {
+        console.log(chalk.grey(msg.toString()));
+    }
+
+    public startSpinner(text: string, spinner: SpinnerName = 'dots') {
+        return ora({
+            text: text,
+            spinner: spinner
+        });
     }
 }

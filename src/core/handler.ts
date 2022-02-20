@@ -1,9 +1,9 @@
 import { GuildMember, Message, TextChannel } from 'discord.js';
-import { Bot } from './bot';
+import Bot from '@core/bot';
 import { getBotReadyAnswer, pick } from './utils';
 import { e } from './vars';
 
-export class Handler {
+export default class Handler {
     private bot: Bot;
 
     constructor(bot: Bot) {

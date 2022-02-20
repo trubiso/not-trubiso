@@ -1,6 +1,5 @@
 import { botReadyAnswers, customEmoteRegex, emojiRegex } from './vars';
-import { Bot } from './bot';
-
+import Bot from '@core/bot';
 export function pick(...a: any[] | any[][]) {
     // I love this function, it's so handy
     const arr = a.flat();

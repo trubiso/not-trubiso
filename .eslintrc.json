@@ -3,18 +3,13 @@
         "browser": true,
         "es2021": true
     },
-    "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended"
-    ],
+    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
     "ignorePatterns": ["out/", "node_modules/"],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": 12
     },
-    "plugins": [
-        "@typescript-eslint"
-    ],
+    "plugins": ["@typescript-eslint"],
     "rules": {
         "array-callback-return": "warn",
         "block-scoped-var": "warn",
@@ -24,11 +19,11 @@
         "default-param-last": "error",
         "dot-notation": "warn",
         "eqeqeq": ["warn", "smart"],
-        "semi": ["error", "always"],
-        "indent": ["error", 4, {
-            "SwitchCase": 0
-        }],
-        "no-extra-semi": "warn",
+        "@typescript-eslint/semi": ["error", "always"],
+        "semi": "off",
+        "indent": ["error", 4, { "SwitchCase": 0 }],
+        "@typescript-eslint/no-extra-semi": "warn",
+        "no-extra-semi": "off",
         "object-curly-spacing": ["warn", "always"],
         "template-curly-spacing": ["warn", "never"],
         "array-bracket-spacing": ["warn", "never"],
@@ -52,7 +47,7 @@
         "newline-before-return": "warn",
         "no-fallthrough": "off",
         "quotes": ["warn", "single", { "avoidEscape": true }],
-		"yoda": "warn",
+        "yoda": "warn",
         "@typescript-eslint/prefer-for-of": "warn",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/explicit-module-boundary-types": "off",

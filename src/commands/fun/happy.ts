@@ -2,14 +2,14 @@ import Command from '@core/command';
 import { e } from '@core/vars';
 
 export = {
-    name: 'test',
-    aliases: ['kangaroo', 'clicker'],
+    name: 'happy',
+    aliases: [e.happy],
     help: {
         category: 'fun',
-        brief: 'test comande',
-        usage: 'test'
+        brief: e.happy,
+        usage: 'happy'
     },
     execute(message) {
-        message.reply(`oh hi ${e.happy}`);
+        message.reply(`${e.happy}${e.happy}${e.happy} i'm happi tooe!`);
     }
 } as Command;
