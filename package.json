@@ -13,9 +13,11 @@
     },
     "devDependencies": {
         "@types/convert-units": "^2.3.5",
+        "@types/levenshtein": "^1.0.1",
         "@typescript-eslint/eslint-plugin": "^4.29.3",
         "@typescript-eslint/parser": "^4.29.3",
         "eslint": "^7.32.0",
+        "prettier": "^2.5.1",
         "typescript-eslint": "^0.0.1-alpha.0"
     },
     "scripts": {
@@ -29,7 +31,7 @@
         "url": "https://github.com/trubiso/not-trubiso.git"
     },
     "engines": {
-        "node": "16.6.x",
-        "npm": "7.x"
+        "node": ">=16.6.x",
+        "npm": ">=7.x"
     }
 }

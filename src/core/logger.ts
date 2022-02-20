@@ -9,18 +9,25 @@ export class Logger {
         this.bot = bot;
     }
 
-    public logCommand(msg: Message, args: string[], command: string) : void {
+    public logCommand(msg: Message, args: string[], command: string): void {
         const commandExists = this.bot.commands.get(command);
         const alias = this.bot.commands.find(v => v.aliases?.includes(command) ?? false);
         const isAlias = !commandExists && alias;
         const commandName = commandExists?.name ?? alias?.name ?? 'undefined';
-        console.log(`${chalk.bgGrey('[LOG]')} ` +
-                    `${chalk.grey(`${msg.author.username}#${msg.author.discriminator} used ` +
-                    `${this.bot.prefix}${alias ? alias.name : commandName}${isAlias ? ` (Alias of ${commandName})` : ''} ` +
-                    `${args.length ? `(Arguments: ${args.join(' ')})` : '(No arguments)'}`)}`);
+        console.log(`${chalk.bgGrey('[LOG]')} ${chalk.grey(`${msg.author.username}#${msg.author.discriminator} used ${this.bot.prefix}${
+            alias ? alias.name : commandName
+        }${isAlias ? ` (Alias of ${commandName})` : ''} ${
+            args.length ? `(Arguments: ${args.join(' ')})` : '(No arguments)'
+        }`)}`);
     }
 
-    public logError(error: any) : void {
-        console.error(`${chalk.red('[ERROR]')} ${chalk.redBright(error.toString())} ${(error as Error).stack}`);
+    public logError(error: any): void {
+        console.error(`${chalk.red('[ERROR]')} ${chalk.redBright(error.toString())}\n${(error as Error).stack}`);
+    }
+
+    public logCritical(error: any): void {
+        console.error(`${chalk.bgRed(chalk.whiteBright('[CRITICAL]'))} ${chalk.redBright(error.toString())}\n${
+            (error as Error).stack
+        }`);
     }
 }

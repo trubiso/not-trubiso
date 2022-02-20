@@ -1,10 +1,10 @@
 import { Command } from './command';
 
 export type Module = {
-    name: string,
+    name: string;
     help: {
-        name: string,
-		brief: string
-	},
-    commands: Command[]
-}
+        name: string;
+        brief: string;
+    };
+    commands: Command[];
+};
