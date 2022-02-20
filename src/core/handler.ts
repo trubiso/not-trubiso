@@ -22,7 +22,7 @@ export default class Handler {
                 (c as TextChannel).send(getBotReadyAnswer());
     }
 
-    public $error(msg: Message, command: string, error: any) {
+    public $error(msg: Message, error: any) {
         if (error instanceof TypeError) this.bot.logger.logError(error);
         else
             msg.channel.send(`${e.shock_handless} ther was an eror executinge yuor comande !! ${e.sad} ${error.toString()}`);
@@ -45,14 +45,14 @@ export default class Handler {
             const actualCmd =
                 this.bot.commands.get(command) ?? this.bot.commands.find(v => v.aliases?.includes(command) ?? false);
             if (actualCmd) {
-                const boundThis = Object.assign({}, msg, this.bot);
+                const boundThis = Object.assign(msg, { bot: this.bot });
                 await (actualCmd.execute.call(boundThis, ...args) as Promise<unknown>)?.catch(error => {
-                    this.$error(msg, command, error);
+                    this.$error(msg, error);
                 });
                 this.bot.logger.logCommand(msg, args, command);
             }
         } catch (error) {
-            this.$error(msg, command, error);
+            this.$error(msg, error);
         }
     }
 

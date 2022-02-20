@@ -1,6 +1,7 @@
 import { Util } from 'discord.js';
 import Command from '@core/command';
 import { e, alphabets, alphabetNames, fullAlphabetNames } from '@core/vars';
+import { applyPerWord, pick } from '@core/utils';
 
 export = {
     name: 'fancify',
@@ -12,37 +13,35 @@ export = {
     execute(...args) {
         if (!args.length) throw 'giv me text to fancifie';
 
+        const getSampleOfAlphabet = (i: number) => alphabets[i].split(',').slice(0, 3).join('');
+
         if (args.includes('-list')) {
-            let out = '**List of alphabets:**';
-            (fullAlphabetNames as string[]).forEach((v, i) => {
-                out += `\n${v} (\`${alphabetNames[i]}\`) - ${alphabets[i].split(',').slice(0, 3).join('')}`;
-            });
+            let out = '**List of alphabets:**\n';
+            out += fullAlphabetNames
+                .map((v, i) => `${v} (\`${alphabetNames[i]}\`) - ${getSampleOfAlphabet(i)}`)
+                .join('\n');
 
             return this.reply(Util.cleanContent(out, this.channel)); // clean da content just in case
         }
 
-        function fancifyWord(word: string): string {
-            const c: string[] = alphabets[Math.floor(Math.random() * (alphabets.length - 1) + 1)].split(',');
-            const a: string[] = alphabets[0].split(',');
-            let o = word;
-            a.forEach((v, i) => (o = o.replaceAll(v, c[i])));
+        const regularAlphabet: string[] = alphabets[0].split(',');
 
-            return o;
+        function fancifyWord(word: string): string {
+            const chosenAlphabet: string[] = pick(alphabets.slice(1)).split(',');
+            regularAlphabet.forEach((v, i) => (word = word.replaceAll(v, chosenAlphabet[i])));
+
+            return word;
         }
 
         let text = Util.cleanContent(args.join(' ').trim(), this.channel);
+
         if (alphabetNames.includes(args[0])) {
-            text = text.split(' ').slice(1).join(' ');
-            (alphabets[alphabetNames.indexOf(args[0])].split(',') as string[]).forEach((v, i) => (text = text.replaceAll(alphabets[0].split(',')[i], v)));
+            text = text.split(' ').slice(1).join(' '); // remove the alphabet name
+            alphabets[alphabetNames.indexOf(args[0])]
+                .split(',')
+                .forEach((currentLetter, i) => (text = text.replaceAll(regularAlphabet[i], currentLetter)));
         } else {
-            text = text
-                .split(' ')
-                .map(v =>
-                    v
-                        .split('\n')
-                        .map(w => fancifyWord(w))
-                        .join('\n'))
-                .join(' ');
+            text = applyPerWord(fancifyWord, text);
         }
 
         if (text.length > 4000) throw `yur text is too bigege !! ${e.sad}`;

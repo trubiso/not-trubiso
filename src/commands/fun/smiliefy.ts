@@ -1,8 +1,8 @@
-import { Message, Util } from 'discord.js';
+import { Util } from 'discord.js';
 import Command from '@core/command';
 
 import { e } from '@core/vars';
-import { pick } from '@core/utils';
+import { applyPerWord, clamp, pick, repeat } from '@core/utils';
 
 export = {
     name: 'smiliefy',
@@ -14,34 +14,29 @@ export = {
     execute(...args) {
         if (!args.length) throw 'giv me text to smiliefie';
 
-        const randomEmote = (message: Message): string =>
-            pick(message.guild?.emojis.cache.map(v => v.toString()) ?? []);
+        let emojis: string[] | undefined;
+        if (!(emojis = this.guild?.emojis.cache.map(v => v.toString())))
+            throw `i can't access the guild's emojis ${e.think}`;
 
-        const addRandomEmotes = (text: string, message: Message): string =>
-            text
-                .split(' ')
-                .map(v => `${v} ${randomEmote(message)}`)
-                .join(' ');
+        const getRandomEmote = (): string => pick(emojis);
+
+        const addRandomEmotes = (text: string): string => applyPerWord(v => `${v} ${getRandomEmote()}`, text);
 
         let text = Util.cleanContent(args
             .join(' ')
-            .replace(/--times [0-9]+/g, '')
+            .replace(/--times [0-9]+/g, '') // remove the --times argument; it is irrelevant currently
             .trim(),
         this.channel);
 
-        const numParam =
-            args
-                .join(' ')
-                .match(/--times [0-9]+/g)
-                ?.toString() ?? '--times 1';
+        let rawNumber = parseInt(args.at(-1) ?? '1');
+        if (isNaN(rawNumber)) rawNumber = 1;
+        const number = clamp(rawNumber, 1, 5);
 
-        const num = Math.max(Math.min(parseInt(numParam.replace(/--times/g, '').trim()), 5), 1);
+        repeat(() => {
+            text = addRandomEmotes(text);
+        }, number);
 
-        [...Array(num).keys()].forEach(() => {
-            text = addRandomEmotes(text, this);
-        });
-
-        if (text.length > 2000) throw `yur text is too bigege !! ${e.sad}`;
+        if (text.length > 4000) throw `yur text is too bigege !! ${e.sad}`;
         else return this.reply(text);
     }
 } as Command;

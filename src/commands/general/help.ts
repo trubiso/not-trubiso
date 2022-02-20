@@ -18,11 +18,11 @@ export = {
             new Levenshtein(compareTo, baseItem).distance;
 
         const findClosestCmdTo = (cmd: string) => {
-            const cmds = [...this.commands.map(v => v.name)];
-            this.commands
+            const cmds = [...this.bot.commands.map(v => v.name)];
+            this.bot.commands
                 .filter(v => typeof v.aliases != 'undefined')
                 .forEach(v => cmds.push(...(v.aliases as string[])));
-            cmds.push(...this.categories.map(v => v.name));
+            cmds.push(...this.bot.categories.map(v => v.name));
 
             return cmds[getClosest.custom(cmd, cmds, compareLevenshteinDistance)];
         };
@@ -30,43 +30,43 @@ export = {
         const getHelp = (cmd: string) => {
             const out = '';
             const cmdExists = false;
-            const prefix = this.prefix;
-            for (const commandName of this.commands) {
-                const command = this.commands.get(commandName[0])!;
-                if (command.name === cmd || command.aliases?.includes(cmd)) {
-                    const embed = {
-                        title: `help abuot ${prefix}${command.name}`,
-                        fields: [
-                            {
-                                name: 'brif descreption',
-                                value: command.help.brief
-                            },
-                            {
-                                name: 'useg',
-                                value: `${prefix}${command.help.usage}`,
-                                inline: true
-                            }
-                        ]
-                    };
+            const prefix = this.bot.prefix;
+            for (const commandName of this.bot.commands) {
+                const command = this.bot.commands.get(commandName[0])!;
+                if (command.name !== cmd && !command.aliases?.includes(cmd)) continue;
 
-                    if (command.aliases)
-                        embed.fields.push({
-                            name: 'aliasese',
-                            value: command.aliases.join(', '),
+                const embed = {
+                    title: `help abuot ${prefix}${command.name}`,
+                    fields: [
+                        {
+                            name: 'brif descreption',
+                            value: command.help.brief
+                        },
+                        {
+                            name: 'useg',
+                            value: `${prefix}${command.help.usage}`,
                             inline: true
-                        });
+                        }
+                    ]
+                };
 
-                    if (command.help.extra)
-                        embed.fields.push({
-                            name: 'moar informetion',
-                            value: command.help.extra
-                        });
+                if (command.aliases)
+                    embed.fields.push({
+                        name: 'aliasese',
+                        value: command.aliases.join(', '),
+                        inline: true
+                    });
 
-                    return embed;
-                }
+                if (command.help.extra)
+                    embed.fields.push({
+                        name: 'moar informetion',
+                        value: command.help.extra
+                    });
+
+                return embed;
             }
 
-            for (const category of this.categories)
+            for (const category of this.bot.categories)
                 if (category.name === cmd || category.help.name === cmd) {
                     const embed = {
                         title: `help abuot de ${category.help.name} categori`,
@@ -92,7 +92,7 @@ export = {
         let out = '';
         if (!args.length) {
             out = '**commandse: **\n\n';
-            for (const category of this.categories.sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0))) {
+            for (const category of this.bot.categories.sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0))) {
                 out += `**${category.help.name}: **`;
                 for (const command of category.commands) out += `${command.name}, `;
 

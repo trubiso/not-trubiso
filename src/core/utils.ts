@@ -7,6 +7,25 @@ export function pick(...a: any[] | any[][]) {
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
+export function repeat(func: CallableFunction, times: number) {
+    [...Array(times).keys()].forEach(v => func(v));
+}
+
+export function clamp(value: number, min: number, max: number) {
+    return Math.min(Math.max(value, min), max);
+}
+
+export function applyPerWord(func: (v: string) => string, words: string) {
+    return words
+        .split(' ')
+        .map(v =>
+            v
+                .split('\n')
+                .map(w => func(w))
+                .join('\n'))
+        .join(' ');
+}
+
 export function getBotReadyAnswer(): string {
     if (Math.random() > 0.5) return pick(botReadyAnswers.nonSeasonal);
 

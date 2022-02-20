@@ -16,4 +16,4 @@ export default interface Command {
     handleSelectMenu?(interaction: SelectMenuInteraction, bot: Bot): Promise<unknown> | void;
 }
 
-export type CommandData = Message & Bot;
+export type CommandData = Message & { bot: Bot };
