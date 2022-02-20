@@ -9,6 +9,7 @@
         "levenshtein": "^1.0.5",
         "node": "16.6.1",
         "ora": "^5.4.1",
+        "replace-tsconfig-paths": "^1.2.6",
         "typescript": "^4.4.2"
     },
     "devDependencies": {
@@ -21,8 +22,8 @@
         "typescript-eslint": "^0.0.1-alpha.0"
     },
     "scripts": {
-        "run": "tsc && cd out && node .",
-        "heroku": "tsc && cd out && node ."
+        "start": "tsc && cd out && replace-tsconfig-paths -c ftsc.json && node .",
+        "dev": "tsc && cd out && replace-tsconfig-paths -c ftsc.json && node . --dev"
     },
     "name": "not-trubiso",
     "author": "trubiso",

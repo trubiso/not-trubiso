@@ -13,6 +13,7 @@ export default class Bot {
     public client: Client;
     public logger: Logger;
     private handler: Handler;
+    private isDev: boolean;
 
     public loadModule(file: string, progress?: ora.Ora) {
         const moduleName = file.slice(0, -3);
@@ -40,10 +41,11 @@ export default class Bot {
         }
     }
 
-    constructor(prefix: string) {
+    constructor(prefix: string, isDev = false) {
         this.commands = new Collection();
         this.categories = [];
         this.prefix = prefix;
+        this.isDev = isDev;
         this.client = new Client({
             intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MEMBERS', 'GUILD_MESSAGE_REACTIONS'],
             allowedMentions: { repliedUser: false }
@@ -60,7 +62,7 @@ export default class Bot {
         categoryFiles.forEach(file => this.loadModule(file, progress));
         progress.succeed(`Loaded ${categoryFiles.length} modules!`);
 
-        this.client.on('ready', () => this.handler.$ready());
+        this.client.on('ready', () => this.handler.$ready(this.isDev));
         this.client.on('messageCreate', msg => this.handler.$messageCreate(msg));
         this.client.on('error', error => this.logger.logError(error));
         process.on('unhandledRejection', error => this.logger.logError(error));

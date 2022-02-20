@@ -10,15 +10,16 @@ export default class Handler {
         this.bot = bot;
     }
 
-    public $ready() {
+    public $ready(isDev = false) {
         console.log(`Logged in as ${this.bot.client.user?.tag}!`);
+        this.bot.client.user?.setPresence({ activities: [{ name: 'yu !!', type: 'LISTENING' }] });
+
+        if (isDev) return;
 
         let c;
         if (this.bot.client.guilds.cache.has('717683408012181505'))
             if ((c = this.bot.client.channels.cache.get('717683408553377815')))
                 (c as TextChannel).send(getBotReadyAnswer());
-
-        this.bot.client.user?.setPresence({ activities: [{ name: 'yu !!', type: 'LISTENING' }] });
     }
 
     public $error(msg: Message, command: string, error: any) {

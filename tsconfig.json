@@ -30,8 +30,9 @@
 
         "forceConsistentCasingInFileNames": true,
 
+        "baseUrl": ".",
         "paths": {
-            "@core/*": ["./src/core/*"]
+            "@core/*": ["src/core/*", "out/core/*"]
         }
     },
     "include": ["./src"],

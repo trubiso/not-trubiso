@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "rootDir": ".",
+        "outDir": ".",
+        "baseUrl": "..",
+        "paths": {
+            "@core/*": ["out/core/*"]
+        }
+    }
+}
