@@ -9,7 +9,7 @@ export = {
         brief: 'test comande',
         usage: 'test'
     },
-    execute(message) {
-        message.reply(`oh hi ${e.happy}`);
+    execute() {
+        this.reply(`oh hi ${e.happy}`);
     }
 } as Command;

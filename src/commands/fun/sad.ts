@@ -9,7 +9,7 @@ export = {
         brief: e.sad,
         usage: 'sad'
     },
-    execute(message) {
-        message.reply(`dont be sade!!! be happi!! ${e.happy}${e.happy}${e.happy}`);
+    execute() {
+        this.reply(`dont be sade!!! be happi!! ${e.happy}${e.happy}${e.happy}`);
     }
 } as Command;

@@ -11,13 +11,17 @@ export = {
         brief: `generats texte !! ${e.shock_handless}`,
         usage: 'textGen <text>'
     },
-    async execute(message, args) {
+    async execute(...args) {
         if (!args.length) throw `com on !! giv me texte !! ${e.sad}`;
 
         deepai.setApiKey(deepAIToken);
+
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
+        const msg = this; // gotta do this because silly async function
+
         const resp = await (async function() {
             return await deepai.callStandardApi('text-generator', {
-                text: Util.cleanContent(args.join(' '), message.channel)
+                text: Util.cleanContent(args.join(' '), msg.channel)
             });
         })();
         const text: string = resp.output ?? `${e.sad}`;
@@ -39,6 +43,6 @@ export = {
             fields: generateEmbedFields()
         } as MessageEmbedOptions;
 
-        message.reply({ embeds: [embed] });
+        this.reply({ embeds: [embed] });
     }
 } as Command;

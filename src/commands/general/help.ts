@@ -1,4 +1,3 @@
-import Bot from '@core/bot';
 import Command from '@core/command';
 import { Util } from 'discord.js';
 import Levenshtein from 'levenshtein';
@@ -14,26 +13,26 @@ export = {
         brief: 'shows help for eny comand, categori or just evri comande',
         usage: 'help [command]'
     },
-    execute(message, args, bot) {
+    execute(...args) {
         const compareLevenshteinDistance = (compareTo: string, baseItem: string) =>
             new Levenshtein(compareTo, baseItem).distance;
 
-        function findClosestCmdTo(cmd: string, bot: Bot) {
-            const cmds = [...bot.commands.map(v => v.name)];
-            bot.commands
-                .filter(v => typeof v.aliases !== 'undefined')
+        const findClosestCmdTo = (cmd: string) => {
+            const cmds = [...this.commands.map(v => v.name)];
+            this.commands
+                .filter(v => typeof v.aliases != 'undefined')
                 .forEach(v => cmds.push(...(v.aliases as string[])));
-            cmds.push(...bot.categories.map(v => v.name));
+            cmds.push(...this.categories.map(v => v.name));
 
             return cmds[getClosest.custom(cmd, cmds, compareLevenshteinDistance)];
-        }
+        };
 
-        function getHelp(cmd: string, bot: Bot) {
+        const getHelp = (cmd: string) => {
             const out = '';
             const cmdExists = false;
-            const prefix = bot.prefix;
-            for (const commandName of bot.commands) {
-                const command = bot.commands.get(commandName[0])!;
+            const prefix = this.prefix;
+            for (const commandName of this.commands) {
+                const command = this.commands.get(commandName[0])!;
                 if (command.name === cmd || command.aliases?.includes(cmd)) {
                     const embed = {
                         title: `help abuot ${prefix}${command.name}`,
@@ -67,7 +66,7 @@ export = {
                 }
             }
 
-            for (const category of bot.categories)
+            for (const category of this.categories)
                 if (category.name === cmd || category.help.name === cmd) {
                     const embed = {
                         title: `help abuot de ${category.help.name} categori`,
@@ -88,12 +87,12 @@ export = {
 
             if (cmdExists) return out;
             else return false;
-        }
+        };
 
         let out = '';
         if (!args.length) {
-            out = '**Commands: **\n\n';
-            for (const category of bot.categories.sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0))) {
+            out = '**commandse: **\n\n';
+            for (const category of this.categories.sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0))) {
                 out += `**${category.help.name}: **`;
                 for (const command of category.commands) out += `${command.name}, `;
 
@@ -101,14 +100,13 @@ export = {
             }
         } else {
             const cmd = args[0].toString().toLowerCase();
-            const ret = getHelp(cmd, bot);
+            const ret = getHelp(cmd);
             if (ret === false)
-                out = `i culdn't find anythinge for **${cmd}**... ${e.think} did yu meane **${findClosestCmdTo(cmd,
-                    bot)}**?`;
+                out = `i culdn't find anythinge for **${cmd}**... ${e.think} did yu meane **${findClosestCmdTo(cmd)}**?`;
             else if (typeof ret === 'string') out = ret;
-            else return message.reply({ embeds: [ret] });
+            else return this.reply({ embeds: [ret] });
         }
 
-        return message.reply(Util.cleanContent(out, message.channel));
+        return this.reply(Util.cleanContent(out, this.channel));
     }
 } as Command;

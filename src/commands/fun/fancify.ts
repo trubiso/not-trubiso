@@ -9,7 +9,7 @@ export = {
         brief: 'fancifies yuor texte',
         usage: 'fancify [alphabet] <text> [-list]'
     },
-    execute(message, args) {
+    execute(...args) {
         if (!args.length) throw 'giv me text to fancifie';
 
         if (args.includes('-list')) {
@@ -18,7 +18,7 @@ export = {
                 out += `\n${v} (\`${alphabetNames[i]}\`) - ${alphabets[i].split(',').slice(0, 3).join('')}`;
             });
 
-            return message.reply(Util.cleanContent(out, message.channel)); // clean da content just in case
+            return this.reply(Util.cleanContent(out, this.channel)); // clean da content just in case
         }
 
         function fancifyWord(word: string): string {
@@ -30,7 +30,7 @@ export = {
             return o;
         }
 
-        let text = Util.cleanContent(args.join(' ').trim(), message.channel);
+        let text = Util.cleanContent(args.join(' ').trim(), this.channel);
         if (alphabetNames.includes(args[0])) {
             text = text.split(' ').slice(1).join(' ');
             (alphabets[alphabetNames.indexOf(args[0])].split(',') as string[]).forEach((v, i) => (text = text.replaceAll(alphabets[0].split(',')[i], v)));
@@ -46,6 +46,6 @@ export = {
         }
 
         if (text.length > 4000) throw `yur text is too bigege !! ${e.sad}`;
-        else return message.reply(text);
+        else return this.reply(text);
     }
 } as Command;

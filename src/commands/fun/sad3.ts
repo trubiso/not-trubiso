@@ -9,7 +9,7 @@ export = {
         brief: e.sad3,
         usage: 'sad3'
     },
-    execute(message) {
-        message.reply(`i'm sade tooe... ${e.sad3}`);
+    execute() {
+        this.reply(`i'm sade tooe... ${e.sad3}`);
     }
 } as Command;

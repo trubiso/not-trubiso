@@ -44,7 +44,8 @@ export default class Handler {
             const actualCmd =
                 this.bot.commands.get(command) ?? this.bot.commands.find(v => v.aliases?.includes(command) ?? false);
             if (actualCmd) {
-                await (actualCmd.execute(msg, args, this.bot) as Promise<unknown>)?.catch(error => {
+                const boundThis = Object.assign({}, msg, this.bot);
+                await (actualCmd.execute.call(boundThis, ...args) as Promise<unknown>)?.catch(error => {
                     this.$error(msg, command, error);
                 });
                 this.bot.logger.logCommand(msg, args, command);

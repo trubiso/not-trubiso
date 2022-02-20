@@ -11,7 +11,9 @@ export default interface Command {
         extra?: string;
     };
 
-    execute(message: Message, args: string[], bot: Bot): Promise<unknown> | void;
+    execute(this: CommandData, ...args: string[]): Promise<unknown> | void;
     handleButton?(interaction: ButtonInteraction, bot: Bot): Promise<unknown> | void;
     handleSelectMenu?(interaction: SelectMenuInteraction, bot: Bot): Promise<unknown> | void;
 }
+
+export type CommandData = Message & Bot;

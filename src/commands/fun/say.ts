@@ -8,10 +8,10 @@ export = {
         brief: 'de bot wil say watever yu wantete !',
         usage: 'say <text>'
     },
-    execute(message, args) {
+    execute(...args) {
         if (!args.length) throw 'gib me text to sey !!';
 
         const text = args.join(' ');
-        message.reply(Util.cleanContent(text, message.channel));
+        this.reply(Util.cleanContent(text, this.channel));
     }
 } as Command;
