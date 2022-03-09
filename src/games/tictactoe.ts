@@ -1,7 +1,7 @@
+import { User, Message, MessageActionRow, MessageButton, MessageActionRowComponent } from 'discord.js';
 import { CommandData, CommandMetadata } from '@core/command';
 import Game from '@core/game';
-import { customEmoteRegex, emojiRegex } from '@core/vars';
-import { User, Message } from 'discord.js';
+import { customEmoteRegex, e, emojiRegex } from '@core/vars';
 
 export interface IPiece {
   owner: User;
@@ -12,7 +12,8 @@ export default class TicTacToe extends Game {
   opponent?: User;
   confirmed?: boolean;
   pieces: IPiece[];
-  grid: boolean[][];
+  grid: (boolean | null)[][];
+  playing = false;
 
   static getMetadata(): CommandMetadata {
     return {
@@ -27,15 +28,40 @@ export default class TicTacToe extends Game {
 
   constructor(message: Message) {
     super(message);
-    this.pieces = this.grid = [];
+    this.pieces = [];
+    this.grid = [
+      [null, null, null],
+      [null, null, null],
+      [null, null, null]
+    ];
     message.reply('started a game of tiq taq toe; mention someone to play with them');
   }
 
-  public $setup(data: CommandData): void {
+  private getComponents(): MessageActionRow[] {
+    const rows: MessageActionRow[] = [];
+
+    this.grid.forEach((v, i) => {
+      const components: MessageActionRowComponent[] = [];
+      v.forEach((w, j) => {
+        components.push(new MessageButton()
+          .setCustomId(`tictactoe_${i * 3 + j}`)
+          .setEmoji(w === null ? e.blank : this.pieces[Number(w!)].piece).setStyle(w === null ? 'PRIMARY' : 'SECONDARY'));
+      });
+      rows.push(new MessageActionRow().addComponents(components));
+    });
+
+    return rows;
+  }
+
+  private async sendGameMessage(): Promise<void> {
+    this.channel!.send({ components: this.getComponents() });
+  }
+
+  private async $setup(data: CommandData): Promise<void> {
     if (!this.opponent) {
       if (data.mentions.users.size) {
         this.opponent = data.mentions.users.first()!;
-        data.reply(`you have challenged ${this.opponent.tag} to a game of tic tac toe; choose your pieces by just sending them`);
+        data.reply(`you have challenged ${this.opponent.toString()} to a game of tic tac toe; choose your pieces by just sending them`);
         // TODO: shuffle challenger & opponent (karl :eyes:)
       }
     } else if (this.pieces.length !== 2) {
@@ -49,10 +75,13 @@ export default class TicTacToe extends Game {
           data.reply('you have chosen your piece :)');
         }
     }
+    if (this.opponent && this.pieces.length === 2) {
+      this.playing = true;
+      await this.sendGameMessage();
+    }
   }
 
-  public $message(data: CommandData): void {
-    if (!this.opponent || this.pieces.length !== 2) return this.$setup(data);
-    data.reply('you have already chosen your pieces, the game should be played now :)');
+  public async $message(data: CommandData): Promise<void> {
+    if (!this.opponent || this.pieces.length !== 2) return await this.$setup(data);
   }
 }
