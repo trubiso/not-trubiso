@@ -84,7 +84,7 @@ export default class Bot {
     this.client.on('ready', () => this.handler.$ready(this.isDev));
     this.client.on('messageCreate', msg => this.handler.$messageCreate(msg));
     this.client.on('error', error => this.logger.logError(error));
-    this.client.on('interaction', interaction => this.handler.$interaction(interaction));
+    this.client.on('interactionCreate', interaction => this.handler.$interaction(interaction));
     process.on('unhandledRejection', error => this.logger.logError(error));
 
     this.client.login(token);

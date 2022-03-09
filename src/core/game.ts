@@ -34,6 +34,6 @@ export default class Game {
   }
 
   public $message?(data: CommandData): void;
-  public $button?(data: Bot & ButtonInteraction): void;
-  public $selectMenu?(data: Bot & SelectMenuInteraction): void;
+  public $button?(data: ButtonInteraction & { bot: Bot }): void;
+  public $selectMenu?(data: SelectMenuInteraction & { bot: Bot }): void;
 }

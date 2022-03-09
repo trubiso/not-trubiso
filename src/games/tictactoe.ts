@@ -1,7 +1,15 @@
-import { User, Message, MessageActionRow, MessageButton, MessageActionRowComponent } from 'discord.js';
+import {
+  User,
+  Message,
+  MessageActionRow,
+  MessageButton,
+  MessageActionRowComponent,
+  ButtonInteraction
+} from 'discord.js';
 import { CommandData, CommandMetadata } from '@core/command';
 import Game from '@core/game';
 import { customEmoteRegex, e, emojiRegex } from '@core/vars';
+import Bot from '@core/bot';
 
 export interface IPiece {
   owner: User;
@@ -14,6 +22,8 @@ export default class TicTacToe extends Game {
   pieces: IPiece[];
   grid: (boolean | null)[][];
   playing = false;
+  turn = false;
+  message: Message | undefined;
 
   static getMetadata(): CommandMetadata {
     return {
@@ -45,7 +55,8 @@ export default class TicTacToe extends Game {
       v.forEach((w, j) => {
         components.push(new MessageButton()
           .setCustomId(`tictactoe_${i * 3 + j}`)
-          .setEmoji(w === null ? e.blank : this.pieces[Number(w!)].piece).setStyle(w === null ? 'PRIMARY' : 'SECONDARY'));
+          .setEmoji(w === null ? e.blank : this.pieces[Number(w!)].piece)
+          .setStyle(w === null ? 'PRIMARY' : 'SECONDARY'));
       });
       rows.push(new MessageActionRow().addComponents(components));
     });
@@ -53,8 +64,12 @@ export default class TicTacToe extends Game {
     return rows;
   }
 
-  private async sendGameMessage(): Promise<void> {
-    this.channel!.send({ components: this.getComponents() });
+  private async renewGameMessage(): Promise<void> {
+    this.message = await this.channel!.send({ components: this.getComponents() });
+  }
+
+  private async editGameMessage(): Promise<void> {
+    await this.message!.edit({ components: this.getComponents() });
   }
 
   private async $setup(data: CommandData): Promise<void> {
@@ -77,11 +92,30 @@ export default class TicTacToe extends Game {
     }
     if (this.opponent && this.pieces.length === 2) {
       this.playing = true;
-      await this.sendGameMessage();
+      await this.renewGameMessage();
     }
   }
 
   public async $message(data: CommandData): Promise<void> {
     if (!this.opponent || this.pieces.length !== 2) return await this.$setup(data);
+  }
+
+  public async $button(data: ButtonInteraction & { bot: Bot }) {
+    if (data.user.id !== (this.turn ? this.opponent!.id : this.challenger.id)) return data.reply({ content: 'not ur turn', ephemeral: true });
+
+    const id = data.customId.split('_')[1];
+    const parsedId = parseInt(id);
+    const y = Math.floor(parsedId / 3);
+    const x = parsedId % 3;
+
+    if (this.grid[y][x] === null) {
+      this.grid[y][x] = data.user.id !== this.challenger.id;
+      data.reply({ content: 'nice', ephemeral: true });
+      await this.editGameMessage();
+    } else {
+      data.reply({ content: 'no lol', ephemeral: true });
+    }
+
+    this.turn = !this.turn;
   }
 }

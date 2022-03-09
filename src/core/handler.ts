@@ -77,7 +77,7 @@ export default class Handler {
     if (i.isButton()) {
       let game;
       if ((game = this.bot.games.find(v => v.channel?.id === i.channelId))) {
-        const commandData = Object.assign(i as ButtonInteraction, this.bot);
+        const commandData = Object.assign(i as ButtonInteraction, { bot: this.bot });
         game.$button!(commandData);
       }
     }
