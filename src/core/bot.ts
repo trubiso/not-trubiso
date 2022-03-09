@@ -5,6 +5,7 @@ import fs from 'fs';
 import Logger from '@core/logger';
 import Handler from '@core/handler';
 import ora from 'ora';
+import Game from './game';
 
 export default class Bot {
     public commands: Collection<string, Command>;
@@ -12,6 +13,7 @@ export default class Bot {
     public prefix: string;
     public client: Client;
     public logger: Logger;
+    public games: Game[];
     private handler: Handler;
     private isDev: boolean;
 
@@ -50,6 +52,7 @@ export default class Bot {
             intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MEMBERS', 'GUILD_MESSAGE_REACTIONS'],
             allowedMentions: { repliedUser: false }
         });
+        this.games = [];
         this.handler = new Handler(this);
         this.logger = new Logger(this);
     }

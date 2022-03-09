@@ -14,6 +14,23 @@ export default class Handler {
         console.log(`Logged in as ${this.bot.client.user?.tag}!`);
         this.bot.client.user?.setPresence({ activities: [{ name: 'yu !!', type: 'LISTENING' }] });
 
+        /*
+        // GET EMOTES FOR WEBSITE
+        const emoteNames = [];
+        const emoteLinks = [];
+        const emotes = [];
+        for (const guild of [...this.bot.client.guilds.cache.values()].filter(v => !['551507531097178113', '729104446948376707'].includes(v.id))) {
+            const guildEmojis = [...guild.emojis.cache.values()];
+            emotes.push(...guildEmojis.map(v => ({ name: v.name, link: v.url, creationDate: v.createdAt })));
+        }
+        emotes.sort((a, b) => a.creationDate.getTime() - b.creationDate.getTime());
+        for (const emote of emotes) {
+            emoteNames.push(emote.name);
+            emoteLinks.push(emote.link);
+        }
+        console.log('%j', { emoteNames, emoteLinks });
+        */
+
         if (isDev) return;
 
         let c;
@@ -45,11 +62,11 @@ export default class Handler {
             const actualCmd =
                 this.bot.commands.get(command) ?? this.bot.commands.find(v => v.aliases?.includes(command) ?? false);
             if (actualCmd) {
+                this.bot.logger.logCommand(msg, args, command);
                 const boundThis = Object.assign(msg, { bot: this.bot });
                 await (actualCmd.execute.call(boundThis, ...args) as Promise<unknown>)?.catch(error => {
                     this.$error(msg, error);
                 });
-                this.bot.logger.logCommand(msg, args, command);
             }
         } catch (error) {
             this.$error(msg, error);
@@ -63,8 +80,19 @@ export default class Handler {
             if (msg.content.includes('busines')) msg.react(e.id(e.business));
         }
 
-        // TODO: check whether there is an ongoing game in that channel; if so,
-        // check whether player is in that game, if they are, let game handle, otherwise see below
-        if (!msg.author.bot && msg.content.startsWith(this.bot.prefix)) await this.$command(msg);
+        let game;
+        if (
+            (game = this.bot.games.find(v => v.channel?.id === msg.channelId)) &&
+            msg.author.id in [game.challenger.id, game.opponent?.id]
+        ) {
+            const commandData = Object.assign({}, msg, { bot: this.bot });
+            try {
+                game.$message?.call(commandData);
+            } catch (e: any) {
+                this.$error(msg, e);
+            }
+        } else {
+            if (!msg.author.bot && msg.content.startsWith(this.bot.prefix)) await this.$command(msg);
+        }
     }
 }
