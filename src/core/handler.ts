@@ -2,7 +2,6 @@ import { GuildMember, Message, TextChannel } from 'discord.js';
 import Bot from '@core/bot';
 import { getBotReadyAnswer, pick } from '@core/utils';
 import { e } from '@core/vars';
-import { CommandData } from '@core/command';
 
 export default class Handler {
   private bot: Bot;
@@ -85,7 +84,7 @@ export default class Handler {
       (game = this.bot.games.find(v => v.channel?.id === msg.channelId)) &&
       [game.challenger.id, game.opponent?.id].includes(msg.author.id)
     ) {
-      const commandData = Object.assign({}, msg, { bot: this.bot });
+      const commandData = Object.assign(msg, { bot: this.bot });
       try {
         game.$message!(commandData);
       } catch (e: any) {
