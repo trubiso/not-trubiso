@@ -1,4 +1,4 @@
-import { ButtonInteraction, SelectMenuInteraction, TextChannel, User } from 'discord.js';
+import { ButtonInteraction, Message, SelectMenuInteraction, TextChannel, User } from 'discord.js';
 import Bot from '@core/bot';
 import { CommandData, CommandMetadata } from '@core/command';
 
@@ -8,7 +8,7 @@ export default class Game {
   public opponent?: User;
   public confirmed?: boolean;
 
-  public getMetadata(): CommandMetadata {
+  static getMetadata(): CommandMetadata {
     return {
       name: '',
       help: {
@@ -19,8 +19,10 @@ export default class Game {
     };
   }
 
-  constructor(challenger: User) {
-    this.challenger = challenger;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  constructor(message: Message, ...args: string[]) {
+    this.challenger = message.author;
+    this.channel = message.channel as TextChannel;
   }
 
   public destroy(bot: Bot): void {
@@ -31,7 +33,7 @@ export default class Game {
     bot.games = bot.games.filter(v => this == v);
   }
 
-  public $message?(this: CommandData): void;
-  public $button?(this: Bot & ButtonInteraction): void;
-  public $selectMenu?(this: Bot & SelectMenuInteraction): void;
+  public $message?(data: CommandData): void;
+  public $button?(data: Bot & ButtonInteraction): void;
+  public $selectMenu?(data: Bot & SelectMenuInteraction): void;
 }

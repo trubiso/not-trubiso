@@ -42,10 +42,10 @@ export default class Bot {
   }
 
   public loadGame(file: string) {
-    const game = require(`../games/${file}`) as Game;
-    const metadata = game.getMetadata();
+    const LoadedGame = require(`../games/${file}`).default;
+    const metadata = LoadedGame.getMetadata();
     function execute(this: CommandData) {
-      this.bot.games.push(new (game as unknown as typeof Game)(this.author));
+      this.bot.games.push(new LoadedGame(this));
     }
     this.commands.set(metadata.name, {
       name: metadata.name,
