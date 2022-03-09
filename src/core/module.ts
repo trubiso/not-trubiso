@@ -1,10 +1,10 @@
 import Command from '@core/command';
 
 export default interface Module {
+  name: string;
+  help: {
     name: string;
-    help: {
-        name: string;
-        brief: string;
-    };
-    commands: Command[];
+    brief: string;
+  };
+  commands: Command[];
 }

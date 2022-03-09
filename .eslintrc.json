@@ -21,7 +21,7 @@
         "eqeqeq": ["warn", "smart"],
         "@typescript-eslint/semi": ["error", "always"],
         "semi": "off",
-        "indent": ["error", 4, { "SwitchCase": 0 }],
+        "indent": ["error", 2, { "SwitchCase": 0 }],
         "@typescript-eslint/no-extra-semi": "warn",
         "no-extra-semi": "off",
         "object-curly-spacing": ["warn", "always"],
