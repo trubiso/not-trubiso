@@ -1,12 +1,23 @@
 import { ButtonInteraction, SelectMenuInteraction, TextChannel, User } from 'discord.js';
 import Bot from '@core/bot';
-import { CommandData } from '@core/command';
+import { CommandData, CommandMetadata } from '@core/command';
 
 export default class Game {
   public channel: TextChannel | undefined;
   public challenger: User;
   public opponent?: User;
   public confirmed?: boolean;
+
+  public getMetadata(): CommandMetadata {
+    return {
+      name: '',
+      help: {
+        category: 'games',
+        brief: '',
+        usage: ''
+      }
+    };
+  }
 
   constructor(challenger: User) {
     this.challenger = challenger;

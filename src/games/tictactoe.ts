@@ -9,5 +9,6 @@ export default class TicTacToe extends Game {
   constructor(message: Message) {
     super(message.author);
     this.channel = message.channel as TextChannel;
+    message.reply('oh hi');
   }
 }
