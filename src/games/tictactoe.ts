@@ -10,6 +10,7 @@ import { CommandData, CommandMetadata } from '@core/command';
 import Game from '@core/game';
 import { customEmoteRegex, e, emojiRegex } from '@core/vars';
 import Bot from '@core/bot';
+import { karlgorithm } from '@core/utils';
 
 export interface IPiece {
   owner: User;
@@ -20,7 +21,7 @@ export default class TicTacToe extends Game {
   opponent?: User;
   confirmed?: boolean;
   pieces: IPiece[];
-  grid: (boolean | null)[][];
+  grid: number[][];
   playing = false;
   turn = false;
   message: Message | undefined;
@@ -40,9 +41,9 @@ export default class TicTacToe extends Game {
     super(message);
     this.pieces = [];
     this.grid = [
-      [null, null, null],
-      [null, null, null],
-      [null, null, null]
+      [-1, -1, -1],
+      [-1, -1, -1],
+      [-1, -1, -1]
     ];
     message.reply('started a game of tiq taq toe; mention someone to play with them');
   }
@@ -55,8 +56,8 @@ export default class TicTacToe extends Game {
       v.forEach((w, j) => {
         components.push(new MessageButton()
           .setCustomId(`tictactoe_${i * 3 + j}`)
-          .setEmoji(w === null ? e.blank : this.pieces[Number(w!)].piece)
-          .setStyle(w === null ? 'PRIMARY' : 'SECONDARY'));
+          .setEmoji(w === -1 ? e.blank : w === 2 ? e.greneblogie : this.pieces[w].piece)
+          .setStyle(w === -1 ? 'PRIMARY' : w === 2 ? 'SUCCESS' : 'SECONDARY'));
       });
       rows.push(new MessageActionRow().addComponents(components));
     });
@@ -68,8 +69,19 @@ export default class TicTacToe extends Game {
     this.message = await this.channel!.send({ components: this.getComponents() });
   }
 
-  private async editGameMessage(): Promise<void> {
-    await this.message!.edit({ components: this.getComponents() });
+  private async editGameMessage(data?: ButtonInteraction): Promise<void> {
+    if (data) await data.update({ components: this.getComponents() });
+    else await this.message!.edit({ components: this.getComponents() });
+  }
+
+  private async win(data: ButtonInteraction & { bot: Bot }): Promise<void> {
+    await this.editGameMessage(data);
+    data.bot.games = data.bot.games.filter(v =>
+      v.channel === this.channel &&
+        v.challenger === this.challenger &&
+        v.opponent === this.opponent &&
+        typeof v === typeof this);
+    this.destroy(data.bot);
   }
 
   private async $setup(data: CommandData): Promise<void> {
@@ -101,19 +113,21 @@ export default class TicTacToe extends Game {
   }
 
   public async $button(data: ButtonInteraction & { bot: Bot }) {
-    if (data.user.id !== (this.turn ? this.opponent!.id : this.challenger.id)) return data.reply({ content: 'not ur turn', ephemeral: true });
+    if (data.user.id !== (this.turn ? this.opponent!.id : this.challenger.id))
+      return data.reply({ content: 'not ur turn', ephemeral: true });
 
     const id = data.customId.split('_')[1];
     const parsedId = parseInt(id);
     const y = Math.floor(parsedId / 3);
     const x = parsedId % 3;
 
-    if (this.grid[y][x] === null) {
-      this.grid[y][x] = data.user.id !== this.challenger.id;
-      data.reply({ content: 'nice', ephemeral: true });
-      await this.editGameMessage();
+    if (this.grid[y][x] === -1) {
+      const placedBy = Number(data.user.id !== this.challenger.id);
+      this.grid[y][x] = placedBy;
+      if (karlgorithm([x, y], placedBy, this.grid, 3, 2)) await this.win(data);
+      else await this.editGameMessage(data);
     } else {
-      data.reply({ content: 'no lol', ephemeral: true });
+      data.reply({ content: 'that space is full', ephemeral: true });
     }
 
     this.turn = !this.turn;
