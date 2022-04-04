@@ -5,7 +5,6 @@ import { Util } from 'discord.js';
 export = {
   name: 'translate',
   help: {
-    category: 'fun',
     brief: 'translatese to smili englisheshe usinge an algroithm !',
     usage: '<text>'
   },

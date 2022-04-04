@@ -30,7 +30,6 @@ export default class TicTacToe extends Game {
     return {
       name: 'tictactoe',
       help: {
-        category: 'games',
         brief: 'Play a game of tic tac toe with your opponent.',
         usage: 'tictactoe <opponent>'
       }

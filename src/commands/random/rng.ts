@@ -6,7 +6,6 @@ export = {
   name: 'rng',
   aliases: ['random-number'],
   help: {
-    category: 'random',
     brief: 'picks numbr acording to de limits yu giv it !',
     extra: 'both min and max are included in the range, defaults are 1 and 10 respectively',
     usage: '[max] | [min] [max]'
@@ -29,7 +28,8 @@ export = {
     if (isNaN(num)) throw `yu shuld giv me actual numberse ${e.think}`;
 
     let parsedNum = num.toPrecision(100);
-    if (!parsedNum.includes('e')) parsedNum = parsedNum.split('.')[0]; // remove decimal point
+    if (!parsedNum.includes('e')) parsedNum = parsedNum.split('.')[0];
+    // remove decimal point
     else parsedNum = num.toString(); // have the scientific notation not be extremely long
 
     const answer = pick(pickAnswers).replace(/{i}/g, `**${parsedNum}**`);

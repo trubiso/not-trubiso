@@ -12,7 +12,6 @@ export default class Game {
     return {
       name: '',
       help: {
-        category: 'games',
         brief: '',
         usage: ''
       }

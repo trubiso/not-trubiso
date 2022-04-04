@@ -4,7 +4,6 @@ import { Util } from 'discord.js';
 export = {
   name: 'say',
   help: {
-    category: 'fun',
     brief: 'de bot wil say watever yu wantete !',
     usage: '<text>'
   },

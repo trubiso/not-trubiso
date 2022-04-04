@@ -5,7 +5,6 @@ export = {
   name: 'test',
   aliases: ['kangaroo', 'clicker'],
   help: {
-    category: 'fun',
     brief: 'test comande'
   },
   execute() {

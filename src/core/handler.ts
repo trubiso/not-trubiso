@@ -110,7 +110,7 @@ export default class Handler {
           await msg.react(e.id(e.lik));
         })();
       // why is this an else? to guarantee that the tongues are together and then they
-      // lik in case of having both tongue left and tongue right, otherwise we could 
+      // lik in case of having both tongue left and tongue right, otherwise we could
       // have a disaster where the tongues don't lick (very sad)
       else if (msg.content.includes(e.lik))
         (async() => {

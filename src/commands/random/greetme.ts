@@ -5,7 +5,6 @@ export = {
   name: 'greetme',
   aliases: ['gm'],
   help: {
-    category: 'random',
     brief: 'i greet u (or anoder preson !) !!!',
     usage: '[mention]'
   },

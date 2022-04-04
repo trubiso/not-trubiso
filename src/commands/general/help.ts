@@ -8,7 +8,6 @@ export = {
   name: 'help',
   aliases: ['cmds'],
   help: {
-    category: 'general',
     brief: 'shows help for eny comand, categori or just evri comande',
     extra:
       'luk at da usag for eech comand !!\n' +
@@ -60,8 +59,6 @@ export = {
             value: command.aliases.join(', '),
             inline: true
           });
-        
-        
 
         if (command.help.extra)
           embed.fields.push({

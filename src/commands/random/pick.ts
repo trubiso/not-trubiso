@@ -7,7 +7,6 @@ export = {
   name: 'pick',
   aliases: ['choose'],
   help: {
-    category: 'random',
     brief: 'picks betweene elements dat can be choesn !',
     extra: 'elements are separated by commas, and 2 elements are required (check usage)',
     usage: '<element>, <element>, [element]...'

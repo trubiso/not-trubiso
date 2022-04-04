@@ -6,7 +6,6 @@ import { Util } from 'discord.js';
 export = {
   name: 'smiliefy',
   help: {
-    category: 'fun',
     brief: 'smiliefies yuor texte',
     usage: '<text> [--times [amount]]',
     extra: 'smiliefy amount is clamped between 1 and 5'

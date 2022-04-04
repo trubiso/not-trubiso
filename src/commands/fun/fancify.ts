@@ -6,7 +6,6 @@ import { Util } from 'discord.js';
 export = {
   name: 'fancify',
   help: {
-    category: 'fancify',
     brief: 'fancifies yuor texte',
     usage: '[alphabet] <text> [-list]'
   },

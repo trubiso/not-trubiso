@@ -5,7 +5,6 @@ export interface CommandMetadata {
   name: string;
   aliases?: string[];
   help: {
-    category: string;
     brief: string;
     usage?: string;
     extra?: string;

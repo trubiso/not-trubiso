@@ -7,7 +7,6 @@ const deepai = require('deepai'); // no es6 module :(
 export = {
   name: 'textgen',
   help: {
-    category: 'fun',
     brief: `generats texte !! ${e.shock_handless}`,
     usage: '<text>'
   },

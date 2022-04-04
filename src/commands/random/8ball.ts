@@ -6,7 +6,6 @@ export = {
   name: '8ball',
   aliases: ['eightball', '8b'],
   help: {
-    category: 'random',
     brief: 'da smili gods will decied if they can agree with somthing!',
     usage: '<question>'
   },
