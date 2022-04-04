@@ -100,8 +100,8 @@ export default class Handler {
       }
 
       // opposite tongues are important
-      if (msg.content.includes(e.tongue_left)) await msg.react(e.id(e.tongue_right));
       if (msg.content.includes(e.tongue_right)) await msg.react(e.id(e.tongue_left));
+      if (msg.content.includes(e.tongue_left)) await msg.react(e.id(e.tongue_right));
     }
 
     let game;
