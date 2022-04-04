@@ -28,7 +28,11 @@ export = {
 
     if (isNaN(num)) throw `yu shuld giv me actual numberse ${e.think}`;
 
-    const answer = pick(pickAnswers).replace(/{i}/g, `**${num}**`);
+    let parsedNum = num.toPrecision(100);
+    if (!parsedNum.includes('e')) parsedNum = parsedNum.split('.')[0]; // remove decimal point
+    else parsedNum = num.toString(); // have the scientific notation not be extremely long
+
+    const answer = pick(pickAnswers).replace(/{i}/g, `**${parsedNum}**`);
 
     return this.reply(answer);
   }
