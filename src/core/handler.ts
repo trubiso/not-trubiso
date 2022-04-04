@@ -93,10 +93,15 @@ export default class Handler {
 
       if (msg.content.includes('busines')) msg.react(e.id(e.business));
 
+      // TONGUE REACTIONS
       if (msg.content.includes(e.lik)) {
         await msg.react(e.id(e.tongue_left));
         await msg.react(e.id(e.tongue_right));
       }
+
+      // opposite tongues are important
+      if (msg.content.includes(e.tongue_left)) await msg.react(e.id(e.tongue_right));
+      if (msg.content.includes(e.tongue_right)) await msg.react(e.id(e.tongue_left));
     }
 
     let game;
