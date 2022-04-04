@@ -219,7 +219,7 @@ export const botReadyAnswers = {
     `i am not a botte ! i am a BUSINES MANNE !! 👋${e.business}`,
     `do yu liek kities ?!? welle, i doe !! 👋${e.happy} an yu can get kities overe at https://trubiso.tk/kity !!! ${e.youradhere}`,
     `👋${e.happy} im habing a gud dey !! ${e.excited} and i hop yu do tooe !! i lav yu !! ${e.excited}${e.flush_happy}${e.tongue_left}`,
-    `hællo!! (${e.funny}) i saw waht yu guyse maed overe at r/place !! ${e.coolwoah}${e.coolwoah} and im PROUDEDE !!! ${e.excited}${e.picardia} i wish i culd hab such a beutiful hat as his ${e.please}`
+    `hællo!! (${e.funny}) i saw waht yu guyse maed overe at r/place !! ${e.coolwoah}${e.coolwoah} and im PROUDEDE !!! ${e.excited}${e.picardia} im SO HAPIE DAT I HAB A HAT LIEK HISE !! ${e.excited_jumping}${e.flush_happy}`
   ],
   seasonal: [
     {
