@@ -10,11 +10,11 @@
         "node": "16.6.1",
         "ora": "^5.4.1",
         "replace-tsconfig-paths": "^1.2.6",
-        "typescript": "^4.4.2"
+        "typescript": "^4.4.2",
+        "@types/levenshtein": "^1.0.1"
     },
     "devDependencies": {
         "@types/convert-units": "^2.3.5",
-        "@types/levenshtein": "^1.0.1",
         "@typescript-eslint/eslint-plugin": "^4.29.3",
         "@typescript-eslint/parser": "^4.29.3",
         "eslint": "^7.32.0",
