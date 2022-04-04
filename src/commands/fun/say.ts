@@ -5,7 +5,8 @@ export = {
   name: 'say',
   help: {
     brief: 'de bot wil say watever yu wantete !',
-    usage: '<text>'
+    usage: '<text>',
+    examples: ['hello', 'i lav yu', 'i am a pegnuin !']
   },
   execute(...text) {
     if (!text.length) throw 'gib me text to sey !!';

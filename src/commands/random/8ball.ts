@@ -7,7 +7,9 @@ export = {
   aliases: ['eightball', '8b'],
   help: {
     brief: 'da smili gods will decied if they can agree with somthing!',
-    usage: '<question>'
+    usage: '<question>',
+    examples: ['ar shoos tastie?', 'ar yu hapi?', 'ise vanila iec creem gut?'],
+    extra: 'works beste wit yes/no questiones'
   },
   execute(...question) {
     if (!question.length) return this.reply(`yu hab to ask a questione! ${e.really}`);

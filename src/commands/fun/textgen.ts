@@ -8,7 +8,8 @@ export = {
   name: 'textgen',
   help: {
     brief: `generats texte !! ${e.shock_handless}`,
-    usage: '<text>'
+    usage: '<text>',
+    examples: ['anfrica is a niec cnontinent', 'i hab a pen', 'i am a businesman']
   },
   async execute(...text) {
     if (!text.length) throw `com on !! giv me texte !! ${e.sad}`;

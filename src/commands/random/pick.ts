@@ -7,9 +7,14 @@ export = {
   name: 'pick',
   aliases: ['choose'],
   help: {
-    brief: 'picks betweene elements dat can be choesn !',
-    extra: 'elements are separated by commas, and 2 elements are required (check usage)',
-    usage: '<element>, <element>, [element]...'
+    brief: 'choosese wan element from a liste ! (usualy da best wan)',
+    usage: '<element>, <element>, [element]...',
+    examples: [
+      'do homwork, procrastinaet',
+      'rite tong, left tong, downwrads tong, upwrads tong',
+      'English (UK/US), smily english !! :P, toki pona :]'
+    ],
+    extra: 'elemnents ar seprateded by comase, an 2 elementsese ar reqwaeieird !! (chek usag)'
   },
   execute(...elements) {
     if (!elements.length) throw 'plees, enter elements for me to choos frome !!';

@@ -6,7 +6,8 @@ export = {
   name: 'translate',
   help: {
     brief: 'translatese to smili englisheshe usinge an algroithm !',
-    usage: '<text>'
+    usage: '<text>',
+    examples: ['From Wikipedia, the free encyclopedia', 'This is very formal text', 'hee hee !']
   },
   execute(...text) {
     if (!text.length) throw 'gib me text to translat !!';

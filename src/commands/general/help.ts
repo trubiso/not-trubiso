@@ -9,12 +9,13 @@ export = {
   aliases: ['cmds'],
   help: {
     brief: 'shows help for eny comand, categori or just evri comande',
+    usage: '[command]',
+    examples: ['', 'help', 'greetme'],
     extra:
       'luk at da usag for eech comand !!\n' +
       '[paramteter] meens dat der is a parametere "paramteter" wich is OPTIONALELE !!\n' +
       `butte... (${e.funny}) <paramteter> meens dat der is a parametere "paramteter" wich is REQUIREDELE !!\n` +
-      `da rest shuld be obvius !! thoughe if yu don understand ask TRUMBINSO and he wil help yu decoed da usag of any comande ${e.glad}`,
-    usage: '[command]'
+      `da rest shuld be obvius !! thoughe if yu don understand ask TRUMBINSO and he wil help yu decoed da usag of any comande ${e.glad}`
   },
   execute(command?) {
     const compareLevenshteinDistance = (compareTo: string, baseItem: string) =>
@@ -58,6 +59,12 @@ export = {
             name: 'aliasese',
             value: command.aliases.join(', '),
             inline: true
+          });
+
+        if (command.help.examples)
+          embed.fields.push({
+            name: 'exampels',
+            value: command.help.examples.map(v => `\`${prefix}${command.name}${v.length ? ' ' : ''}${v}\``).join('\n') // this seems more complex than it actually is
           });
 
         if (command.help.extra)

@@ -7,8 +7,9 @@ export = {
   aliases: ['random-number'],
   help: {
     brief: 'picks numbr acording to de limits yu giv it !',
-    extra: 'both min and max are included in the range, defaults are 1 and 10 respectively',
-    usage: '[max] | [min] [max]'
+    usage: '[max] | [min] [max]',
+    examples: ['', '20', '42 2883'],
+    extra: 'both min and max are included in the range, defaults are 1 and 10 respectively'
   },
   execute(min?, max?) {
     // defaults (both parameters are optional)

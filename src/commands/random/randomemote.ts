@@ -6,8 +6,9 @@ export = {
   aliases: ['re'],
   help: {
     brief: 'sends a random emot for yu !',
-    extra: 'emote amount is clamped between 1 and 5',
-    usage: '[amount]'
+    usage: '[amount]',
+    examples: ['', '10498832', '2'],
+    extra: 'emote amount is clamped between 1 and 5'
   },
   execute(amount?) {
     const num = clamp(amount ? parseInt(amount) : 1, 1, 5);

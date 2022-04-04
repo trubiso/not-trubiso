@@ -8,7 +8,8 @@ export = {
   help: {
     brief: 'smiliefies yuor texte',
     usage: '<text> [--times [amount]]',
-    extra: 'smiliefy amount is clamped between 1 and 5'
+    examples: ['hello', 'tongs ar cul --times 2', 'fierflies --times 392'],
+    extra: 'smiliefy amuont is clampded betweene 1 an 5'
   },
   execute(...text) {
     if (!text.length) throw 'giv me text to smiliefie';

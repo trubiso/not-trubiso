@@ -7,6 +7,7 @@ export interface CommandMetadata {
   help: {
     brief: string;
     usage?: string;
+    examples?: string[];
     extra?: string;
   };
 }

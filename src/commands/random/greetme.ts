@@ -6,7 +6,8 @@ export = {
   aliases: ['gm'],
   help: {
     brief: 'i greet u (or anoder preson !) !!!',
-    usage: '[mention]'
+    usage: '[mention]',
+    examples: ['', '@tongy', '@silyman']
   },
   execute(user?) {
     let person = this.author.username;

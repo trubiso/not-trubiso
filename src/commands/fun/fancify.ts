@@ -7,7 +7,8 @@ export = {
   name: 'fancify',
   help: {
     brief: 'fancifies yuor texte',
-    usage: '[alphabet] <text> [-list]'
+    usage: '[alphabet] <text> [-list]',
+    examples: ['hello', 'hello -list', 'rsab HALO !!']
   },
   execute(...text) {
     if (!text.length) throw 'giv me text to fancifie';
