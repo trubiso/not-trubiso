@@ -1,8 +1,7 @@
-import { Util } from 'discord.js';
 import Command from '@core/command';
-
 import { e } from '@core/vars';
 import { applyPerWord, clamp, pick, repeat } from '@core/utils';
+import { Util } from 'discord.js';
 
 export = {
   name: 'smiliefy',

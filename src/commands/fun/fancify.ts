@@ -1,7 +1,7 @@
-import { Util } from 'discord.js';
 import Command from '@core/command';
 import { e, alphabets, alphabetNames, fullAlphabetNames } from '@core/vars';
 import { applyPerWord, pick } from '@core/utils';
+import { Util } from 'discord.js';
 
 export = {
   name: 'fancify',

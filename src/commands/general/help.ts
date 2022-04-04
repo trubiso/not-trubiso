@@ -1,9 +1,8 @@
 import Command from '@core/command';
+import { e } from '@core/vars';
 import { Util } from 'discord.js';
 import Levenshtein from 'levenshtein';
-import { e } from '@core/vars';
-
-const getClosest = require('get-closest');
+const getClosest = require('get-closest'); // no es6 module :(
 
 export = {
   name: 'help',

@@ -1,8 +1,8 @@
-import { MessageEmbedOptions, Util } from 'discord.js';
 import Command from '@core/command';
 import { deepAIToken } from '@core/vars';
 import { e } from '@core/vars';
-const deepai = require('deepai');
+import { MessageEmbedOptions, Util } from 'discord.js';
+const deepai = require('deepai'); // no es6 module :(
 
 export = {
   name: 'textgen',

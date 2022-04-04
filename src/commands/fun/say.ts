@@ -1,5 +1,5 @@
-import { Util } from 'discord.js';
 import Command from '@core/command';
+import { Util } from 'discord.js';
 
 export = {
   name: 'say',

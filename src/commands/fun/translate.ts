@@ -1,6 +1,6 @@
-import { Util } from 'discord.js';
 import Command from '@core/command';
 import { smilieEnglish } from '@core/utils';
+import { Util } from 'discord.js';
 
 export = {
   name: 'translate',
