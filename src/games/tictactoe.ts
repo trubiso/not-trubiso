@@ -75,7 +75,8 @@ export default class TicTacToe extends Game {
   }
 
   private async win(data: ButtonInteraction & { bot: Bot }): Promise<void> {
-    await this.editGameMessage(data);
+    await this.editGameMessage();
+    await data.reply(`YOU WON !!! ${data.user} CONGREATUTAILTAIIONS !!! ${e.excited}${e.happy}${e.flush_happy}`);
     data.bot.games = data.bot.games.filter(v =>
       v.channel === this.channel &&
         v.challenger === this.challenger &&
@@ -124,7 +125,7 @@ export default class TicTacToe extends Game {
     if (this.grid[y][x] === -1) {
       const placedBy = Number(data.user.id !== this.challenger.id);
       this.grid[y][x] = placedBy;
-      if (karlgorithm([x, y], placedBy, this.grid, 3, 2)) await this.win(data);
+      if (karlgorithm([y, x], placedBy, this.grid, 3, 2)) await this.win(data);
       else await this.editGameMessage(data);
     } else {
       data.reply({ content: 'that space is full', ephemeral: true });

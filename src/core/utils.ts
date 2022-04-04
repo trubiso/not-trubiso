@@ -71,7 +71,7 @@ export function containsEmoji(text: string): boolean {
   return !!text.match(emojiRegex);
 }
 
-export function karlgorithm<T>(cpPos: number[], cpPlacedBy: T, grid: T[][], n: number, winning: T): boolean {
+export function karlgorithm<T>(lastPiecePos: number[], lastPieceOwner: T, grid: T[][], n: number, winning: T): boolean {
   // welcome to the karlgorithm
 
   // the directions that the traverser will go in
@@ -102,7 +102,7 @@ export function karlgorithm<T>(cpPos: number[], cpPlacedBy: T, grid: T[][], n: n
   }
 
   // the direction objects
-  const dirObjs = directions.map(v => {
+  const directionObjects = directions.map(v => {
     return {
       direction: v,
       piecesFound: 0,
@@ -110,47 +110,55 @@ export function karlgorithm<T>(cpPos: number[], cpPlacedBy: T, grid: T[][], n: n
     } as IDirObj;
   });
 
-  let pos = [...cpPos];
+  let currentPos = [...lastPiecePos];
 
   // these eslint rules are disabled just because eslint does not want me to have a while(true)
   // eslint-disable-next-line curly
   for (const direction of directions) {
+    // (we have a break to stop the loop)
     // eslint-disable-next-line no-constant-condition
     while (true) {
-      pos[0] += direction[0];
-      pos[1] += direction[1];
-      if (grid[pos[1]] !== undefined && grid[pos[1]][pos[0]] === cpPlacedBy) {
+      // move to that direction
+      currentPos[0] += direction[0];
+      currentPos[1] += direction[1];
+
+      // if we're out of bounds, or if I didn't place that, break
+      if (grid[currentPos[0]] !== undefined && grid[currentPos[0]][currentPos[1]] === lastPieceOwner) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const dirObj = dirObjs.find(v => v.direction === direction)!;
-        dirObj.piecesFound++;
+        const directionObject = directionObjects.find(v => v.direction === direction)!;
+        directionObject.piecesFound++;
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        dirObj.piecesFoundArr.push([pos[1], pos[0]]);
+        directionObject.piecesFoundArr.push(currentPos);
       } else {
-        pos = [cpPos[0], cpPos[1]];
+        currentPos = [...lastPiecePos];
         break;
       }
     }
   }
 
-  const axis = directions.slice(0, 4).map(v => {
+  const axes = directions.slice(0, 4).map(v => {
     return {
-      directions: [v, [v[0] === 0 ? 0 : -v[0], v[1] === 0 ? 0 : -v[1]]],
+      directions: [v, [-v[0], -v[1]]],
       piecesFound: 0
     };
   });
-  const processedAxis = axis.map(v => {
-    const a = dirObjs.filter(a => v.directions.some(i => i[0] === a.direction[0] && i[1] === a.direction[1]));
+
+  const processedAxes = axes.map(v => {
+    const axisObjects = directionObjects.filter(w =>
+      v.directions.some(b => b[0] === w.direction[0] && b[1] === w.direction[1]));
 
     return {
       directions: v.directions,
-      piecesFound: a[0].piecesFound + a[1].piecesFound,
-      piecesFoundArr: [...a[0].piecesFoundArr, ...a[1].piecesFoundArr]
+      piecesFound: axisObjects[0].piecesFound + axisObjects[1].piecesFound,
+      piecesFoundArr: [...axisObjects[0].piecesFoundArr, ...axisObjects[1].piecesFoundArr]
     } as IAxis;
   });
-  for (const paxis of processedAxis)
-    if (paxis.piecesFound > n - 2) {
-      const what = [...paxis.piecesFoundArr, cpPos];
-      what.forEach(v => (grid[v[1]][v[0]] = winning));
+
+  console.log(processedAxes.map(v => v.piecesFoundArr));
+  for (const currentAxis of processedAxes)
+    if (currentAxis.piecesFound > n - 2) {
+      const correctAxis = [...currentAxis.piecesFoundArr, lastPiecePos];
+      correctAxis.forEach(v => (grid[v[0]][v[1]] = winning));
 
       return true;
     }
