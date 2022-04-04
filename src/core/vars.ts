@@ -40,6 +40,10 @@ export const e = {
   flush_happy: '<:flush_happy:852700969963094057>',
   coolwoah: '<:coolwoah:717684437508161546>',
   drunk: '<:drunk:729406247870267412>',
+  excited_jumping: '<:excited_jumping:830926210678652961>',
+  thinky: '<:thinky:839643005321609218>',
+  youradhere: '<:youradhere:729363169151287307>',
+  picardia: '<:picardia:755450193616568371>',
   id: (emote: string) =>
     emote
       .replace(/<(a)?:/, '')
@@ -206,7 +210,14 @@ export const botReadyAnswers = {
     `lötló !!! 👋${e.silly}`,
     `${e.drunk} i got drunked !!! ar yu proud ? 👋${e.happy}`,
     `${e.telekinesis} yu can do it !!!`,
-    `${e.sad2} tiem goes by so fast !!! ${e.glad} but at leaste it goes by hapy!!!! 👋${e.happy}`
+    `${e.sad2} tiem goes by so fast !!! ${e.glad} but at leaste it goes by hapy!!!! 👋${e.happy}`,
+    `helo! 👋${e.happy} i am NOT TRUMBINSO an i am REDI TO HLEP !! ${e.excited}`,
+    `👋${e.glad} yu caughte me in my thinkqing sesion !! ${e.think} i was thingkqinkg abuot waht a TREE ise !! ${e.thinky} waht is its meening in our planet ?!?!?! ${e.think}${e.sad2}`,
+    `lik lik lik !! 👋${e.tongue_left}`,
+    `i am not a botte ! i am a BUSINES MANNE !! 👋${e.business}`,
+    `do yu liek kities ?!? welle, i doe !! 👋${e.happy} an yu can get kities overe at https://trubiso.tk/kity !!! ${e.youradhere}`,
+    `👋${e.happy} im habing a gud dey !! ${e.excited} and i hop yu do tooe !! i lav yu !! ${e.excited}${e.flush_happy}${e.tongue_left}`,
+    `hællo!! (${e.funny}) i saw waht yu guyse maed overe at r/place !! ${e.coolwoah}${e.coolwoah} and im PROUDEDE !!! ${e.excited}${e.picardia} i wish i culd hab such a beutiful hat as his ${e.please}`
   ],
   seasonal: [
     {
@@ -219,6 +230,18 @@ export const botReadyAnswers = {
         `we resently completed anodar orbit aruond da sun ! ${e.excited}`,
         `bunjoure !! 👋${e.business} fun faqt !! der can be a snowstorme wit thunder ! it is knowne as thundersnowe !! ${e.coolwoah}`,
         `hOlaA !! 👋${e.silly} go wach da nortenr lites !! ${e.excited} dey ar best seen in da winter ! ${e.nerd}`
+      ]
+    },
+    {
+      day: 1,
+      month: 4,
+      messages: [
+        `hanlo ! 👋${e.flush_happy} da cheri blosomes ar flowering !! deyr so cule ${e.coolwoah}`,
+        `hai... 👋${e.sad} i hab ALERGI !! an da flowers gib polen to my noes !! ${e.angry_pink}`,
+        `HEYEYE !! 👋${e.excited_jumping} LUK AT DA BEES !! DEYR SO PRETY !!! ${e.excited}${e.flush_happy}${e.excited_jumping}`,
+        `hIAiAi !! 👋${e.glad} its reining!! ${e.silly} i sur hop rain dosnt fal on me ! ${e.please}`,
+        `REMBEMBER DA DED PLANTES ??!? DEYR GROWING AGEIN !! YHEAYAYHAHAHEYAEHYEAH !!! 👋${e.excited_jumping}`,
+        `luk at yur cloq !! its SPRINGE !! 👋${e.excited}`
       ]
     },
     {
