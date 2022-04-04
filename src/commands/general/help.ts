@@ -48,7 +48,7 @@ export = {
             },
             {
               name: 'useg',
-              value: `\`${prefix}${command.name}${command.help.usage ? ` ${command.help.usage}` : ''}\``,
+              value: `\`${prefix}${command.name} ${command.help.usage ?? ''}\``.trim(),
               inline: true
             }
           ]
@@ -64,7 +64,7 @@ export = {
         if (command.help.examples)
           embed.fields.push({
             name: 'exampels',
-            value: command.help.examples.map(v => `\`${prefix}${command.name}${v.length ? ' ' : ''}${v}\``).join('\n') // this seems more complex than it actually is
+            value: command.help.examples.map(v => `\`${prefix}${command.name} ${v}\``.trim()).join('\n')
           });
 
         if (command.help.extra)
