@@ -48,7 +48,7 @@ export = {
             },
             {
               name: 'useg',
-              value: `\`${prefix}${command.name}${command.help.usage ?? ''}\``,
+              value: `\`${prefix}${command.name}${command.help.usage ? ` ${command.help.usage}` : ''}\``,
               inline: true
             }
           ]
