@@ -10,6 +10,11 @@ export = {
   help: {
     category: 'general',
     brief: 'shows help for eny comand, categori or just evri comande',
+    extra:
+      'luk at da usag for eech comand !!\n' +
+      '[paramteter] meens dat der is a parametere "paramteter" wich is OPTIONALELE !!\n' +
+      `butte... (${e.funny}) <paramteter> meens dat der is a parametere "paramteter" wich is REQUIREDELE !!\n` +
+      `da rest shuld be obvius !! thoughe if yu don understand ask TRUMBINSO and he wil help yu decoed da usag of any comande ${e.glad}`,
     usage: 'help [command]'
   },
   execute(...args) {
