@@ -85,9 +85,18 @@ export default class Handler {
 
   public async $messageCreate(msg: Message) {
     if (!msg.mentions.everyone) {
-      if (msg.mentions.has(this.bot.client.user!)) (await msg.react('👋')).message.react(e.id(e.happy));
+      // automatic reactions
+      if (msg.mentions.has(this.bot.client.user!)) {
+        await msg.react('👋');
+        await msg.react(e.id(e.happy));
+      }
 
       if (msg.content.includes('busines')) msg.react(e.id(e.business));
+
+      if (msg.content.includes(e.lik)) {
+        await msg.react(e.id(e.tongue_left));
+        await msg.react(e.id(e.tongue_right));
+      }
     }
 
     let game;

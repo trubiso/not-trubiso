@@ -25,6 +25,7 @@ export const e = {
   mad: '<:mad:746136045866844251>',
   tongue_down: '<:tongue_down:741712866159099935>',
   tongue_left: '<:tongue_left:729364446157471865>',
+  tongue_right: '<:tongue_right:729364877134790696>',
   party: '<a:tWhenPartying:753250137408536608>',
   hammering: '<:hammering:762814921616392192>',
   funny: '<:funny:717690391499112508>',
@@ -44,6 +45,7 @@ export const e = {
   thinky: '<:thinky:839643005321609218>',
   youradhere: '<:youradhere:729363169151287307>',
   picardia: '<:picardia:755450193616568371>',
+  lik: '<:lik:725447448385945671>',
   id: (emote: string) =>
     emote
       .replace(/<(a)?:/, '')
