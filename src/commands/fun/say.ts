@@ -6,7 +6,7 @@ export = {
   help: {
     category: 'fun',
     brief: 'de bot wil say watever yu wantete !',
-    usage: 'say <text>'
+    usage: '<text>'
   },
   execute(...args) {
     if (!args.length) throw 'gib me text to sey !!';

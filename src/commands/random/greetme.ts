@@ -7,7 +7,7 @@ export = {
   help: {
     category: 'random',
     brief: 'i greet u (or anoder preson !) !!!',
-    usage: 'greetme [mention]'
+    usage: '[mention]'
   },
   execute(user?) {
     let person = this.author.username;

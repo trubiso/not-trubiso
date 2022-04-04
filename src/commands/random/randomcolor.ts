@@ -6,8 +6,7 @@ export = {
   aliases: ['rc'],
   help: {
     category: 'random',
-    brief: 'randome colorere',
-    usage: 'randomcolor'
+    brief: 'randome colorere'
   },
   execute() {
     const color = (Math.random() * 0xfffff * 1000000).toString(16).slice(1, 7);

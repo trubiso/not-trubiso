@@ -9,8 +9,8 @@ export = {
   help: {
     category: 'random',
     brief: 'picks betweene elements dat can be choesn !',
-    extra: 'elements are separated by commas (check usage)',
-    usage: 'pick <element>, [element], [element]...'
+    extra: 'elements are separated by commas, and 2 elements are required (check usage)',
+    usage: '<element>, <element>, [element]...'
   },
   execute(...elements) {
     if (!elements.length) throw 'plees, enter elements for me to choos frome !!';

@@ -6,8 +6,7 @@ export = {
   aliases: [e.sad3],
   help: {
     category: 'fun',
-    brief: e.sad3,
-    usage: 'sad3'
+    brief: e.sad3
   },
   execute() {
     this.reply(`i'm sade tooe... ${e.sad3}`);

@@ -8,7 +8,7 @@ export = {
     category: 'random',
     brief: 'sends a random emot for yu !',
     extra: 'emote amount is clamped between 1 and 5',
-    usage: 'randomemote [amount]'
+    usage: '[amount]'
   },
   execute(amount?) {
     const num = clamp(amount ? parseInt(amount) : 1, 1, 5);

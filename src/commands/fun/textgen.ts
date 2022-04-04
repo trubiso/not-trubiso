@@ -9,7 +9,7 @@ export = {
   help: {
     category: 'fun',
     brief: `generats texte !! ${e.shock_handless}`,
-    usage: 'textGen <text>'
+    usage: '<text>'
   },
   async execute(...args) {
     if (!args.length) throw `com on !! giv me texte !! ${e.sad}`;

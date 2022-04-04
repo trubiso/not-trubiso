@@ -15,7 +15,7 @@ export = {
       '[paramteter] meens dat der is a parametere "paramteter" wich is OPTIONALELE !!\n' +
       `butte... (${e.funny}) <paramteter> meens dat der is a parametere "paramteter" wich is REQUIREDELE !!\n` +
       `da rest shuld be obvius !! thoughe if yu don understand ask TRUMBINSO and he wil help yu decoed da usag of any comande ${e.glad}`,
-    usage: 'help [command]'
+    usage: '[command]'
   },
   execute(...args) {
     const compareLevenshteinDistance = (compareTo: string, baseItem: string) =>
@@ -48,7 +48,7 @@ export = {
             },
             {
               name: 'useg',
-              value: `${prefix}${command.help.usage}`,
+              value: `\`${prefix}${command.name}${command.help.usage ?? ''}\``,
               inline: true
             }
           ]
@@ -60,6 +60,8 @@ export = {
             value: command.aliases.join(', '),
             inline: true
           });
+        
+        
 
         if (command.help.extra)
           embed.fields.push({

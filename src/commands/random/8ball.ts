@@ -8,7 +8,7 @@ export = {
   help: {
     category: 'random',
     brief: 'da smili gods will decied if they can agree with somthing!',
-    usage: '8ball <question>'
+    usage: '<question>'
   },
   execute(...question) {
     if (!question.length) return this.reply(`yu hab to ask a questione! ${e.really}`);

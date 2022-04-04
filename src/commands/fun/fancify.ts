@@ -8,7 +8,7 @@ export = {
   help: {
     category: 'fancify',
     brief: 'fancifies yuor texte',
-    usage: 'fancify [alphabet] <text> [-list]'
+    usage: '[alphabet] <text> [-list]'
   },
   execute(...args) {
     if (!args.length) throw 'giv me text to fancifie';

@@ -9,7 +9,7 @@ export = {
     category: 'random',
     brief: 'picks numbr acording to de limits yu giv it !',
     extra: 'both min and max are included in the range, defaults are 1 and 10 respectively',
-    usage: 'rng ([max]|[min] [max])'
+    usage: '[max] | [min] [max]'
   },
   execute(min?, max?) {
     // defaults (both parameters are optional)

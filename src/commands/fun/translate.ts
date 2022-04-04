@@ -7,7 +7,7 @@ export = {
   help: {
     category: 'fun',
     brief: 'translatese to smili englisheshe usinge an algroithm !',
-    usage: 'translate <text>'
+    usage: '<text>'
   },
   execute(...args) {
     if (!args.length) throw 'gib me text to translat !!';

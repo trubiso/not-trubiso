@@ -8,7 +8,8 @@ export = {
   help: {
     category: 'fun',
     brief: 'smiliefies yuor texte',
-    usage: 'smiliefy <text> [--times [number (1-5)]]'
+    usage: '<text> [--times [amount]]',
+    extra: 'smiliefy amount is clamped between 1 and 5'
   },
   execute(...args) {
     if (!args.length) throw 'giv me text to smiliefie';
