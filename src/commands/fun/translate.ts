@@ -9,11 +9,11 @@ export = {
     brief: 'translatese to smili englisheshe usinge an algroithm !',
     usage: '<text>'
   },
-  execute(...args) {
-    if (!args.length) throw 'gib me text to translat !!';
+  execute(...text) {
+    if (!text.length) throw 'gib me text to translat !!';
 
-    let text = args.join(' ').toLowerCase();
-    text = smilieEnglish(Util.cleanContent(text, this.channel));
-    this.reply(Util.cleanContent(text, this.channel)); // clean it again just in case!
+    let joinedText = text.join(' ').toLowerCase();
+    joinedText = smilieEnglish(Util.cleanContent(joinedText, this.channel));
+    this.reply(Util.cleanContent(joinedText, this.channel)); // clean it again just in case!
   }
 } as Command;

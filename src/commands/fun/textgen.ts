@@ -11,8 +11,8 @@ export = {
     brief: `generats texte !! ${e.shock_handless}`,
     usage: '<text>'
   },
-  async execute(...args) {
-    if (!args.length) throw `com on !! giv me texte !! ${e.sad}`;
+  async execute(...text) {
+    if (!text.length) throw `com on !! giv me texte !! ${e.sad}`;
 
     deepai.setApiKey(deepAIToken);
 
@@ -21,13 +21,13 @@ export = {
 
     const resp = await (async function() {
       return await deepai.callStandardApi('text-generator', {
-        text: Util.cleanContent(args.join(' '), msg.channel)
+        text: Util.cleanContent(text.join(' '), msg.channel)
       });
     })();
-    const text: string = resp.output ?? `${e.sad}`;
+    const respText: string = resp.output ?? `${e.sad}`;
 
     const splitText: string[] = [];
-    for (let i = 0; i < text.length; i += 1024) splitText.push(text.slice(i, i + 1024));
+    for (let i = 0; i < respText.length; i += 1024) splitText.push(respText.slice(i, i + 1024));
 
     const generateEmbedFields = () =>
       splitText.map((v, i) => {

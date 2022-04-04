@@ -11,8 +11,8 @@ export = {
     usage: '<text> [--times [amount]]',
     extra: 'smiliefy amount is clamped between 1 and 5'
   },
-  execute(...args) {
-    if (!args.length) throw 'giv me text to smiliefie';
+  execute(...text) {
+    if (!text.length) throw 'giv me text to smiliefie';
 
     let emojis: string[] | undefined;
     if (!(emojis = this.guild?.emojis.cache.map(v => v.toString())))
@@ -22,21 +22,21 @@ export = {
 
     const addRandomEmotes = (text: string): string => applyPerWord(v => `${v} ${getRandomEmote()}`, text);
 
-    let text = Util.cleanContent(args
+    let joinedText = Util.cleanContent(text
       .join(' ')
       .replace(/--times [0-9]+/g, '') // remove the --times argument; it is irrelevant currently
       .trim(),
     this.channel);
 
-    let rawNumber = parseInt(args.at(-1) ?? '1');
-    if (isNaN(rawNumber)) rawNumber = 1;
+    let rawNumber = parseInt(text.at(-1) ?? '1'); // get the number of times to smiliefy
+    if (isNaN(rawNumber)) rawNumber = 1; // if the number is not a number, set it to 1
     const number = clamp(rawNumber, 1, 5);
 
     repeat(() => {
-      text = addRandomEmotes(text);
+      joinedText = addRandomEmotes(joinedText);
     }, number);
 
-    if (text.length > 4000) throw `yur text is too bigege !! ${e.sad}`;
-    else return this.reply(text);
+    if (joinedText.length > 4000) throw `yur text is too bigege !! ${e.sad}`;
+    else return this.reply(joinedText);
   }
 } as Command;

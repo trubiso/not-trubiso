@@ -17,7 +17,7 @@ export = {
       `da rest shuld be obvius !! thoughe if yu don understand ask TRUMBINSO and he wil help yu decoed da usag of any comande ${e.glad}`,
     usage: '[command]'
   },
-  execute(...args) {
+  execute(command?) {
     const compareLevenshteinDistance = (compareTo: string, baseItem: string) =>
       new Levenshtein(compareTo, baseItem).distance;
 
@@ -96,7 +96,7 @@ export = {
     };
 
     let out = '';
-    if (!args.length) {
+    if (!command) {
       out = '**commandse: **\n\n';
       for (const category of this.bot.categories.sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0))) {
         out += `**${category.help.name}: **`;
@@ -105,7 +105,7 @@ export = {
         out = `${out.slice(0, -2)}\n`;
       }
     } else {
-      const cmd = args[0].toString().toLowerCase();
+      const cmd = command.toString().toLowerCase();
       const ret = getHelp(cmd);
       if (ret === false)
         out = `i culdn't find anythinge for **${cmd}**... ${e.think} did yu meane **${findClosestCmdTo(cmd)}**?`;

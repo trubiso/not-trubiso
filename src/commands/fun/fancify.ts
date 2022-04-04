@@ -10,8 +10,8 @@ export = {
     brief: 'fancifies yuor texte',
     usage: '[alphabet] <text> [-list]'
   },
-  execute(...args) {
-    if (!args.length) throw 'giv me text to fancifie';
+  execute(...text) {
+    if (!text.length) throw 'giv me text to fancifie';
 
     const getSampleOfAlphabet = (i: number) => alphabets[i].split(',').slice(0, 3).join('');
 
@@ -26,36 +26,36 @@ export = {
       return word;
     }
 
-    if (args[0] === '-list') {
+    if (text[0] === '-list') {
       let out = '**List of alphabets:**\n';
       let nextText = '';
-      if (args.length > 1) nextText = args.slice(1).join(' ');
+      if (text.length > 1) nextText = text.slice(1).join(' ');
       out += fullAlphabetNames
         .map((v, i) =>
-          `${v} (\`${alphabetNames[i]}\`) - ${args.length > 1 ? fancifyWord(nextText, i) : getSampleOfAlphabet(i)}`)
+          `${v} (\`${alphabetNames[i]}\`) - ${text.length > 1 ? fancifyWord(nextText, i) : getSampleOfAlphabet(i)}`)
         .join('\n');
 
       return this.reply(Util.cleanContent(out, this.channel)); // clean da content just in case
     }
 
-    let text = Util.cleanContent(args.join(' ').trim(), this.channel).normalize('NFD'); // normalize to NFD so á becomes a´ and it actually gets fancified.
+    let normalisedText = Util.cleanContent(text.join(' ').trim(), this.channel).normalize('NFD'); // normalize to NFD so á becomes a´ and it actually gets fancified.
 
-    if (args.length > 1 && (alphabetNames.includes(args[0]) || args[0] === 'random')) {
-      text = text.split(' ').slice(1).join(' '); // remove the alphabet name
-      if (args[0] === 'random')
-        text = text
+    if (text.length > 1 && (alphabetNames.includes(text[0]) || text[0] === 'random')) {
+      normalisedText = normalisedText.split(' ').slice(1).join(' '); // remove the alphabet name
+      if (text[0] === 'random')
+        normalisedText = normalisedText
           .split('')
           .map(v => fancifyWord(v))
           .join('');
       else
-        alphabets[alphabetNames.indexOf(args[0])]
+        alphabets[alphabetNames.indexOf(text[0])]
           .split(',')
-          .forEach((currentLetter, i) => (text = text.replaceAll(regularAlphabet[i], currentLetter)));
+          .forEach((currentLetter, i) => (normalisedText = normalisedText.replaceAll(regularAlphabet[i], currentLetter)));
     } else {
-      text = applyPerWord(fancifyWord, text);
+      normalisedText = applyPerWord(fancifyWord, normalisedText);
     }
 
-    if (text.length > 4000) throw `yur text is too bigege !! ${e.sad}`;
-    else return this.reply(text);
+    if (normalisedText.length > 4000) throw `yur text is too bigege !! ${e.sad}`;
+    else return this.reply(normalisedText);
   }
 } as Command;

@@ -8,10 +8,10 @@ export = {
     brief: 'de bot wil say watever yu wantete !',
     usage: '<text>'
   },
-  execute(...args) {
-    if (!args.length) throw 'gib me text to sey !!';
+  execute(...text) {
+    if (!text.length) throw 'gib me text to sey !!';
 
-    const text = args.join(' ');
-    this.reply(Util.cleanContent(text, this.channel));
+    const joinedText = text.join(' ');
+    this.reply(Util.cleanContent(joinedText, this.channel));
   }
 } as Command;
