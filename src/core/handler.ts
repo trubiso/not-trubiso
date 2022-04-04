@@ -86,24 +86,39 @@ export default class Handler {
   public async $messageCreate(msg: Message) {
     if (!msg.mentions.everyone) {
       // automatic reactions
-      if (msg.mentions.has(this.bot.client.user!)) {
-        await msg.react('👋');
-        await msg.react(e.id(e.happy));
-      }
+      // the functions may seem messy, but we have to preserve the order of the reactions
+      // and putting the code outside the function will make not trubiso wait before he
+      // can even execute the command which is dumb, so i just have an async function I
+      // don't await.
+      if (msg.mentions.has(this.bot.client.user!))
+        (async() => {
+          await msg.react('👋');
+          await msg.react(e.id(e.happy));
+        })();
 
       if (msg.content.includes('busines')) msg.react(e.id(e.business));
 
       // TONGUE REACTIONS
-      if (msg.content.includes(e.lik)) {
-        await msg.react(e.id(e.tongue_left));
-        await msg.react(e.id(e.tongue_right));
-      }
 
       // opposite tongues are important
-      if (msg.content.includes(e.tongue_right)) await msg.react(e.id(e.tongue_left));
-      if (msg.content.includes(e.tongue_left)) await msg.react(e.id(e.tongue_right));
-
-      if (msg.content.includes(e.tongue_right) && msg.content.includes(e.tongue_left)) await msg.react(e.id(e.lik));
+      // we have to do it this way so that the tongues aren't opposite to each other,
+      // since they have to be licking each other
+      if (msg.content.includes(e.tongue_right) && msg.content.includes(e.tongue_left))
+        (async() => {
+          await msg.react(e.id(e.tongue_left));
+          await msg.react(e.id(e.tongue_right));
+          await msg.react(e.id(e.lik));
+        })();
+      // why is this an else? to guarantee that the tongues are together and then they
+      // lik in case of having both tongue left and tongue right, otherwise we could 
+      // have a disaster where the tongues don't lick (very sad)
+      else if (msg.content.includes(e.lik))
+        (async() => {
+          await msg.react(e.id(e.tongue_left));
+          await msg.react(e.id(e.tongue_right));
+        })();
+      else if (msg.content.includes(e.tongue_right)) msg.react(e.id(e.tongue_left));
+      else if (msg.content.includes(e.tongue_left)) msg.react(e.id(e.tongue_right));
     }
 
     let game;
