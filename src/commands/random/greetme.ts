@@ -9,9 +9,14 @@ export = {
     brief: 'i greet u (or anoder preson !) !!!',
     usage: 'greetme [mention]'
   },
-  execute(...args) {
+  execute(user?) {
     let person = this.author.username;
-    if (args[0]) person = this.bot.client.users.cache.get(args[0].replaceAll(/[^0-9]/g, ''))!.username;
+
+    if (user) {
+      const id = user.replace(/[^0-9]/g, '');
+      const users = this.bot.client.users.cache;
+      person = users.get(id)!.username;
+    }
 
     return this.reply(`${smilieEnglish(person)}, ${getBotReadyAnswer()}`);
   }

@@ -10,8 +10,8 @@ export = {
     brief: 'da smili gods will decied if they can agree with somthing!',
     usage: '8ball <question>'
   },
-  execute(...args) {
-    if (!args.length) return this.reply(`yu hab to ask a questione! ${e.really}`);
+  execute(...question) {
+    if (!question.length) return this.reply(`yu hab to ask a questione! ${e.really}`);
 
     const answer = pick(eightballAnswers);
 

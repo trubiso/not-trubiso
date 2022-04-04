@@ -9,12 +9,13 @@ export = {
   help: {
     category: 'random',
     brief: 'picks betweene elements dat can be choesn !',
-    usage: 'pick [element, element, <element>...]'
+    extra: 'elements are separated by commas (check usage)',
+    usage: 'pick <element>, [element], [element]...'
   },
-  execute(...args) {
-    if (!args.length) throw 'plees, enter elements for me to choos frome !!';
+  execute(...elements) {
+    if (!elements.length) throw 'plees, enter elements for me to choos frome !!';
 
-    const arr = args.join(' ').split(',');
+    const arr = elements.join(' ').split(',');
     if (!arr[1] || !arr[0]) throw `meybi enter at least 2 elements for me to choos from ?? ${e.sad}`;
 
     const item = Util.cleanContent(pick(arr).trim(), this.channel);

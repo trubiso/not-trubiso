@@ -8,13 +8,23 @@ export = {
   help: {
     category: 'random',
     brief: 'picks numbr acording to de limits yu giv it !',
-    usage: 'rng <max|min, max>'
+    extra: 'both min and max are included in the range, defaults are 1 and 10 respectively',
+    usage: 'rng ([max]|[min] [max])'
   },
-  execute(...args) {
-    const min = parseInt((args[1] ? args[0] : 1) as string);
-    const max = parseInt(args[1] ?? args[0] ?? 10) + 1; // wth
-    const num = Math.floor(Math.random() * (max - min)) + min;
-    if (args.length > 2) throw 'yu gaev me too meny arguments !!';
+  execute(min?, max?) {
+    // defaults (both parameters are optional)
+    let parsedMin = 1;
+    let parsedMax = 10;
+    if (max) {
+      // if both are given
+      parsedMin = parseInt(min);
+      parsedMax = parseInt(max);
+    } else if (min) {
+      // if only one is given then the only one given is the max (check usage)
+      parsedMax = parseInt(min);
+    }
+
+    const num = Math.floor(Math.random() * (parsedMax - parsedMin + 1)) + parsedMin;
 
     if (isNaN(num)) throw `yu shuld giv me actual numberse ${e.think}`;
 

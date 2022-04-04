@@ -7,16 +7,15 @@ export = {
   help: {
     category: 'random',
     brief: 'sends a random emot for yu !',
-    usage: 'randomemote [num (up to 5)]'
+    extra: 'emote amount is clamped between 1 and 5',
+    usage: 'randomemote [amount]'
   },
-  execute(...args) {
-    const num = clamp(args[0] ? parseInt(args[0]) : 1, 1, 5);
+  execute(amount?) {
+    const num = clamp(amount ? parseInt(amount) : 1, 1, 5);
     const arr = this.guild?.emojis.cache.map(v => v.toString()) ?? [];
     const emojis: string[] = [];
 
-    [...Array(num).keys()].forEach(() => {
-      emojis.push(pick(arr));
-    });
+    for (let i = 0; i < num; i++) emojis.push(pick(arr));
 
     this.reply(emojis.join(''));
   }
