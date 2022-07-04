@@ -10,7 +10,7 @@ import { CommandData, CommandMetadata } from '@core/command';
 import Game from '@core/game';
 import { customEmoteRegex, e, emojiRegex } from '@core/vars';
 import Bot from '@core/bot';
-import { karlgorithm } from '@core/utils';
+import { karlgorithm, pick } from '@core/utils';
 
 export interface IPiece {
   owner: User;
@@ -20,11 +20,12 @@ export interface IPiece {
 export default class TicTacToe extends Game {
   opponent?: User;
   confirmed?: boolean;
-  pieces: IPiece[];
+  pieces: IPiece[] = [];
   grid: number[][];
   playing = false;
   turn = false;
   message: Message | undefined;
+  hasChosenPiece: boolean[] = [false, false];
 
   static getMetadata(): CommandMetadata {
     return {
@@ -85,24 +86,42 @@ export default class TicTacToe extends Game {
   }
 
   private async $setup(data: CommandData): Promise<void> {
-    if (!this.opponent) {
+    if (data.content === 'hocus pocus') {
+      data.reply('quickstart, place as you wish');
+      this.hasChosenPiece = [true, true];
+      this.pieces = [
+        { owner: this.challenger, piece: e.tongue_left },
+        { owner: this.opponent!, piece: pick(Object.values(e).slice(0, -1)) }
+      ];
+    } else if (!this.opponent) {
       if (data.mentions.users.size) {
         this.opponent = data.mentions.users.first()!;
-        data.reply(`you have challenged ${this.opponent.toString()} to a game of tic tac toe; choose your pieces by just sending them`);
+        data.reply(`you have challenged ${this.opponent} to a game of tic tac toe; choose your pieces by just sending them`);
         // TODO: shuffle challenger & opponent (karl :eyes:)
       }
-    } else if (this.pieces.length !== 2) {
+    } else if (this.hasChosenPiece.some(v => !v)) {
       const text = data.cleanContent;
-      if (emojiRegex.test(text) || customEmoteRegex.test(text))
+      const customEmoteMatch = customEmoteRegex.test(text);
+      const emojiMatch = emojiRegex.test(text);
+      if (customEmoteMatch || emojiMatch) {
+        const match = customEmoteMatch ? customEmoteRegex : emojiRegex;
+        const actualEmote = (match.exec(text) ? match.exec(text)![0] : text) ?? text;
         if (data.author.id === this.challenger.id) {
-          this.pieces[0] = { owner: this.challenger, piece: text };
+          this.pieces.push({ owner: this.challenger, piece: actualEmote });
+          this.hasChosenPiece[0] = true;
           data.reply('you have chosen your piece :)');
         } else if (data.author.id === this.opponent?.id) {
-          this.pieces[1] = { owner: this.opponent!, piece: text };
+          this.pieces.push({ owner: this.opponent!, piece: actualEmote });
+          this.hasChosenPiece[1] = true;
           data.reply('you have chosen your piece :)');
+        } else {
+          throw "i received a message from a person i shouldn't have";
         }
+      }
     }
-    if (this.opponent && this.pieces.length === 2) {
+
+    if (this.hasChosenPiece.every(v => v)) {
+      this.pieces.sort((a, b) => (a.owner.id === this.challenger.id ? -1 : b.owner.id === this.challenger.id ? 1 : 0));
       this.playing = true;
       await this.renewGameMessage();
     }

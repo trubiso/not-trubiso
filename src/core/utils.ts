@@ -1,4 +1,4 @@
-import { botReadyAnswers, customEmoteRegex, emojiRegex } from './vars';
+import { botReadyAnswers, customEmoteRegex } from './vars';
 import Bot from '@core/bot';
 export function pick(...a: any[] | any[][]) {
   // I love this function, it's so handy
@@ -67,10 +67,6 @@ export function validateCustomEmote(emote: string, bot: Bot): boolean {
   }
 }
 
-export function containsEmoji(text: string): boolean {
-  return !!text.match(emojiRegex);
-}
-
 export function karlgorithm<T>(lastPiecePos: number[], lastPieceOwner: T, grid: T[][], n: number, winning: T): boolean {
   // welcome to the karlgorithm
 
@@ -124,12 +120,11 @@ export function karlgorithm<T>(lastPiecePos: number[], lastPieceOwner: T, grid: 
 
       // if we're out of bounds, or if I didn't place that, break
       if (grid[currentPos[0]] !== undefined && grid[currentPos[0]][currentPos[1]] === lastPieceOwner) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const directionObject = directionObjects.find(v => v.direction === direction)!;
         directionObject.piecesFound++;
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         directionObject.piecesFoundArr.push(currentPos);
       } else {
+        // and reset the current pos to the proper one
         currentPos = [...lastPiecePos];
         break;
       }
@@ -154,7 +149,7 @@ export function karlgorithm<T>(lastPiecePos: number[], lastPieceOwner: T, grid: 
     } as IAxis;
   });
 
-  console.log(processedAxes.map(v => v.piecesFoundArr));
+  console.log(processedAxes.map(v => v.piecesFoundArr), processedAxes.map(v => v.piecesFound));
   for (const currentAxis of processedAxes)
     if (currentAxis.piecesFound > n - 2) {
       const correctAxis = [...currentAxis.piecesFoundArr, lastPiecePos];
@@ -186,7 +181,7 @@ export function smilieEnglish(s: string): string {
     .toLowerCase()
     .split(' ')
     .map(v => {
-      if (v.match(customEmoteRegex) || containsEmoji(v)) return v;
+      if (v.match(customEmoteRegex)) return v;
       let r = v.replace(vcRegex, '');
       r = r.replace(/'/g, '');
       r = r.replace(/ei/g, 'ie');

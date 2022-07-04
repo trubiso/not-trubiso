@@ -1,3 +1,5 @@
+import emoji from 'emoji-regex';
+
 /* eslint-disable camelcase */
 export const e = {
   business: '<:business:729362524184510575>',
@@ -46,6 +48,10 @@ export const e = {
   youradhere: '<:youradhere:729363169151287307>',
   picardia: '<:picardia:755450193616568371>',
   lik: '<:lik:725447448385945671>',
+  satana2: '<:satana2:750047454405066773>',
+  good_meal: '<:good_meal:750034917743919256>',
+  cri: '<:cri:750033819637383189>',
+  cri2: '<:cri2:755563588650795121>',
   id: (emote: string) =>
     emote
       .replace(/<(a)?:/, '')
@@ -247,6 +253,22 @@ export const botReadyAnswers = {
       ]
     },
     {
+      day: 15,
+      month: 6,
+      messages: [
+        `👋${e.shock_handless} booga !! mai chips ar MELTINGE !! ${e.sad2} HLEP!!!!!!!!!!! UGHUGHUGHU`,
+        `👋${e.drunk} i stey up until let hours witout permision of trumbniso !! how cul is dat !! ${e.silly}${e.funny} hahhweh`,
+        `ahhhe 👋${e.good_meal} jus enjoyinge som watarmelon ${e.flush_happy}${e.tongue_left}🍉`,
+        `👋${e.cri} i mis da rein... now da onli water i can see is da wan dat fals of mai eys ${e.cri2}${e.sad3}`,
+        `HEI 👋${e.shock_handless} DID YU KNO DAT WATERMELONS AR ACTUELI VEGTABLS AND NOT FRUITSE ${e.coolwoah}${e.coolwoah}${e.coolwoah} WHOWHOOGWGHBGHOWGH !!`,
+        `luk at yur cloq AGEIN !! its SUMAR nowe !! 👋${e.excited}`,
+        `👋${e.happy} ha- ${e.angry_pink} friq !! mosqito !! ${e.angry_red}💥🦟`,
+        `hai !!!! 👋${e.flush_happy} jus waching da thundarstorm outsied ${e.angel}`,
+        `HÖI !!! WANA SWIM WIT ME ?? ${e.please}${e.flush_happy} o weit... i cnant swim... i computar... 👋${e.sad3}`,
+        `HHIHIIHIHIHI !! 👋${e.excited_jumping} FINALI NO MOAR BOARING SCUL !!! ${e.excited}${e.nerd}`
+      ]
+    },
+    {
       day: 1,
       month: 11,
       messages: [
@@ -274,9 +296,8 @@ export const botReadyAnswers = {
   ]
 };
 
-export const customEmoteRegex = /<[a]*?:[0-9a-zA-Z_]{2,32}:[0-9]{18}>/g;
-export const emojiRegex =
-  /(\p{Extended_Pictographic}|\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]|🇦|🇧|🇨|🇩|🇪|🇫|🇬|🇭|🇮|🇯|🇰|🇱|🇲|🇳|🇴|🇵|🇶|🇷|🇸|🇹|🇺|🇻|🇼|🇽|🇾|🇿)/gu;
+export const customEmoteRegex = /<[a]?:[0-9a-zA-Z_]{2,32}?:[0-9]{18}?>/g;
+export const emojiRegex = emoji();
 export const mentionRegex = /<@[!]?[0-9]{18}>/g;
 
 export const deepAIToken: string = process.env.DEEPAI_TOKEN ?? require('../../config.json').deepai;

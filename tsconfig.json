@@ -10,6 +10,7 @@
         "skipLibCheck": true,
         "declaration": true,
         "types": [],
+        "resolveJsonModule": true,
 
         "strict": true,
         "noImplicitAny": true,
