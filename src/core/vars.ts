@@ -261,7 +261,7 @@ export const botReadyAnswers = {
         `👋${e.drunk} i stey up until let hours witout permision of trumbniso !! how cul is dat !! ${e.silly}${e.funny} hahhweh`,
         `ahhhe 👋${e.good_meal} jus enjoyinge som watarmelon ${e.flush_happy}${e.tongue_left}🍉`,
         `👋${e.cri} i mis da rein... now da onli water i can see is da wan dat fals of mai eys ${e.cri2}${e.sad3}`,
-        `HEI 👋${e.shock_handless} DID YU KNO DAT WATERMELONS AR ACTUELI VEGTABLS AND NOT FRUITSE ${e.coolwoah}${e.coolwoah}${e.coolwoah} WHOWHOOGWGHBGHOWGH !!`,
+        `HEI 👋${e.shock_handless} DID YU KNO DAT WATERMELONS AR RELETED TO CUCUMBARS?!??! ${e.coolwoah}${e.coolwoah}${e.coolwoah} WHOWHOOGWGHBGHOWGH !! ${e.thinky} but ar dey fruits or vegtabls`,
         `luk at yur cloq AGEIN !! its SUMAR nowe !! 👋${e.excited}`,
         `👋${e.happy} ha- ${e.angry_pink} friq !! mosqito !! ${e.angry_red}💥🦟`,
         `hai !!!! 👋${e.flush_happy} jus waching da thundarstorm outsied ${e.angel}`,
