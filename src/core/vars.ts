@@ -216,7 +216,7 @@ export const botReadyAnswers = {
     `pleased to meet yu mr / ms smily !! ${e.business} i hop yu hav a gud dey tudey !!! ${e.happy}`,
     `привет !!!! ${e.business} i am multilinguelale man !! ${e.nerd}`,
     `i'm bakke!!! ${e.happy}`,
-    `toki !! 👋${e.excited} o tenpo ni li pona tawa sina!!!`,
+    `toki !! 👋${e.excited} tenpo ni o pona tawa sina a!!!`,
     `lötló !!! 👋${e.silly}`,
     `${e.drunk} i got drunked !!! ar yu proud ? 👋${e.happy}`,
     `${e.telekinesis} yu can do it !!!`,
