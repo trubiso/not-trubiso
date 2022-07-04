@@ -52,6 +52,7 @@ export const e = {
   good_meal: '<:good_meal:750034917743919256>',
   cri: '<:cri:750033819637383189>',
   cri2: '<:cri2:755563588650795121>',
+  agony: '<:agony:718886770963382303>',
   id: (emote: string) =>
     emote
       .replace(/<(a)?:/, '')
@@ -256,7 +257,7 @@ export const botReadyAnswers = {
       day: 15,
       month: 6,
       messages: [
-        `👋${e.shock_handless} booga !! mai chips ar MELTINGE !! ${e.sad2} HLEP!!!!!!!!!!! UGHUGHUGHU`,
+        `👋${e.shock_handless} booga !! mai chips ar MELTINGE !! ${e.sad2} HLEP!!!!!!!!!!! UGHUGHUGHU ${e.agony}`,
         `👋${e.drunk} i stey up until let hours witout permision of trumbniso !! how cul is dat !! ${e.silly}${e.funny} hahhweh`,
         `ahhhe 👋${e.good_meal} jus enjoyinge som watarmelon ${e.flush_happy}${e.tongue_left}🍉`,
         `👋${e.cri} i mis da rein... now da onli water i can see is da wan dat fals of mai eys ${e.cri2}${e.sad3}`,
