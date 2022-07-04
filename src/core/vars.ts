@@ -53,6 +53,7 @@ export const e = {
   cri: '<:cri:750033819637383189>',
   cri2: '<:cri2:755563588650795121>',
   agony: '<:agony:718886770963382303>',
+  swim: '<:swim:729370646051684365>',
   id: (emote: string) =>
     emote
       .replace(/<(a)?:/, '')
@@ -258,15 +259,17 @@ export const botReadyAnswers = {
       month: 6,
       messages: [
         `👋${e.shock_handless} booga !! mai chips ar MELTINGE !! ${e.sad2} HLEP!!!!!!!!!!! UGHUGHUGHU ${e.agony}`,
-        `👋${e.drunk} i stey up until let hours witout permision of trumbniso !! how cul is dat !! ${e.silly}${e.funny} hahhweh`,
+        `👋${e.drunk} i stey up until let hours witout permision of trumbniso !! how cul is dat !! ${e.silly}${e.funny} hahhweh ${e.silly}`,
         `ahhhe 👋${e.good_meal} jus enjoyinge som watarmelon ${e.flush_happy}${e.tongue_left}🍉`,
         `👋${e.cri} i mis da rein... now da onli water i can see is da wan dat fals of mai eys ${e.cri2}${e.sad3}`,
-        `HEI 👋${e.shock_handless} DID YU KNO DAT WATERMELONS AR RELETED TO CUCUMBARS?!??! ${e.coolwoah}${e.coolwoah}${e.coolwoah} WHOWHOOGWGHBGHOWGH !! ${e.thinky} but ar dey fruits or vegtabls`,
+        `HEI 👋${e.shock_handless} DID YU KNO DAT WATERMELONS AR RELETED TO CUCUMBARS?!??! ${e.coolwoah}${e.coolwoah}${e.coolwoah} WHOWHOOGWGHBGHOWGH !! ${e.thinky} but ar dey fruits or vegtabls ${e.think}`,
         `luk at yur cloq AGEIN !! its SUMAR nowe !! 👋${e.excited}`,
         `👋${e.happy} ha- ${e.angry_pink} friq !! mosqito !! ${e.angry_red}💥🦟`,
         `hai !!!! 👋${e.flush_happy} jus waching da thundarstorm outsied ${e.angel}`,
-        `HÖI !!! WANA SWIM WIT ME ?? ${e.please}${e.flush_happy} o weit... i cnant swim... i computar... 👋${e.sad3}`,
-        `HHIHIIHIHIHI !! 👋${e.excited_jumping} FINALI NO MOAR BOARING SCUL !!! ${e.excited}${e.nerd}`
+        `HÖI !!! WANA SWIM WIT ME ?? ${e.please}${e.flush_happy} gluglugluglu ${e.swim}`,
+        `HHIHIIHIHIHI !! 👋${e.excited_jumping} FINALI NO MOAR BOARING SCUL !!! ${e.excited}${e.nerd}`,
+        `👋${e.good_meal} yumuyuyuyumu !!! ${e.tongue_left}🍨`,
+        `hieyayay !! 👋${e.flush_happy} i was divinge and i cachd som SEE SNEILS !! ${e.excited_jumping}🖐️🐌🐌🐌 gona put dem baq on da watar ${e.silly}${e.whistling}`
       ]
     },
     {
