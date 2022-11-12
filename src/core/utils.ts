@@ -27,7 +27,7 @@ export function applyPerWord(func: (v: string) => string, words: string) {
 }
 
 export function getBotReadyAnswer(n?: number): string {
-  if (n && n < botReadyAnswers.nonSeasonal.length) return botReadyAnswers.nonSeasonal[n];
+  if (typeof n == 'number' && n < botReadyAnswers.nonSeasonal.length) return botReadyAnswers.nonSeasonal[n];
   if (Math.random() > 0.5) return pick(botReadyAnswers.nonSeasonal);
 
   // get current date

@@ -24,7 +24,7 @@ export = {
     }
 
     if (replyNum) {
-      if (isNaN(parseInt(replyNum))) throw `pleez enter a repli numbar`;
+      if (isNaN(parseInt(replyNum))) throw `pleez enter a repli numbar!`;
       n = parseInt(replyNum);
     }
 
