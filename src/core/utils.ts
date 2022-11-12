@@ -56,7 +56,7 @@ export function getBotReadyAnswer(n?: number): string {
 
   if (n) {
     const newN = n - botReadyAnswers.nonSeasonal.length;
-    return chosen[newN];
+    return chosen.messages[newN];
   }
 
   return pick(chosen.messages);
