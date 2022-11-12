@@ -26,7 +26,8 @@ export function applyPerWord(func: (v: string) => string, words: string) {
     .join(' ');
 }
 
-export function getBotReadyAnswer(): string {
+export function getBotReadyAnswer(n?: number): string {
+  if (n && n < botReadyAnswers.nonSeasonal.length) return botReadyAnswers.nonSeasonal[n];
   if (Math.random() > 0.5) return pick(botReadyAnswers.nonSeasonal);
 
   // get current date
@@ -51,6 +52,11 @@ export function getBotReadyAnswer(): string {
     // if we can't find one, it means it's a new year
     now.setMonth(11, 31); // therefore it has to pull from December (of the last year)
     chosen = getAnswerForDate(now);
+  }
+
+  if (n) {
+    const newN = n - botReadyAnswers.nonSeasonal.length;
+    return chosen[newN];
   }
 
   return pick(chosen.messages);
