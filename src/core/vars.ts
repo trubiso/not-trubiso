@@ -284,9 +284,9 @@ export const botReadyAnswers = {
         `ahoj !!! 👋${e.happy} da tieds ar calm but da tempreturs ar lo !!! ${e.whistling}`,
         `boogi !! ${e.tribaldance} ${e.angry_pink} its reining agein !!! frinq da cloudese !!!`,
         `hiyaea !! 👋${e.flush_happy} i can observ da leafs ar turnin amber, red n yelo & som ar begining to falle... ${e.shock_handless} but it'se beutiful nonthalesse ! ${e.angel}`,
-        `hei.. 👋${e.sad3} da sun doesnt seem to shien as muc sinc da cold caem... ${e.cri}`
+        `hei.. 👋${e.sad3} da sun doesnt seem to shien as muc sinc da cold caem... ${e.cri}`,
         `HUAIAIIA !! 👋${e.shock_handless} DID YU KNO !?!?! ${e.excited_jumping} if yu wer borne in AUTUMNE yu wil LIV LONGAR !! ${e.flush_happy} (sourc: trsust me !! ${e.glad})`,
-        `HEI ! 👋${e.think} plees do wutevar u ken 2 stop climat cheng !! ${e.please} otharwies we wont hab beutiful autumnes enimor... ${e.sad2}`
+        `HEI ! 👋${e.think} plees do wutevar u ken 2 stop climat cheng !! ${e.please} otharwies we wont hab beutiful autumnes enimor... ${e.sad2}`,
         `bunjoureing ! 👋${e.business} do yu cal da curent seeson AUTUN or FALLE? ${e.think}`
       ]
     },
