@@ -227,7 +227,8 @@ export const botReadyAnswers = {
     `i am not a botte ! i am a BUSINES MANNE !! 👋${e.business}`,
     `do yu liek kities ?!? welle, i doe !! 👋${e.happy} an yu can get kities overe at https://trubiso.tk/kity !!! ${e.youradhere}`,
     `👋${e.happy} im habing a gud dey !! ${e.excited} and i hop yu do tooe !! i lav yu !! ${e.excited}${e.flush_happy}${e.tongue_left}`,
-    `hællo!! (${e.funny}) i saw waht yu guyse maed overe at r/place !! ${e.coolwoah}${e.coolwoah} and im PROUDEDE !!! ${e.excited}${e.picardia} im SO HAPIE DAT I HAB A HAT LIEK HISE !! ${e.excited_jumping}${e.flush_happy}`
+    `hællo!! (${e.funny}) i saw waht yu guyse maed overe at r/place !! ${e.coolwoah}${e.coolwoah} and im PROUDEDE !!! ${e.excited}${e.picardia} im SO HAPIE DAT I HAB A HAT LIEK HISE !! ${e.excited_jumping}${e.flush_happy}`,
+    `👋${e.business} coi ro do .i mi'e la .na.trubis. .i .ui mi gleki le nu ro do cu klama .i do mo`
   ],
   seasonal: [
     {
@@ -281,7 +282,12 @@ export const botReadyAnswers = {
         `👋${e.happy} gogogo bugoro !! ${e.silly} jus kiding !! hav a gud autmune!! ${e.angel}`,
         `halo !! 👋${e.happy} an angele was broughte upon me !! ${e.shock_handless}${e.angel} he told me to wish yu gud luck in da beutiful autumnene !!! ${e.happy}`,
         `ahoj !!! 👋${e.happy} da tieds ar calm but da tempreturs ar lo !!! ${e.whistling}`,
-        `boogi !! ${e.tribaldance} ${e.angry_pink} its reining agein !!! frinq da cloudese !!!`
+        `boogi !! ${e.tribaldance} ${e.angry_pink} its reining agein !!! frinq da cloudese !!!`,
+        `hiyaea !! 👋${e.flush_happy} i can observ da leafs ar turnin amber, red n yelo & som ar begining to falle... ${e.shock_handless} but it'se beutiful nonthalesse ! ${e.angel}`,
+        `hei.. 👋${e.sad3} da sun doesnt seem to shien as muc sinc da cold caem... ${e.cri}`
+        `HUAIAIIA !! 👋${e.shock_handless} DID YU KNO !?!?! ${e.excited_jumping} if yu wer borne in AUTUMNE yu wil LIV LONGAR !! ${e.flush_happy} (sourc: trsust me !! ${e.glad})`,
+        `HEI ! 👋${e.think} plees do wutevar u ken 2 stop climat cheng !! ${e.please} otharwies we wont hab beutiful autumnes enimor... ${e.sad2}`
+        `bunjoureing ! 👋${e.business} do yu cal da curent seeson AUTUN or FALLE? ${e.think}`
       ]
     },
     {
