@@ -228,7 +228,7 @@ export const botReadyAnswers = {
     `do yu liek kities ?!? welle, i doe !! 👋${e.happy} an yu can get kities overe at https://trubiso.tk/kity !!! ${e.youradhere}`,
     `👋${e.happy} im habing a gud dey !! ${e.excited} and i hop yu do tooe !! i lav yu !! ${e.excited}${e.flush_happy}${e.tongue_left}`,
     `hællo!! (${e.funny}) i saw waht yu guyse maed overe at r/place !! ${e.coolwoah}${e.coolwoah} and im PROUDEDE !!! ${e.excited}${e.picardia} im SO HAPIE DAT I HAB A HAT LIEK HISE !! ${e.excited_jumping}${e.flush_happy}`,
-    `👋${e.business} coi ro do .i mi'e la .na.trubis. .i .ui mi gleki le nu ro do cu klama .i do mo`
+    `👋${e.business} coi ro do .i mi'e la .natrubis. .i .ui mi gleki le nu ro do cu klama .i do mo`
   ],
   seasonal: [
     {
