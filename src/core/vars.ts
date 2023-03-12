@@ -54,6 +54,7 @@ export const e = {
   cri2: '<:cri2:755563588650795121>',
   agony: '<:agony:718886770963382303>',
   swim: '<:swim:729370646051684365>',
+  salute: '<:salute:729410549892251667>',
   id: (emote: string) =>
     emote
       .replace(/<(a)?:/, '')
