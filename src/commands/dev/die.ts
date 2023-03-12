@@ -6,8 +6,8 @@ export = {
   help: {
     brief: 'i wil stop runing'
   },
-  execute() {
-    this.reply(`i shal returne! ${e.salute}`);
-    this.bot.client.destroy();
+  async execute() {
+    await this.reply(`i shal returne! ${e.salute}`);
+    await this.bot.client.destroy();
   }
 } as Command;
