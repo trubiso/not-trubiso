@@ -4,7 +4,7 @@ import {
   MessageActionRow,
   MessageButton,
   MessageActionRowComponent,
-  ButtonInteraction
+  ButtonInteraction,
 } from 'discord.js';
 import { CommandData, CommandMetadata } from '@core/command';
 import Game from '@core/game';
