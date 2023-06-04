@@ -12,7 +12,7 @@ export default class Handler {
 
   public $ready(isDev = false) {
     console.log(`Logged in as ${this.bot.client.user?.tag}!`);
-    this.bot.client.user?.setPresence({ activities: [{ name: 'yu !!', type: 'LISTENING' }] });
+    this.bot.client.user?.setPresence({ activities: [{ name: 'you :-)', type: 'WATCHING' }] });
 
     /*
         // GET EMOTES FOR WEBSITE
