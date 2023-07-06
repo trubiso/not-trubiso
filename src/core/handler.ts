@@ -1,7 +1,7 @@
-import { ButtonInteraction, GuildMember, Interaction, Message, TextChannel } from 'discord.js';
 import Bot from '@core/bot';
 import { getBotReadyAnswer, pick } from '@core/utils';
 import { e } from '@core/vars';
+import { ButtonInteraction, GuildMember, Interaction, Message, TextChannel } from 'discord.js';
 
 export default class Handler {
   private bot: Bot;
@@ -124,7 +124,7 @@ export default class Handler {
     let game;
     if (
       (game = this.bot.games.find(v => v.channel?.id === msg.channelId)) &&
-      [game.challenger.id, game.opponent?.id].includes(msg.author.id)
+      ([game.challenger.id, game.opponent?.id].includes(msg.author.id) || game.wantsAllMessages)
     ) {
       const commandData = Object.assign(msg, { bot: this.bot });
       try {

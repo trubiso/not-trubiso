@@ -1,12 +1,13 @@
-import { ButtonInteraction, Message, SelectMenuInteraction, TextChannel, User } from 'discord.js';
 import Bot from '@core/bot';
 import { CommandData, CommandMetadata } from '@core/command';
+import { ButtonInteraction, Message, SelectMenuInteraction, TextChannel, User } from 'discord.js';
 
 export default class Game {
   public channel: TextChannel | undefined;
   public challenger: User;
   public opponent?: User;
   public confirmed?: boolean;
+  public wantsAllMessages = false;
 
   static getMetadata(): CommandMetadata {
     return {
@@ -35,4 +36,13 @@ export default class Game {
   public $message?(data: CommandData): void;
   public $button?(data: ButtonInteraction & { bot: Bot }): void;
   public $selectMenu?(data: SelectMenuInteraction & { bot: Bot }): void;
+
+  protected async finish(bot: Bot) {
+    bot.games = bot.games.filter(v => !(
+      v.channel === this.channel &&
+      v.challenger === this.challenger &&
+      v.opponent === this.opponent &&
+      typeof v === typeof this));
+    this.destroy(bot);
+  }
 }

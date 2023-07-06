@@ -1,16 +1,16 @@
-import {
-  User,
-  Message,
-  MessageActionRow,
-  MessageButton,
-  MessageActionRowComponent,
-  ButtonInteraction,
-} from 'discord.js';
+import Bot from '@core/bot';
 import { CommandData, CommandMetadata } from '@core/command';
 import Game from '@core/game';
-import { customEmoteRegex, e, emojiRegex } from '@core/vars';
-import Bot from '@core/bot';
 import { karlgorithm, pick } from '@core/utils';
+import { customEmoteRegex, e, emojiRegex } from '@core/vars';
+import {
+  ButtonInteraction,
+  Message,
+  MessageActionRow,
+  MessageActionRowComponent,
+  MessageButton,
+  User
+} from 'discord.js';
 
 export interface IPiece {
   owner: User;
@@ -77,12 +77,7 @@ export default class TicTacToe extends Game {
   private async win(data: ButtonInteraction & { bot: Bot }): Promise<void> {
     await this.editGameMessage();
     await data.reply(`YOU WON !!! ${data.user} CONGREATUTAILTAIIONS !!! ${e.excited}${e.happy}${e.flush_happy}`);
-    data.bot.games = data.bot.games.filter(v =>
-      v.channel === this.channel &&
-        v.challenger === this.challenger &&
-        v.opponent === this.opponent &&
-        typeof v === typeof this);
-    this.destroy(data.bot);
+    this.finish(data.bot);
   }
 
   private async $setup(data: CommandData): Promise<void> {
