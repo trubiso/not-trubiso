@@ -426,10 +426,6 @@ export default class Uno extends Game {
               this.nextTurn();
               break;
             case ActionCardKind.Draw4:
-              // Player to dealer's left declares the first color to be matched and takes the first turn
-              this.color = await this.chooseColorModal();
-              break;
-            case ActionCardKind.ChangeColor:
               // Card is returned to the deck,
               this.deck.push(this.discard[0]);
               this.discard = [];
@@ -438,6 +434,10 @@ export default class Uno extends Game {
               this.discard = [this.deck[0]];
               this.deck = this.deck.slice(1);
               finishedDetermining = false;
+              break;
+            case ActionCardKind.ChangeColor:
+              // Player to dealer's left declares the first color to be matched and takes the first turn
+              this.color = await this.chooseColorModal();
             }
         }
 
