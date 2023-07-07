@@ -71,11 +71,11 @@ enum UnoCard {
 }
 
 enum UnoColor {
-  Red,
-  Yellow,
-  Green,
-  Blue,
-  Wild
+  Red = 'redde',
+  Yellow = 'yelo',
+  Green = 'grin',
+  Blue = 'bleu',
+  Wild = 'WAILDE !!'
 }
 
 function getColor(card: UnoCard) {
@@ -180,9 +180,9 @@ function actionCardKind(card: UnoCard) {
 
 enum Direction {
   // clockwise
-  Cw,
+  Cw = 'cloqwais',
   // counterclockwise
-  Ccw
+  Ccw = 'cauntarcloqwis'
 }
 
 // 1 of 0 and 2 of 1-9 + R + B + D for each color, 4 of each wild.
@@ -462,7 +462,7 @@ export default class Uno extends Game {
               break;
             case ActionCardKind.Draw2:
               // Player to dealer's left draws two cards and misses a turn
-              this.draw(2);
+              await this.draw(2);
               this.nextTurn();
               break;
             case ActionCardKind.Draw4:
@@ -481,9 +481,9 @@ export default class Uno extends Game {
             }
         }
 
-        data.reply('TODO: configuration (progressive/stacking rule, seven-o rule, )');
+        // TODO: configuration (progressive/stacking rule, seven-o rule, ...)
 
-        await this.playTurn();
+        await this.playTurn(false);
       }
     }
   }
@@ -492,9 +492,11 @@ export default class Uno extends Game {
     return this.discard[this.discard.length - 1];
   }
 
-  private async printInfo() {
+  private async printInfo(played: boolean) {
     await this.channel?.send({
-      content: `curant crard: ${this.getTopDiscard()}\nturne: ${
+      content: `${
+        played ? `${this.players[this.lastPlayer()]} played ` : 'curant crard: '
+      }${this.getTopDiscard()}\n\ncolore: ${this.color}\ndireqtion: ${this.direction}\nturne: ${
         this.players[this.turn]
       }\n\nto pley, pleez pres da cardse button to see ur cardze and odar peopl's card quantitye, and if it iz ur turn u can pley wan of em by typing its naem !! ${
         e.shock_handless
@@ -507,8 +509,8 @@ export default class Uno extends Game {
     });
   }
 
-  private async playTurn() {
-    await this.printInfo();
+  private async playTurn(played: boolean) {
+    await this.printInfo(played);
   }
 
   private async chooseColorModal(player = this.turn): Promise<UnoColor> {
@@ -530,13 +532,20 @@ export default class Uno extends Game {
     });
   }
 
-  private nextPlayer() {
+  private lastPlayer() {
+    if (isActionCard(this.getTopDiscard()) && actionCardKind(this.getTopDiscard()) === ActionCardKind.Reverse)
+      return this.nextPlayer(1);
+
+    return this.nextPlayer(-1);
+  }
+
+  private nextPlayer(q = 1) {
     let t = this.turn;
     if (this.direction === Direction.Cw) {
-      t += 1;
+      t += q;
       while (t >= this.players.length) t -= this.players.length;
     } else {
-      t -= 1;
+      t -= q;
       while (t < 0) t += this.players.length;
     }
 
@@ -547,15 +556,27 @@ export default class Uno extends Game {
     this.turn = this.nextPlayer();
   }
 
-  private draw(amount: number, player = this.turn) {
+  private async draw(amount: number, player = this.turn) {
     if (this.deck.length < amount) throw 'TODO: fix the deck length problem';
 
     const cards = this.takeCards(amount);
     this.hands[player].push(...cards);
+
+    this.channel?.send(`${this.players[player]} drawze ${amount} card${amount !== 1 ? 'sies' : ''}!!! ${e.shock_handless}${
+      e.shock_handless
+    }${e.shock_handless}`);
   }
 
   private getPlayerById(id: string) {
     return this.players.findIndex(v => v.id === id);
+  }
+
+  private getCardValidity(card: UnoCard) {
+    return (
+      getColor(card) === UnoColor.Wild ||
+      this.color !== getColor(this.getTopDiscard()) ||
+      getKind(card) === getKind(this.getTopDiscard())
+    );
   }
 
   public async $message(data: CommandData): Promise<void> {
@@ -565,10 +586,13 @@ export default class Uno extends Game {
     if (replyingPlayer === this.turn) {
       const supposedCard = data.content.trim();
       if (supposedCard === 'draw') {
-        this.draw(1);
-        await this.andNext();
+        await this.draw(1);
 
-        return;
+        if (!this.hands[this.turn].some(v => this.getCardValidity(v))) {
+          await this.andNext(false);
+
+          return;
+        }
       }
 
       if (!isValidCard(supposedCard)) return;
@@ -581,11 +605,7 @@ export default class Uno extends Game {
         return;
       }
 
-      const topDiscard = this.getTopDiscard();
-      const color = getColor(supposedCard);
-      const kind = getKind(supposedCard);
-
-      if (color !== UnoColor.Wild && color !== getColor(topDiscard) && kind !== getKind(topDiscard)) {
+      if (!this.getCardValidity(supposedCard)) {
         data.reply(`u cant pley dat card, sutpid ${e.s_facepalm}`);
 
         return;
@@ -595,33 +615,47 @@ export default class Uno extends Game {
       this.hands[this.turn].splice(cardIndex, 1);
       this.discard.push(supposedCard);
 
-      if (isActionCard(supposedCard))
+      if (isActionCard(supposedCard)) {
+        const ogCurrent = this.turn;
         switch (actionCardKind(supposedCard)) {
         case ActionCardKind.Block:
           this.nextTurn(); // skip next person's turn
+          await data.reply(`${this.players[ogCurrent]} BRUTALIE skippeded ${this.players[this.turn]}'s turne !!! ${e.coolwoah} ${
+            e.excited_jumping
+          } ${e.sad} ${e.funny}`);
           break;
         case ActionCardKind.Reverse:
           if (this.direction === Direction.Cw) this.direction = Direction.Ccw;
           else this.direction = Direction.Cw;
+          await data.reply(`da direction haz been reversedede !! ${e.drunk} now we goin ${this.direction} ${e.silly}`);
           break;
         case ActionCardKind.Draw2:
-          this.draw(2, this.nextPlayer());
+          await data.reply(`${this.players[this.turn]} infliqts a draw carde on ${this.players[this.nextPlayer()]} !!! ${
+            e.hammering
+          }`);
+          await this.draw(2, this.nextPlayer());
           break;
         case ActionCardKind.Draw4:
-          this.draw(4, this.nextPlayer());
+          await data.reply(`${this.players[this.turn]} infliqts a draw carde on ${this.players[this.nextPlayer()]} !!! ${
+            e.hammering
+          }`);
+          this.color = await this.chooseColorModal();
+          await this.draw(4, this.nextPlayer());
           break;
         case ActionCardKind.ChangeColor:
+          await data.reply(`WHOGOGOGO !! ${e.coolwoah} da color is CHENGING !! ${e.angry_pink} ${e.glad} ${e.greneblogie} ${e.business} ${e.party}`);
           this.color = await this.chooseColorModal();
           break;
         }
+      }
 
       await this.andNext();
     }
   }
 
-  private async andNext() {
+  private async andNext(played = true) {
     this.nextTurn();
-    this.playTurn();
+    this.playTurn(played);
   }
 
   public async $button(data: ButtonInteraction & { bot: Bot }) {
