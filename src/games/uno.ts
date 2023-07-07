@@ -83,7 +83,7 @@ function getColor(card: UnoCard) {
   if (card.startsWith('y')) return UnoColor.Yellow;
   if (card.startsWith('g')) return UnoColor.Green;
   if (card.startsWith('b')) return UnoColor.Blue;
-  
+
   return UnoColor.Wild;
 }
 
@@ -400,8 +400,6 @@ export default class Uno extends Game {
         this.direction = Direction.Cw;
         this.color = UnoColor.Wild;
 
-        this.deck[0] = UnoCard.wD;
-
         // and the top card of the remaining deck is flipped over and set aside to begin the discard pile.
         this.discard = [this.deck[0]];
         this.deck = this.deck.slice(1);
@@ -442,7 +440,7 @@ export default class Uno extends Game {
               finishedDetermining = false;
             }
         }
-        
+
         data.reply('TODO: configuration (0-7 rule, etc)');
 
         console.log(this.deck);
@@ -494,7 +492,7 @@ export default class Uno extends Game {
   public async $button(data: ButtonInteraction & { bot: Bot }) {
     if (this.choosingColor) {
       let color = UnoColor.Red;
-      switch (data.id.slice(0, 5)) {
+      switch (data.customId.slice(0, 5)) {
       case 'uno_r':
         color = UnoColor.Red;
         break;
@@ -511,16 +509,19 @@ export default class Uno extends Game {
         return;
       }
 
-      const intendedPlayer = parseInt(data.id.slice(5));
+      const intendedPlayer = parseInt(data.customId.slice(5));
       const replyingPlayer = this.players.findIndex(v => v.id === data.user.id);
 
       if (intendedPlayer !== replyingPlayer) {
-        await data.reply(`not ur turn to choos color dumbut ${e.silly}`);
-        
+        await data.reply({ content: `not ur turn to choos color dumbut ${e.silly}`, ephemeral: true });
+
         return;
       }
 
-      await data.update(`${this.players[intendedPlayer].toString()} has choozen ${data.component.label} ${e.excited}`);
+      await data.update({
+        content: `${this.players[intendedPlayer].toString()} has choozen ${data.component.label} ${e.excited}`,
+        components: []
+      });
 
       this.afterChooseResolve(color);
     }

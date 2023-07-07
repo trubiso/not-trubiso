@@ -1,11 +1,11 @@
+import Command, { CommandData } from '@core/command';
+import Game from '@core/game';
+import Handler from '@core/handler';
+import Logger from '@core/logger';
+import Module from '@core/module';
 import { Client, Collection } from 'discord.js';
 import fs from 'fs';
 import ora from 'ora';
-import Command, { CommandData } from '@core/command';
-import Module from '@core/module';
-import Logger from '@core/logger';
-import Handler from '@core/handler';
-import Game from '@core/game';
 
 export default class Bot {
   public commands: Collection<string, Command>;
@@ -61,8 +61,7 @@ export default class Bot {
     this.prefix = prefix;
     this.isDev = isDev;
     this.client = new Client({
-      intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MEMBERS', 'GUILD_MESSAGE_REACTIONS'],
-      allowedMentions: { repliedUser: false }
+      intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MEMBERS', 'GUILD_MESSAGE_REACTIONS']
     });
     this.games = [];
     this.handler = new Handler(this);

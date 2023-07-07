@@ -127,6 +127,8 @@ export default class TicTacToe extends Game {
   }
 
   public async $button(data: ButtonInteraction & { bot: Bot }) {
+    if (data.customId.startsWith('uno_')) return;
+    
     if (data.user.id !== (this.turn ? this.opponent!.id : this.challenger.id))
       return data.reply({ content: 'not ur turn', ephemeral: true });
 
