@@ -41,18 +41,23 @@ export default class Bot {
     }
   }
 
-  public loadGame(file: string) {
+  public loadGame(file: string): Command {
     const LoadedGame = require(`../games/${file}`).default;
     const metadata = LoadedGame.getMetadata();
     function execute(this: CommandData) {
       this.bot.games.push(new LoadedGame(this));
     }
-    this.commands.set(metadata.name, {
+
+    const command = {
       name: metadata.name,
       aliases: metadata.aliases,
       help: metadata.help,
       execute
-    });
+    };
+
+    this.commands.set(metadata.name, command);
+
+    return command;
   }
 
   constructor(prefix: string, isDev = false) {
@@ -77,7 +82,15 @@ export default class Bot {
     progress.succeed(`Loaded ${categoryFiles.length} modules!`);
 
     const gameFiles = fs.readdirSync('./games').filter((file: string) => file.endsWith('.js'));
-    gameFiles.forEach(file => this.loadGame(file));
+    const gameCategory = gameFiles.map(file => this.loadGame(file));
+    this.categories.push({
+      name: 'games',
+      help: {
+        name: 'gaemze',
+        brief: 'gaemze to pley wif da whol familiy !!'
+      },
+      commands: gameCategory
+    } as Module);
     this.logger.log(`Loaded ${gameFiles.length} games!`);
 
     this.client.on('ready', () => this.handler.$ready(this.isDev));

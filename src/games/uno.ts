@@ -327,8 +327,7 @@ export default class Uno extends Game {
     return {
       name: 'uno',
       help: {
-        brief: `plye a game of uno wif ur frends !! ${e.excited}`,
-        usage: 'uno'
+        brief: `plye a game of uno wif ur frends !! ${e.excited}`
       }
     };
   }
