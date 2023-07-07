@@ -325,10 +325,10 @@ export default class Uno extends Game {
 
   static getMetadata(): CommandMetadata {
     return {
-      name: 'secret',
+      name: 'uno',
       help: {
-        brief: 'Play a game of secret.',
-        usage: 'secret'
+        brief: `plye a game of uno wif ur frends !! ${e.excited}`,
+        usage: 'uno'
       }
     };
   }
@@ -337,25 +337,6 @@ export default class Uno extends Game {
     super(message);
     this.players = [message.author];
     message.reply(`created a partie !! ${e.glad} if u forgot da commands or da roolz for dis gaem pleez tyep "<what" ${e.angel}`);
-  }
-
-  private getComponents(): MessageActionRow[] {
-    return [];
-  }
-
-  private async renewGameMessage(): Promise<void> {
-    this.message = await this.channel!.send({ components: this.getComponents() });
-  }
-
-  private async editGameMessage(data?: ButtonInteraction): Promise<void> {
-    if (data) await data.update({ components: this.getComponents() });
-    else await this.message!.edit({ components: this.getComponents() });
-  }
-
-  private async win(data: ButtonInteraction & { bot: Bot }): Promise<void> {
-    await this.editGameMessage();
-    await data.reply(`YOU WON !!! ${data.user} CONGREATUTAILTAIIONS !!! ${e.excited}${e.happy}${e.flush_happy}`);
-    this.finish(data.bot);
   }
 
   private takeCards(amount: number) {
@@ -550,7 +531,12 @@ export default class Uno extends Game {
   }
 
   private async draw(amount: number, player = this.turn) {
-    if (this.deck.length < amount) throw 'TODO: fix the deck length problem';
+    if (this.deck.length < amount) {
+      const topDiscard = this.getTopDiscard();
+      const restOfDiscard = this.discard.slice(0, -1);
+      this.discard = [topDiscard];
+      this.deck = shuffle([...this.deck, ...restOfDiscard]);
+    }
 
     const cards = this.takeCards(amount);
     this.hands[player].push(...cards);
@@ -621,10 +607,11 @@ export default class Uno extends Game {
         }
 
         if (!couldPlay)
-          data.reply(`oke u can pley ur drawne ${this.hands[this.turn][this.hands[this.turn].length - 1]} nau ${e.whistling}`);
+          data.reply(`oke u can pley ur drawne \`${this.hands[this.turn][this.hands[this.turn].length - 1]}\` nau ${e.whistling}`);
         else data.reply(`oke u can pley ur drawne carde nau ${e.whistling}`);
       }
 
+      if (supposedCard.length !== 2) return;
       supposedCard = this.formatCard(supposedCard);
 
       if (!isValidCard(supposedCard)) return;
@@ -662,6 +649,8 @@ export default class Uno extends Game {
           .join('\n')}\n\n**gz ${this.players[this.turn]}!! ${e.excited_jumping} ${e.party}**`);
 
         this.finish(data.bot);
+        
+        return;
       }
 
       if (isActionCard(supposedCard)) {
@@ -718,11 +707,15 @@ export default class Uno extends Game {
               `${v}${i === replyingPlayer ? ' (u)' : ''}${
                 i === this.turn ? (i === replyingPlayer ? ' (ur turn)' : ' (ther turn)') : ''
               }: ${
-                i === replyingPlayer ? this.hands[i].map(v => `\`${v}\``).join(' ') : `\`??\`x${this.hands[i].length}`
+                i === replyingPlayer
+                  ? this.hands[i].map(v => (this.getCardValidity(v) ? `__**\`${v}\`**__` : `\`${v}\``)).join(' ')
+                  : `\`??\`x${this.hands[i].length}`
               }`)
             .join('\n')}${
             this.turn === replyingPlayer
-              ? '\n\npley ur card by tipyng its nam, or tyep "draw" to draw a card from da deqqe'
+              ? `\n\npley ur card by tipyng its nam, or tyep "draw" to draw a card from da deqqe${
+                !this.canPlay() ? '\n**u hab 2 drau a card, non of ur cards r pleyable**' : ''
+              }`
               : ''
           }`,
           ephemeral: true
