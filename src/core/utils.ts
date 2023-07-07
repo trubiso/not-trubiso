@@ -1,10 +1,20 @@
-import { botReadyAnswers, customEmoteRegex } from './vars';
 import Bot from '@core/bot';
+import { botReadyAnswers, customEmoteRegex } from './vars';
 export function pick(...a: any[] | any[][]) {
   // I love this function, it's so handy
   const arr = a.flat();
 
   return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// idk who wrote this function but ty
+export function shuffle<T>(array: T[]): T[] {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  
+  return array;
 }
 
 export function repeat(func: CallableFunction, times: number) {
@@ -56,6 +66,7 @@ export function getBotReadyAnswer(n?: number): string {
 
   if (n) {
     const newN = n - botReadyAnswers.nonSeasonal.length;
+    
     return chosen.messages[newN];
   }
 
