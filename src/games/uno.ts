@@ -316,6 +316,7 @@ export default class Uno extends Game {
   direction = Direction.Cw;
   color = UnoColor.Wild;
   choosingColor = false;
+  pendingUno: number | undefined = undefined;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   afterChooseResolve = (value: UnoColor) => {
@@ -335,7 +336,7 @@ export default class Uno extends Game {
   constructor(message: Message) {
     super(message);
     this.players = [message.author];
-    message.reply(`created a partie !! ${e.glad} if u forgot da commands for dis gaem pleez tyep "<what" ${e.angel}`);
+    message.reply(`created a partie !! ${e.glad} if u forgot da commands or da roolz for dis gaem pleez tyep "<what" ${e.angel}`);
   }
 
   private getComponents(): MessageActionRow[] {
@@ -366,7 +367,7 @@ export default class Uno extends Game {
 
   private async $setup(data: CommandData): Promise<void> {
     if (data.content === `${data.bot.prefix}what`) {
-      data.reply(`i see thou needest of mine assistanc... welle... ${e.silly}\n- if u want to join da partie ${e.party} pleez use da ${data.bot.prefix}join comande.. ${e.tongue_left}\n- if u wanna see who'ze in da prartie ${e.party} pleez use da ${data.bot.prefix}players comande...\n- UND FINALI !! ${e.shock_handless} if u want to START da gaem pleez use da ${data.bot.prefix}start comand !!! ${e.excited_jumping}\n- or if yu wana throw it all awei... jus doo ${data.bot.prefix}exit comande... ${e.sad3} ${e.cri}\n(obviusli da commandse relatinge to begining or ending parti ar onli abeliabl to whoo strated it ${e.silly})\n\nhab fun !! ${e.glad}`);
+      data.reply(`i see thou needest of mine assistanc... welle... ${e.silly}\n- if u want to join da partie ${e.party} pleez use da ${data.bot.prefix}join comande.. ${e.tongue_left}\n- if u wanna see who'ze in da prartie ${e.party} pleez use da ${data.bot.prefix}players comande...\n- UND FINALI !! ${e.shock_handless} if u want to START da gaem pleez use da ${data.bot.prefix}start comand !!! ${e.excited_jumping}\n- or if yu wana throw it all awei... jus doo ${data.bot.prefix}exit comande... ${e.sad3} ${e.cri}\n(obviusli da commandse relatinge to begining or ending parti ar onli abeliabl to whoo strated it ${e.silly})\n\nwans yu pley: to pley, pleez pres da cardse button to see ur cardze and odar peopl's card quantitye, and if it iz ur turn u can pley wan of em by typing its naem !! ${e.shock_handless} ${e.happy} ore... tyep "draw" to draw a card from da deqqe ${e.silly}\nhwen yu pley ur penultimet card, remember to tyep "uno" afterwards, otharwies yu'l get PENALIEZD if somwan pleys befor u sey it ${e.agony}\n\nhab fun !! ${e.glad}`);
 
       return;
     }
@@ -411,6 +412,9 @@ export default class Uno extends Game {
       }
 
       if (isStart) {
+        if (this.players.length < 2)
+          await data.reply(`o mai gudnes !!! yur parti is 2 smal! !! do u think u can pley alon ${e.silly}`);
+
         data.reply(`YEASEE !!! ${e.excited} STARTARTIARIGNINIGN !!! ${e.excited_jumping} ${e.party} ${e.flush_happy}`);
         this.playing = true;
 
@@ -494,13 +498,9 @@ export default class Uno extends Game {
 
   private async printInfo(played: boolean) {
     await this.channel?.send({
-      content: `${
-        played ? `${this.players[this.lastPlayer()]} played ` : 'curant crard: '
-      }${this.getTopDiscard()}\n\ncolore: ${this.color}\ndireqtion: ${this.direction}\nturne: ${
-        this.players[this.turn]
-      }\n\nto pley, pleez pres da cardse button to see ur cardze and odar peopl's card quantitye, and if it iz ur turn u can pley wan of em by typing its naem !! ${
-        e.shock_handless
-      } ${e.happy}`,
+      content: `${played ? 'da last pleyr played ' : 'curant crard: '}**\`${this.getTopDiscard()}\`**\n\n${
+        getColor(this.getTopDiscard()) === UnoColor.Wild ? `colore: ${this.color}\n` : ''
+      }direqtion: ${this.direction}\nturne: ${this.players[this.turn]}\n\n`,
       components: [
         new MessageActionRow().addComponents([
           new MessageButton().setCustomId('uno_U_c').setLabel('cardse').setStyle('PRIMARY')
@@ -532,16 +532,9 @@ export default class Uno extends Game {
     });
   }
 
-  private lastPlayer() {
-    if (isActionCard(this.getTopDiscard()) && actionCardKind(this.getTopDiscard()) === ActionCardKind.Reverse)
-      return this.nextPlayer(1);
-
-    return this.nextPlayer(-1);
-  }
-
   private nextPlayer(q = 1) {
     let t = this.turn;
-    if (this.direction === Direction.Cw) {
+    if ((q < 0 && this.direction === Direction.Ccw) || this.direction === Direction.Cw) {
       t += q;
       while (t >= this.players.length) t -= this.players.length;
     } else {
@@ -574,25 +567,56 @@ export default class Uno extends Game {
   private getCardValidity(card: UnoCard) {
     return (
       getColor(card) === UnoColor.Wild ||
-      this.color !== getColor(this.getTopDiscard()) ||
+      getColor(card) === this.color ||
       getKind(card) === getKind(this.getTopDiscard())
     );
+  }
+
+  private canPlay(player = this.turn) {
+    return this.hands[player].some(v => this.getCardValidity(v));
+  }
+
+  private async punishUno() {
+    await this.channel?.send(`${e.silly} ${this.players[this.pendingUno!]} did not sey UNOE !! he gets PUNIHSD nou !! ${e.funny}`);
+    await this.draw(2, this.pendingUno);
+
+    this.pendingUno = undefined;
+  }
+
+  private formatCard(c: string) {
+    const d = c.trim();
+
+    return d[0].toLowerCase() + d[1].toUpperCase();
   }
 
   public async $message(data: CommandData): Promise<void> {
     if (!this.playing) return await this.$setup(data);
     if (this.choosingColor) return;
     const replyingPlayer = this.getPlayerById(data.author.id);
+    if (data.content.trim().toLowerCase() === 'uno')
+      if (replyingPlayer === this.pendingUno) {
+        await data.reply(`${e.coolwoah} ${e.coolwoah} ${e.coolwoah} ${e.coolwoah}`);
+        this.pendingUno = undefined;
+      }
+
     if (replyingPlayer === this.turn) {
-      const supposedCard = data.content.trim();
+      const supposedCard = this.formatCard(data.content.trim());
       if (supposedCard === 'draw') {
+        const couldPlay = this.canPlay();
+
+        if (this.pendingUno !== undefined) await this.punishUno();
+
         await this.draw(1);
 
-        if (!this.hands[this.turn].some(v => this.getCardValidity(v))) {
+        if (!this.canPlay()) {
+          data.reply(`unfortunetli u can't pley ENI of da cardz u drew ${e.funny} LOZAR !!! ${e.silly} ${e.silly}`);
           await this.andNext(false);
 
           return;
         }
+
+        if (couldPlay) data.reply(`oke u can pley ur drawne ${this.hands[this.turn]} nau ${e.whistling}`);
+        else data.reply(`oke u can pley ur drawne carde nau ${e.whistling}`);
       }
 
       if (!isValidCard(supposedCard)) return;
@@ -612,8 +636,25 @@ export default class Uno extends Game {
       }
 
       // we can finally play the card
+      if (this.pendingUno !== undefined) await this.punishUno();
       this.hands[this.turn].splice(cardIndex, 1);
       this.discard.push(supposedCard);
+      this.color = getColor(supposedCard);
+      if (this.hands[this.turn].length === 1) this.pendingUno = this.turn;
+
+      if (this.hands[this.turn].length === 0) {
+        data.reply(`${this.players[this.turn]} WONE !!! ${e.excited} ${e.party} ${e.glad} ${e.silly}`);
+        data.reply(`heer's da cardze:\n\n${this.players
+          .map((v, i) =>
+            `${v}${
+              i === this.turn
+                ? ` (haz no cards becuz they'r da WINAR !! ${e.flush_happy})`
+                : `: ${this.hands[i].map(v => `\`${v}\``).join(' ')}`
+            }`)
+          .join('\n')}\n\n**gz ${this.players[this.turn]}!! ${e.excited_jumping} ${e.party}**`);
+
+        this.finish(data.bot);
+      }
 
       if (isActionCard(supposedCard)) {
         const ogCurrent = this.turn;
