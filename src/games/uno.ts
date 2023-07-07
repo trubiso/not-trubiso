@@ -577,16 +577,21 @@ export default class Uno extends Game {
   }
 
   private async punishUno() {
-    await this.channel?.send(`${e.silly} ${this.players[this.pendingUno!]} did not sey UNOE !! he gets PUNIHSD nou !! ${e.funny}`);
-    await this.draw(2, this.pendingUno);
-
+    const uno = this.pendingUno;
     this.pendingUno = undefined;
+
+    await this.channel?.send(`${e.silly} ${this.players[uno!]} did not sey UNOE !! he gets PUNIHSD nou !! ${e.funny}`);
+    await this.draw(2, uno);
   }
 
   private formatCard(c: string) {
-    const d = c.trim();
+    try {
+      const d = c.trim();
 
-    return d[0].toLowerCase() + d[1].toUpperCase();
+      return d[0].toLowerCase() + d[1].toUpperCase();
+    } catch (e) {
+      return c;
+    }
   }
 
   public async $message(data: CommandData): Promise<void> {
@@ -595,12 +600,12 @@ export default class Uno extends Game {
     const replyingPlayer = this.getPlayerById(data.author.id);
     if (data.content.trim().toLowerCase() === 'uno')
       if (replyingPlayer === this.pendingUno) {
-        await data.reply(`${e.coolwoah} ${e.coolwoah} ${e.coolwoah} ${e.coolwoah}`);
         this.pendingUno = undefined;
+        await data.reply(`${e.coolwoah} ${e.coolwoah} ${e.coolwoah} ${e.coolwoah}`);
       }
 
     if (replyingPlayer === this.turn) {
-      const supposedCard = this.formatCard(data.content.trim());
+      let supposedCard = data.content.trim();
       if (supposedCard === 'draw') {
         const couldPlay = this.canPlay();
 
@@ -615,9 +620,12 @@ export default class Uno extends Game {
           return;
         }
 
-        if (couldPlay) data.reply(`oke u can pley ur drawne ${this.hands[this.turn]} nau ${e.whistling}`);
+        if (!couldPlay)
+          data.reply(`oke u can pley ur drawne ${this.hands[this.turn][this.hands[this.turn].length - 1]} nau ${e.whistling}`);
         else data.reply(`oke u can pley ur drawne carde nau ${e.whistling}`);
       }
+
+      supposedCard = this.formatCard(supposedCard);
 
       if (!isValidCard(supposedCard)) return;
 
