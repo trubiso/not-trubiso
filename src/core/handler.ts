@@ -1,7 +1,7 @@
 import Bot from '@core/bot';
 import { getBotReadyAnswer, pick } from '@core/utils';
 import { e } from '@core/vars';
-import { ButtonInteraction, GuildMember, Interaction, Message, TextChannel } from 'discord.js';
+import { ButtonInteraction, GuildMember, Interaction, Message, SelectMenuInteraction, TextChannel } from 'discord.js';
 
 export default class Handler {
   private bot: Bot;
@@ -79,6 +79,14 @@ export default class Handler {
       if ((game = this.bot.games.find(v => v.channel?.id === i.channelId))) {
         const commandData = Object.assign(i as ButtonInteraction, { bot: this.bot });
         game.$button!(commandData);
+      }
+    }
+
+    if (i.isSelectMenu()) {
+      let game;
+      if ((game = this.bot.games.find(v => v.channel?.id === i.channelId))) {
+        const commandData = Object.assign(i as SelectMenuInteraction, { bot: this.bot });
+        game.$selectMenu!(commandData);
       }
     }
   }

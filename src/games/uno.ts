@@ -8,8 +8,8 @@ import {
   Message,
   MessageActionRow,
   MessageButton,
-  // MessageActionRowComponent,
-  // MessageButton,
+  MessageSelectMenu,
+  SelectMenuInteraction,
   User
 } from 'discord.js';
 
@@ -303,6 +303,14 @@ function isValidCard(c: string): c is UnoCard {
   return (<string[]>getDeck()).includes(c);
 }
 
+enum UnoRules {
+  Stacking = 'stacking',
+  SevenZero = 'sevenzero',
+  Challenge = 'challenge',
+  JumpIn = 'jumpin',
+  ShuffleCard = 'shufflecard'
+}
+
 export default class Uno extends Game {
   players: User[];
   playing = false;
@@ -315,11 +323,17 @@ export default class Uno extends Game {
   turn = 0;
   direction = Direction.Cw;
   color = UnoColor.Wild;
-  choosingColor = false;
   pendingUno: number | undefined = undefined;
 
+  choosingColor = false;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   afterChooseResolve = (value: UnoColor) => {
+    return;
+  };
+
+  rules: UnoRules[] = [];
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  afterRulesResolve = (value: unknown) => {
     return;
   };
 
@@ -392,11 +406,17 @@ export default class Uno extends Game {
       }
 
       if (isStart) {
-        if (this.players.length < 2)
+        if (this.players.length < 2) {
           await data.reply(`o mai gudnes !!! yur parti is 2 smal! !! do u think u can pley alon ${e.silly}`);
+
+          return;
+        }
 
         data.reply(`YEASEE !!! ${e.excited} STARTARTIARIGNINIGN !!! ${e.excited_jumping} ${e.party} ${e.flush_happy}`);
         this.playing = true;
+
+        // TODO: configuration (progressive/stacking rule, seven-o rule, ...)
+        await this.getRules();
 
         // shuffle the players
         this.players = shuffle(this.players);
@@ -465,11 +485,72 @@ export default class Uno extends Game {
             }
         }
 
-        // TODO: configuration (progressive/stacking rule, seven-o rule, ...)
-
         await this.playTurn(false);
       }
     }
+  }
+
+  private async getRules() {
+    await this.channel?.send({
+      content: `but... BEFOR WE STARTE... chooz da rulese!\n\nif u dont went eny jus clik da confirm bnuton ${e.glad}\nif u regret startging dis gaem den clic da exit buton... i wnont cry myslef to slepe ${e.hidethepain}`,
+      components: [
+        new MessageActionRow().addComponents(new MessageSelectMenu()
+          .setCustomId('uno_rules')
+          .setMinValues(0)
+          .setMaxValues(5)
+          .setPlaceholder('CUSTOAM RULZ !!')
+          .addOptions([
+            {
+              label: 'stakqing',
+              value: 'stacking',
+              description: 'u can stak draw cards n add deir penaltis',
+              emoji: '*️⃣'
+            },
+            {
+              label: '7-0 rul',
+              value: 'sevenzero',
+              description: "0 cycls evriwan's cards, 7 swaps urs wif somwan u choos",
+              emoji: '♻️'
+            },
+            {
+              label: 'chalenging',
+              value: 'challenge',
+              description: 'u can chaleng draw 4 cards if who pleyd it had odar cardz',
+              emoji: '🚫'
+            },
+            {
+              label: 'jumpe-in',
+              value: 'jumpin',
+              description: 'u can pley da sem card as was jus pleyd n steel da turn',
+              emoji: '☄️'
+            },
+            {
+              label: 'shufal hands card',
+              value: 'shufflecard',
+              description: "adds a shufl hands card dat shufls evriwan's cards",
+              emoji: '🔀'
+            }
+          ])),
+        new MessageActionRow().addComponents([
+          new MessageButton().setCustomId('uno_rules_confirm').setLabel('confrirm').setStyle('SUCCESS'),
+          new MessageButton().setCustomId('uno_rules_exit').setLabel('eqxit').setStyle('DANGER')
+        ])
+      ]
+    });
+
+    return await new Promise(resolve => {
+      this.afterRulesResolve = resolve;
+    });
+  }
+
+  public $selectMenu(data: SelectMenuInteraction & { bot: Bot }): void {
+    if (data.customId === 'uno_rules')
+      if (data.user.id === this.challenger.id) {
+        this.rules = data.values as UnoRules[];
+        data.reply({ content: `new roolz set ! ${e.happy}`, ephemeral: true });
+      } else {
+        data.reply({ content: `ur not da host, loozar ${e.silly}`, ephemeral: true });
+      }
   }
 
   private getTopDiscard() {
@@ -648,7 +729,7 @@ export default class Uno extends Game {
           .join('\n')}\n\n**gz ${this.players[this.turn]}!! ${e.excited_jumping} ${e.party}**`);
 
         this.finish(data.bot);
-        
+
         return;
       }
 
@@ -697,6 +778,28 @@ export default class Uno extends Game {
 
   public async $button(data: ButtonInteraction & { bot: Bot }) {
     const replyingPlayer = this.getPlayerById(data.user.id);
+
+    if (data.customId.startsWith('uno_rules')) {
+      if (data.user.id !== this.challenger.id) {
+        data.reply({ content: `go liq a stiq, not ur turn ${e.funny}`, ephemeral: true });
+        
+        return;
+      }  
+      
+      switch (data.customId.slice(10)) {
+      case 'confirm':
+        data.reply({ content: `starting shortlie ! ${e.shock_handless}` });
+        this.afterRulesResolve(0);
+        break;
+
+      case 'exit':
+        data.reply(`oke ${e.angry_pink} if u dont wana pley i'm goinge ${e.angry_red}${e.angry_red}${e.angry_red}`);
+        this.finish(data.bot);
+        break;
+      }
+
+      return;
+    }
 
     if (data.customId.startsWith('uno_U')) {
       if (data.customId === 'uno_U_c')

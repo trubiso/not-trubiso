@@ -55,6 +55,7 @@ export const e = {
   agony: '<:agony:718886770963382303>',
   swim: '<:swim:729370646051684365>',
   salute: '<:salute:729410549892251667>',
+  hidethepain: '<:hidethepain:731946523079737474>',
   s_facepalm: '<a:skype_facepalm:746416903052066866>',
   id: (emote: string) =>
     emote
